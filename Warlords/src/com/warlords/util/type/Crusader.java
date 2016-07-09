@@ -143,6 +143,25 @@ public class Crusader extends SpielKlasse {
 			p.getInventory().setItem(0, is);
 		}
 	}
+	@Override
+	public ItemStack getMainAbility() {
+		ItemStack is = WeaponUtil.generateItemStack(getWeapon(), getName());
+		if (is != null) {
+			ItemMeta im = is.getItemMeta();
+			if (getWeapon().getSkill() == 0 && getWeapon().getKlass() == 4) {
+				im.setLore(ItemListCrusader.getCrusaderMain(eastrike, ccastrike, cmulastrike,
+						((double) (int) (dminastrike * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0,
+						((double) (int) (dmaxastrike * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0, egive,
+						countstrike));
+			} else {
+				im.setLore(ItemListCrusader.getCrusaderMain(eastrike, ccastrike, cmulastrike, dminastrike, dmaxastrike,
+						egive, countstrike));
+			}
+			im.setDisplayName(ChatColor.GREEN + cstrikename);
+			is.setItemMeta(im);
+		}
+		return is;
+	}
 
 	@Override
 	public void doAbility(int j) {

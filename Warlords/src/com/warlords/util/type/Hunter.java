@@ -122,6 +122,23 @@ public class Hunter extends SpielKlasse {
 			p.getInventory().setItem(0, is);
 		}
 	}
+	@Override
+	public ItemStack getMainAbility() {
+		ItemStack is = WeaponUtil.generateItemStack(getWeapon(), getName());
+		if (is != null) {
+			ItemMeta im = is.getItemMeta();
+			if (getWeapon().getSkill() == 0 && getWeapon().getKlass() == 3) {
+				im.setLore(ItemListHunter.getHunterMain(eball, ccball, cmulball,
+						((double) (int) (dminball * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0,
+						((double) (int) (dmaxball * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0));
+			} else {
+				im.setLore(ItemListHunter.getHunterMain(eball, ccball, cmulball, dminball, dmaxball));
+			}
+			im.setDisplayName(ChatColor.GREEN + "Elemental Arrow");
+			is.setItemMeta(im);
+		}
+		return is;
+	}
 
 	@Override
 	public void doAbility(int j) {

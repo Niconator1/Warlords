@@ -343,6 +343,14 @@ public class EventManager implements Listener {
 							e.setCancelled(true);
 							return;
 						}
+
+					}
+					if (is != null && sk.getMainAbility() != null) {
+						if (sk.getMainAbility().equals(is) || (is.getType() == Material.INK_SACK
+								&& (is.getDurability() == 8 || is.getDurability() == 15))) {
+							e.setCancelled(true);
+							return;
+						}
 					}
 				}
 			}
@@ -460,7 +468,8 @@ public class EventManager implements Listener {
 								}
 							}
 						} else {
-							if (event.getEntity() instanceof LivingEntity&&!(event.getEntity() instanceof ArmorStand)) {
+							if (event.getEntity() instanceof LivingEntity
+									&& !(event.getEntity() instanceof ArmorStand)) {
 								if (!Warlords.isUsingVanish(sk.p)) {
 									LivingEntity e = (LivingEntity) event.getEntity();
 									if (p.getInventory().getHeldItemSlot() == 0) {

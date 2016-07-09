@@ -187,4 +187,6 @@ public abstract class SpielKlasse {
 	public void applySpeed(){
 		p.setWalkSpeed((float)(0.2f*(1.0+speedBoost+getWeapon().getSpeed())));
 	}
+
+	public abstract ItemStack getMainAbility();
 }

@@ -124,6 +124,23 @@ public class Assassin extends SpielKlasse {
 			p.getInventory().setItem(0, is);
 		}
 	}
+	@Override
+	public ItemStack getMainAbility(){
+		ItemStack is = WeaponUtil.generateItemStack(getWeapon(), getName());
+		if (is != null) {
+			ItemMeta im = is.getItemMeta();
+			if (getWeapon().getSkill() == 0 && getWeapon().getKlass() == 1) {
+				im.setLore(ItemListAssassin.getAssassinMain(eball, ccball, cmulball,
+						((double) (int) (dminball * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0,
+						((double) (int) (dmaxball * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0));
+			} else {
+				im.setLore(ItemListAssassin.getAssassinMain(eball, ccball, cmulball, dminball, dmaxball));
+			}
+			im.setDisplayName(ChatColor.GREEN + "Shadow Step");
+			is.setItemMeta(im);
+		}
+		return is;
+	}
 
 	@Override
 	public void doAbility(int j) {

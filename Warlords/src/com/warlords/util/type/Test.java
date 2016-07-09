@@ -155,6 +155,23 @@ public class Test extends SpielKlasse {
 			p.getInventory().setItem(0, is);
 		}
 	}
+	@Override
+	public ItemStack getMainAbility() {
+		ItemStack is = WeaponUtil.generateItemStack(getWeapon(), getName());
+		if (is != null) {
+			ItemMeta im = is.getItemMeta();
+			if (getWeapon().getSkill() == 0 && getWeapon().getKlass() == 2) {
+				im.setLore(ItemListTest.getTestMain(eocelot, ccocelot, cmulocelot,
+						((double) (int) (dminocelot * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0,
+						((double) (int) (dmaxocelot * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0));
+			} else {
+				im.setLore(ItemListTest.getTestMain(eocelot, ccocelot, cmulocelot, dminocelot, dmaxocelot));
+			}
+			im.setDisplayName(ChatColor.GREEN + ocelotname);
+			is.setItemMeta(im);
+		}
+		return is;
+	}
 
 	@Override
 	public void doAbility(int j) {

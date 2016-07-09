@@ -141,6 +141,23 @@ public class Avenger extends SpielKlasse {
 			p.getInventory().setItem(0, is);
 		}
 	}
+	@Override
+	public ItemStack getMainAbility(){
+		ItemStack is = WeaponUtil.generateItemStack(getWeapon(), getName());
+		if (is != null) {
+			ItemMeta im = is.getItemMeta();
+			if (getWeapon().getSkill() == 0 && getWeapon().getKlass() == 2) {
+				im.setLore(ItemListAvenger.getAvengerMain(eastrike, ccastrike, cmulastrike,
+						((double) (int) (dminastrike * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0,
+						((double) (int) (dmaxastrike * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0));
+			} else {
+				im.setLore(ItemListAvenger.getAvengerMain(eastrike, ccastrike, cmulastrike, dminastrike, dmaxastrike));
+			}
+			im.setDisplayName(ChatColor.GREEN + "Avenger's Strike");
+			is.setItemMeta(im);
+		}
+		return is;
+	}
 
 	@Override
 	public void doAbility(int j) {

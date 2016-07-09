@@ -118,6 +118,23 @@ public class Pyromancer extends SpielKlasse {
 			p.getInventory().setItem(0, is);
 		}
 	}
+	@Override
+	public ItemStack getMainAbility() {
+		ItemStack is = WeaponUtil.generateItemStack(getWeapon(), getName());
+		if (is != null) {
+			ItemMeta im = is.getItemMeta();
+			if (getWeapon().getSkill() == 0 && getWeapon().getKlass() == 0) {
+				im.setLore(ItemListPyro.getPyroMain(eball, ccball, cmulball,
+						((double) (int) (dminball * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0,
+						((double) (int) (dmaxball * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0));
+			} else {
+				im.setLore(ItemListPyro.getPyroMain(eball, ccball, cmulball, dminball, dmaxball));
+			}
+			im.setDisplayName(ChatColor.GREEN + "Fireball");
+			is.setItemMeta(im);
+		}
+		return is;
+	}
 
 	@Override
 	public void doAbility(int j) {
