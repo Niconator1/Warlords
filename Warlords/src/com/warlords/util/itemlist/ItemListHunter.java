@@ -12,8 +12,7 @@ import com.warlords.util.type.Hunter;
 
 public class ItemListHunter {
 
-	public static ItemStack getHunterRedRune(double cburst, int eburst, double dminburst, double cc, double cm,
-			double dburst) {
+	public static ItemStack getHunterRedRune(double cburst, int eburst, double dminburst, double dburst) {
 		ItemStack ret = new ItemStack(Material.INK_SACK, 1, (short) (1));
 		ItemMeta i = ret.getItemMeta();
 		i.setDisplayName(ChatColor.RESET + "" + ChatColor.GREEN + Hunter.burstname);
@@ -68,7 +67,7 @@ public class ItemListHunter {
 		return ret;
 	}
 
-	public static ItemStack getHunterYellowRune(double cinf, int companionlive, double dinf) {
+	public static ItemStack getHunterYellowRune(double cinf, double dinf) {
 		ItemStack ret = new ItemStack(Material.INK_SACK, 1, (short) (14));
 		ItemMeta i = ret.getItemMeta();
 		i.setDisplayName(ChatColor.RESET + "" + ChatColor.GREEN + Hunter.infname);

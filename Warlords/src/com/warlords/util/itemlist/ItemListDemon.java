@@ -43,7 +43,7 @@ public class ItemListDemon {
 			double dlinfusion) {
 		ItemStack ret = new ItemStack(Material.GLOWSTONE_DUST, 1);
 		ItemMeta i = ret.getItemMeta();
-		i.setDisplayName(ChatColor.RESET + "" + ChatColor.GREEN +  Demon.infusionname);
+		i.setDisplayName(ChatColor.RESET + "" + ChatColor.GREEN + Demon.infusionname);
 		List<String> lore = new ArrayList<String>();
 		lore.add(ChatColor.RESET + "" + ChatColor.GRAY + "Cooldown: " + ChatColor.AQUA + clinfusion + " seconds");
 		lore.add("");
@@ -58,11 +58,11 @@ public class ItemListDemon {
 		return ret;
 	}
 
-	public static ItemStack getDemonBlueRune(double chradiance, int ehradiance, double cchradiance,
-			double cmhradiance, double dminhradiance, double dmaxhradiance) {
+	public static ItemStack getDemonBlueRune(double chradiance, int ehradiance, double cchradiance, double cmhradiance,
+			double dminhradiance, double dmaxhradiance) {
 		ItemStack ret = new ItemStack(Material.INK_SACK, 1, (short) (10));
 		ItemMeta i = ret.getItemMeta();
-		i.setDisplayName(ChatColor.RESET + "" + ChatColor.GREEN +  Demon.hradiancename);
+		i.setDisplayName(ChatColor.RESET + "" + ChatColor.GREEN + Demon.hradiancename);
 		List<String> lore = new ArrayList<String>();
 		lore.add(ChatColor.RESET + "" + ChatColor.GRAY + "Cooldown: " + ChatColor.AQUA + chradiance + " seconds");
 		lore.add(ChatColor.RESET + "" + ChatColor.GRAY + "Energy Cost: " + ChatColor.YELLOW + ehradiance);
@@ -113,13 +113,13 @@ public class ItemListDemon {
 		lore.add("");
 		lore.add(ChatColor.RESET + "" + ChatColor.GRAY + "Strike the targeted enemy player,");
 		lore.add(ChatColor.RESET + "" + ChatColor.GRAY + "causing " + ChatColor.RED + dminstrike + ChatColor.GRAY
-				+ " - " + ChatColor.RED + dmaxstrike+ChatColor.GRAY+" damage");
+				+ " - " + ChatColor.RED + dmaxstrike + ChatColor.GRAY + " damage");
 		lore.add(ChatColor.RESET + "" + ChatColor.GRAY + "and removing " + ChatColor.GOLD + "3 " + ChatColor.GRAY
 				+ "energy.");
 		return lore;
 	}
-	public static ItemStack getSpecialRune(double cburst, int eburst, double ccburst, double cmulburst,
-			double dminburst, double dmaxburst, double dburst) {
+
+	public static ItemStack getSpecialRune(double cburst, int eburst, double ccburst, double cmulburst) {
 		ItemStack ret = new ItemStack(Material.NETHER_STAR);
 		ItemMeta i = ret.getItemMeta();
 		i.setDisplayName(ChatColor.RESET + "" + ChatColor.GREEN + Demon.spherename);

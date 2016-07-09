@@ -131,17 +131,15 @@ public class Demon extends SpielKlasse {
 			break;
 		case 5:
 			if (getWeapon().getSkill() == 5 && getWeapon().getKlass() == 2) {
-				p.getInventory().setItem(5, ItemListDemon.getSpecialRune(
-						((double) (int) (csphere * (1.0 - getWeapon().getCooldown()) * 100.0) / 100.0), esphere,
-						ccsphere, cmulsphere,
-						((double) (int) (dminsphere * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0,
-						((double) (int) (dmaxsphere * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0, dsphere));
+				p.getInventory().setItem(5,
+						ItemListDemon.getSpecialRune(
+								((double) (int) (csphere * (1.0 - getWeapon().getCooldown()) * 100.0) / 100.0), esphere,
+								ccsphere, cmulsphere));
 			} else {
 				p.getInventory().setItem(5,
 						ItemListDemon.getSpecialRune(
 								((double) (int) (csphere * (1.0 - getWeapon().getCooldown()) * 100.0) / 100.0), esphere,
-								ccsphere, cmulsphere, ((double) (int) (dminsphere * 100.0)) / 100.0,
-								((double) (int) (dmaxsphere * 100.0)) / 100.0, dsphere));
+								ccsphere, cmulsphere));
 			}
 			break;
 		case 8:
@@ -349,14 +347,11 @@ public class Demon extends SpielKlasse {
 			if (getWeapon().getSkill() == 5 && getWeapon().getKlass() == 2) {
 				return ItemListDemon.getSpecialRune(
 						((double) (int) (csphere * (1.0 - getWeapon().getCooldown()) * 100.0) / 100.0), esphere,
-						ccsphere, cmulsphere,
-						((double) (int) (dminsphere * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0,
-						((double) (int) (dmaxsphere * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0, dsphere);
+						ccsphere, cmulsphere);
 			} else {
 				return ItemListDemon.getSpecialRune(
 						((double) (int) (csphere * (1.0 - getWeapon().getCooldown()) * 100.0) / 100.0), esphere,
-						ccsphere, cmulsphere, ((double) (int) (dminsphere * 100.0)) / 100.0,
-						((double) (int) (dmaxsphere * 100.0)) / 100.0, dsphere);
+						ccsphere, cmulsphere);
 			}
 		case 8:
 			return ItemListGenerel.getElytraRune(celytra, eelytra, espeed);

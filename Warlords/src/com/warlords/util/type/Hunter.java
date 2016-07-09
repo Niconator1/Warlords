@@ -75,26 +75,26 @@ public class Hunter extends SpielKlasse {
 				p.getInventory().setItem(1,
 						ItemListHunter.getHunterRedRune(
 								((double) (int) (cburst * (1.0 - getWeapon().getCooldown()) * 100.0) / 100.0), eburst,
-								(double) (int) (dminburst * (1.0 + getWeapon().getBoost()) * 100.0) / 100.0, cc, cm,dburst));
+								(double) (int) (dminburst * (1.0 + getWeapon().getBoost()) * 100.0) / 100.0, dburst));
 
 			} else {
 				p.getInventory().setItem(1,
 						ItemListHunter.getHunterRedRune(
 								((double) (int) (cburst * (1.0 - getWeapon().getCooldown()) * 100.0) / 100.0), eburst,
-								(double) (int) (dminburst * 100.0) / 100.0, cc, cm,dburst));
+								(double) (int) (dminburst * 100.0) / 100.0, dburst));
 			}
 			break;
 		case 2:
 			p.getInventory().setItem(2, ItemListHunter.getHunterPurpleRune(
-					((double) (int) (cwarp * (1.0 - getWeapon().getCooldown()) * 100.0) / 100.0), ewarp,dwarp));
+					((double) (int) (cwarp * (1.0 - getWeapon().getCooldown()) * 100.0) / 100.0), ewarp, dwarp));
 			break;
 		case 3:
 			p.getInventory().setItem(3, ItemListHunter.getHunterBlueRune(
-					((double) (int) (cshield * (1.0 - getWeapon().getCooldown()) * 100.0) / 100.0), eshield,dshield));
+					((double) (int) (cshield * (1.0 - getWeapon().getCooldown()) * 100.0) / 100.0), eshield, dshield));
 			break;
 		case 4:
 			p.getInventory().setItem(4, ItemListHunter.getHunterYellowRune(
-					((double) (int) (cinf * (1.0 - getWeapon().getCooldown()) * 100.0) / 100.0), companionlive, dinf));
+					((double) (int) (cinf * (1.0 - getWeapon().getCooldown()) * 100.0) / 100.0), dinf));
 
 			break;
 		case 8:
@@ -137,21 +137,21 @@ public class Hunter extends SpielKlasse {
 			case 0:
 				if (getEnergy() >= eball) {
 					boolean f = false;
-					if(dmgb>0){
-						f=true;
+					if (dmgb > 0) {
+						f = true;
 					}
 					boolean m = false;
-					if(dmgb1>1){
-						m=true;
+					if (dmgb1 > 1) {
+						m = true;
 					}
 					if (getWeapon().getSkill() == 0 && getWeapon().getKlass() == 3) {
 						SkillUtil.doElementelarrow(p,
 								(dminball * (1.0 + getWeapon().getBoost()) + dmgb) * dmgb1 * dmgb2,
 								(dmaxball * (1.0 + getWeapon().getBoost()) + dmgb) * dmgb1 * dmgb2, ccball + ccBoost,
-								cmulball + cmulBoost,f,m);
+								cmulball + cmulBoost, f, m);
 					} else {
 						SkillUtil.doElementelarrow(p, (dminball + dmgb) * dmgb1 * dmgb2,
-								(dmaxball + dmgb) * dmgb1 * dmgb2, ccball + ccBoost, cmulball + cmulBoost,f,m);
+								(dmaxball + dmgb) * dmgb1 * dmgb2, ccball + ccBoost, cmulball + cmulBoost, f, m);
 					}
 
 					doCooldown(j);
@@ -163,9 +163,9 @@ public class Hunter extends SpielKlasse {
 				if (getEnergy() >= eburst) {
 
 					if (getWeapon().getSkill() == 1 && getWeapon().getKlass() == 3) {
-						SkillUtil.addExplosivarrow(p, dminburst * (1.0 + getWeapon().getBoost()), cc, cm,dburst);
+						SkillUtil.addExplosivarrow(p, dminburst * (1.0 + getWeapon().getBoost()), cc, cm, dburst);
 					} else {
-						SkillUtil.addExplosivarrow(p, dminburst, cc, cm,dburst);
+						SkillUtil.addExplosivarrow(p, dminburst, cc, cm, dburst);
 					}
 					doCooldown(j);
 					removeEnergy(eburst);
@@ -267,21 +267,21 @@ public class Hunter extends SpielKlasse {
 			if (getWeapon().getSkill() == 1 && getWeapon().getKlass() == 3) {
 				return ItemListHunter.getHunterRedRune(
 						((double) (int) (cburst * (1.0 - getWeapon().getCooldown()) * 100.0) / 100.0), eburst,
-						((double) (int) (dminburst * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0, cc, cm,dburst);
+						((double) (int) (dminburst * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0, dburst);
 			} else {
 				return ItemListHunter.getHunterRedRune(
 						((double) (int) (cburst * (1.0 - getWeapon().getCooldown()) * 100.0) / 100.0), eburst,
-						((double) (int) (dminburst * 100.0)) / 100.0, cc, cm,dburst);
+						((double) (int) (dminburst * 100.0)) / 100.0, dburst);
 			}
 		case 2:
 			return ItemListHunter.getHunterPurpleRune(
-					((double) (int) (cwarp * (1.0 - getWeapon().getCooldown()) * 100.0) / 100.0), ewarp,dwarp);
+					((double) (int) (cwarp * (1.0 - getWeapon().getCooldown()) * 100.0) / 100.0), ewarp, dwarp);
 		case 3:
 			return ItemListHunter.getHunterBlueRune(
-					((double) (int) (cshield * (1.0 - getWeapon().getCooldown()) * 100.0) / 100.0), eshield,dshield);
+					((double) (int) (cshield * (1.0 - getWeapon().getCooldown()) * 100.0) / 100.0), eshield, dshield);
 		case 4:
 			return ItemListHunter.getHunterYellowRune(
-					((double) (int) (cinf * (1.0 - getWeapon().getCooldown()) * 100.0) / 100.0), companionlive, dinf);
+					((double) (int) (cinf * (1.0 - getWeapon().getCooldown()) * 100.0) / 100.0), dinf);
 
 		case 8:
 			return ItemListGenerel.getElytraRune(celytra, eelytra, espeed);

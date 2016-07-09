@@ -22,7 +22,7 @@ public class Pontiff {
 	private int healthmax = 2000000;
 	private int[] ha = new int[100];
 	private int iSlam = 0;
-	private int cSlam = 15*20;
+	private int cSlam = 15 * 20;
 	private int bSlam = cSlam;
 	private BossBattleServer server;
 	private Location target;
@@ -139,16 +139,17 @@ public class Pontiff {
 		bSlam--;
 	}
 
-	private static int tSlam = 0;
-	public void increaseSlam(){
+	public void increaseSlam() {
 		iSlam++;
 	}
-	public int getSlamI(){
+
+	public int getSlamI() {
 		return iSlam;
 	}
-	public void resetSlam(){
-		iSlam=0;
-		bSlam=cSlam;
+
+	public void resetSlam() {
+		iSlam = 0;
+		bSlam = cSlam;
 	}
 
 	public int getSC() {
@@ -156,15 +157,18 @@ public class Pontiff {
 	}
 
 	public void setTarget(Location location) {
-		this.target=location;		
+		this.target = location;
 	}
-	public Location getTarget(){
+
+	public Location getTarget() {
 		return target;
 	}
-	public double getSlamHeight(){
+
+	public double getSlamHeight() {
 		return slamHeight;
 	}
+
 	public void setSlamHeight(double d) {
-		this.slamHeight=d;		
+		this.slamHeight = d;
 	}
 }
