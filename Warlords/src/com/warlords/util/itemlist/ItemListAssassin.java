@@ -78,7 +78,7 @@ public class ItemListAssassin {
 		lore.add(ChatColor.RESET + "" + ChatColor.GRAY + "Cooldown: " + ChatColor.AQUA + cinf + " seconds");
 		lore.add("");
 		lore.add(ChatColor.RESET + "" + ChatColor.GRAY + "Kill someone under " + ChatColor.GREEN + maxliveenemy);
-		lore.add(ChatColor.RESET + "" + ChatColor.GRAY + "life, but also damge yourself"
+		lore.add(ChatColor.RESET + "" + ChatColor.GRAY + "life, but also damage yourself"
 				);
 		lore.add(ChatColor.RESET + "" + ChatColor.GRAY + "with "+ ChatColor.RED + yourdmg+ChatColor.GRAY+".");
 		i.setLore(lore);

@@ -3,9 +3,9 @@ package com.warlords.util;
 import java.util.ArrayList;
 
 import org.bukkit.ChatColor;
-import org.bukkit.EntityEffect;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.craftbukkit.v1_10_R1.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_10_R1.entity.CraftPlayer;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -379,14 +379,13 @@ public class UtilMethods {
 				return;
 			}
 		}
+		CraftLivingEntity cle = ((CraftLivingEntity) le);
+		cle.getHandle().world.broadcastEntityEffect(cle.getHandle(), (byte) 2);
 		if (le.getHealth() < hp) {
-			le.playEffect(EntityEffect.HURT);
 			le.setHealth(0);
 		} else {
-			le.playEffect(EntityEffect.HURT);
 			le.setHealth(le.getHealth() - hp);	
 		}
-		
 	}
 
 	public static void chooseClass(Player p, SpielKlasse py) {

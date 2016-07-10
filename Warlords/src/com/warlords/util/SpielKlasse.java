@@ -3,6 +3,7 @@ package com.warlords.util;
 import java.util.ArrayList;
 
 import org.bukkit.ChatColor;
+import org.bukkit.craftbukkit.v1_10_R1.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_10_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -104,6 +105,8 @@ public abstract class SpielKlasse {
 	}
 
 	public void removeHealth(double i) {
+		CraftLivingEntity cle = ((CraftLivingEntity) p);
+		cle.getHandle().world.broadcastEntityEffect(cle.getHandle(), (byte) 2);
 		if (getHealth() - i >= 0) {
 			p.setHealth(getHealth() - i);
 		} else {
@@ -178,6 +181,8 @@ public abstract class SpielKlasse {
 	public abstract ItemStack getAbility(int i);
 
 	public void damageShield(double dmg) {
+		CraftLivingEntity cle = ((CraftLivingEntity) p);
+		cle.getHandle().world.broadcastEntityEffect(cle.getHandle(), (byte) 2);
 		shield = shield - dmg;
 	}
 
