@@ -291,7 +291,7 @@ public class Warlords extends JavaPlugin {
 									if (allies.size() < max) {
 										max = allies.size();
 									}
-									p.sendMessage("Allies (Page " + page + " of " + (int) (allies.size() % 10.0 + 0.5)
+									p.sendMessage("Allies (Page " + page + " of " + (int) (allies.size() / 10.0 + 0.5)
 											+ " )");
 									for (int i = min; i < max; i++) {
 										OfflinePlayer p3 = Bukkit.getOfflinePlayer(allies.get(i));
