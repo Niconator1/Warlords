@@ -141,6 +141,7 @@ public class SkillUtil extends UtilMethods {
 												if (dmg != 0) {
 													sk.removeHealth(sk.hptohealth(dmg));
 												}
+												a.getWorld().playSound(l, "entity.arrow.hit_player", 1, 1);
 											}
 										}
 									}
@@ -159,6 +160,7 @@ public class SkillUtil extends UtilMethods {
 										WeaponUtil.doWeapon(e, b.getShooter());
 									}
 									setHealth(e, dmg);
+									a.getWorld().playSound(l, "entity.arrow.hit_player", 1, 1);
 								}
 							}
 						}
@@ -200,6 +202,7 @@ public class SkillUtil extends UtilMethods {
 												if (dmg != 0) {
 													sk.removeHealth(sk.hptohealth(dmg));
 												}
+												a.getWorld().playSound(l, "entity.arrow.hit_player", 1, 1);
 											}
 										}
 									}
@@ -218,6 +221,7 @@ public class SkillUtil extends UtilMethods {
 										WeaponUtil.doWeapon(e, f.getShooter());
 									}
 									setHealth(e, dmg);
+									a.getWorld().playSound(l, "entity.arrow.hit_player", 1, 1);
 								}
 							}
 						}
