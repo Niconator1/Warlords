@@ -461,4 +461,20 @@ public class WeaponUtil {
 			}
 		}
 	}
+
+	public static Confirmation getWeaponConfirmationInventory(Player p, int rawSlot) {
+		Inventory ci = Bukkit.createInventory(p, 27, "Confirmation");
+		ItemStack isy = new ItemStack(Material.STAINED_CLAY, 1, (short) 13);
+		ItemMeta imy = isy.getItemMeta();
+		imy.setDisplayName(ChatColor.RESET+"Confirm");
+		isy.setItemMeta(imy);
+		ItemStack isn = new ItemStack(Material.STAINED_CLAY, 1, (short) 14);
+		ItemMeta imn = isn.getItemMeta();
+		imn.setDisplayName(ChatColor.RESET+"Cancel");
+		isn.setItemMeta(imn);
+		ci.setItem(11, isy);
+		ci.setItem(15, isn);
+		Confirmation c = new Confirmation(rawSlot, ci);
+		return c;
+	}
 }

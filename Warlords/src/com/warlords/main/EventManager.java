@@ -26,6 +26,7 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -38,6 +39,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import com.warlords.boss.Pontiff;
+import com.warlords.util.Confirmation;
 import com.warlords.util.PlayerUtil;
 import com.warlords.util.SkillUtil;
 import com.warlords.util.SpielKlasse;
@@ -100,6 +102,7 @@ public class EventManager implements Listener {
 						for (int i = 0; i < Warlords.elytra.size(); i++) {
 							if (Warlords.elytra.get(i).getPlayer().equals(p)) {
 								e.setDamage(0);
+								e.setCancelled(true);
 								return;
 							}
 						}
@@ -134,7 +137,7 @@ public class EventManager implements Listener {
 		for (Pontiff p : Warlords.pontiff) {
 			if (p.getSkel().getUniqueId().compareTo(e.getEntity().getUniqueId()) == 0) {
 				if (!p.removeHealth((int) Math.round(UtilMethods.healthtohp(e.getDamage())))) {
-
+					e.setDamage(0);
 				}
 				return;
 			}
@@ -194,6 +197,17 @@ public class EventManager implements Listener {
 	}
 
 	@EventHandler
+	public void onInventoryClose(InventoryCloseEvent event) {
+		Inventory in = event.getInventory();
+		for (int i = 0; i < Warlords.confirmation.size(); i++) {
+			if (in.equals(Warlords.confirmation.get(i).getInventory())) {
+				Warlords.confirmation.remove(i);
+			}
+		}
+
+	}
+
+	@EventHandler
 	public void onInventoryClick(InventoryClickEvent event) {
 		Player p = (Player) event.getWhoClicked();
 		ItemStack clicked = event.getCurrentItem();
@@ -210,12 +224,15 @@ public class EventManager implements Listener {
 									&& event.getSlot() != wp.getWeaponSlot()) {
 								Weapon w = wlist.get(event.getRawSlot());
 								if (w.getKat() == 1) {
-									p.sendMessage("You salvaged " + ChatColor.GOLD + WeaponUtil.LEGENDNAMES[w.getType()]
-											+ " of the " + WeaponUtil.KLASSEN[w.getKlass()]);
+									Confirmation c = WeaponUtil.getWeaponConfirmationInventory(p, event.getRawSlot());
+									Warlords.confirmation.add(c);
+									p.openInventory(c.getInventory());
+									return;
 								} else if (w.getKat() == 2) {
-									p.sendMessage(
-											"You salvaged " + ChatColor.DARK_PURPLE + WeaponUtil.EPICNAMES[w.getType()]
-													+ " of the " + WeaponUtil.KLASSEN[w.getKlass()]);
+									Confirmation c = WeaponUtil.getWeaponConfirmationInventory(p, event.getRawSlot());
+									Warlords.confirmation.add(c);
+									p.openInventory(c.getInventory());
+									return;
 								} else if (w.getKat() == 3) {
 									p.sendMessage("You salvaged " + ChatColor.BLUE + WeaponUtil.RARENAMES[w.getType()]
 											+ " of the " + WeaponUtil.KLASSEN[w.getKlass()]);
@@ -256,6 +273,42 @@ public class EventManager implements Listener {
 			}
 			event.setCancelled(true);
 		} else {
+			for (int i = 0; i < Warlords.confirmation.size(); i++) {
+				if (inventory.equals(Warlords.confirmation.get(i).getInventory())) {
+					if(event.getRawSlot()==11){
+						Confirmation c = Warlords.confirmation.get(i);
+						WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
+								"/players/" + p.getUniqueId());
+						if (wp != null) {
+							ArrayList<Weapon> wlist = wp.getWeaponlist();
+							if (wlist != null) {
+								Weapon w = wlist.get(c.getSlot());
+								if (w.getKat() == 1) {
+									p.sendMessage("You salvaged " + ChatColor.GOLD + WeaponUtil.LEGENDNAMES[w.getType()]
+											+ " of the " + WeaponUtil.KLASSEN[w.getKlass()]);
+								} else if (w.getKat() == 2) {
+									p.sendMessage(
+											"You salvaged " + ChatColor.DARK_PURPLE + WeaponUtil.EPICNAMES[w.getType()]
+													+ " of the " + WeaponUtil.KLASSEN[w.getKlass()]);
+								}
+								if (c.getSlot() < wp.getWeaponSlot()) {
+									wp.setWeaponSlot(wp.getWeaponSlot() - 1);
+								}
+								wlist.remove(c.getSlot());
+								wp.saveWeaponlist(wlist);
+								PlayerUtil.save(wp, Warlords.getPlugin(Warlords.class).getDataFolder(),
+										"/players/" + p.getUniqueId());
+								Warlords.confirmation.remove(i);
+								p.openInventory(WeaponUtil.getWeaponInventory(p));
+							}
+						}
+					}
+					else if(event.getRawSlot()==15){
+						Warlords.confirmation.remove(i);
+						p.openInventory(WeaponUtil.getWeaponInventory(p));
+					}	
+				}
+			}
 			SpielKlasse sk = Warlords.getKlasse(p);
 			WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
 					"/players/" + p.getUniqueId());

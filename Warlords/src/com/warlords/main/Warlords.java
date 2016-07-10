@@ -26,6 +26,7 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.util.Vector;
 
 import com.warlords.boss.Pontiff;
+import com.warlords.util.Confirmation;
 import com.warlords.util.FileUtilMethods;
 import com.warlords.util.PlayerUtil;
 import com.warlords.util.SkillUtil;
@@ -106,6 +107,7 @@ public class Warlords extends JavaPlugin {
 	public static ArrayList<CatBolt> catbolt = new ArrayList<CatBolt>();
 	public static Objective obj;
 	public static ArrayList<Elytra> elytra = new ArrayList<Elytra>();
+	public static ArrayList<Confirmation> confirmation = new ArrayList<Confirmation>();
 	public static ArrayList<Pontiff> pontiff = new ArrayList<Pontiff>();
 
 	public void onEnable() {
