@@ -62,7 +62,7 @@ public class Thunderlord extends SpielKlasse {
 				im.setLore(
 						ItemListThunder.getThunderMain(ebolt, ccbolt, cmulbolt, dminbolt, dmaxbolt, range, cooldown));
 			}
-			im.setDisplayName(ChatColor.GREEN + "Firebolt");
+			im.setDisplayName(ChatColor.GREEN + "Lightning Bolt");
 			is.setItemMeta(im);
 			p.getInventory().setItem(0, is);
 		}
