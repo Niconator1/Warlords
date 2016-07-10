@@ -75,6 +75,7 @@ import net.minecraft.server.v1_10_R1.EntityOcelot;
 import net.minecraft.server.v1_10_R1.EnumParticle;
 import net.minecraft.server.v1_10_R1.IChatBaseComponent;
 import net.minecraft.server.v1_10_R1.PacketPlayOutBoss;
+import net.minecraft.server.v1_10_R1.PacketPlayOutEntityDestroy;
 import net.minecraft.server.v1_10_R1.PacketPlayOutEntityTeleport;
 import net.minecraft.server.v1_10_R1.PacketPlayOutSpawnEntityLiving;
 import net.minecraft.server.v1_10_R1.WorldServer;
@@ -156,6 +157,13 @@ public class Warlords extends JavaPlugin {
 			p.setWalkSpeed(0.2f);
 		}
 		for (int i = 0; i < catbolt.size(); i++) {
+			for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+				if (Warlords.catbolt.get(i).getOcelot() != null) {
+					PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(
+							Warlords.catbolt.get(i).getOcelot().getBukkitEntity().getEntityId());
+					((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
+				}
+			}
 			catbolt.get(i).getArrow().remove();
 		}
 		for (int i = 0; i < lightningbolt.size(); i++) {
@@ -913,6 +921,8 @@ public class Warlords extends JavaPlugin {
 													if (dmg != 0) {
 														sk.removeHealth(sk.hptohealth(dmg));
 													}
+													UtilMethods.sendSoundPacket(c.getP(), "entity.arrow.hit_player",
+															c.getP().getLocation());
 												}
 											}
 										}
@@ -927,6 +937,8 @@ public class Warlords extends JavaPlugin {
 										if (hp < dmg) {
 											WeaponUtil.doWeapon(le, c.getP());
 										}
+										UtilMethods.sendSoundPacket(c.getP(), "entity.arrow.hit_player",
+												c.getP().getLocation());
 										SkillUtil.setHealth(le, dmg);
 									}
 								}
@@ -1123,6 +1135,8 @@ public class Warlords extends JavaPlugin {
 													if (dmg != 0) {
 														sk.removeHealth(sk.hptohealth(dmg));
 													}
+													UtilMethods.sendSoundPacket(c.getP(), "entity.arrow.hit_player",
+															c.getP().getLocation());
 												}
 											}
 										}
@@ -1137,6 +1151,8 @@ public class Warlords extends JavaPlugin {
 										if (hp < dmg) {
 											WeaponUtil.doWeapon(le, c.getP());
 										}
+										UtilMethods.sendSoundPacket(c.getP(), "entity.arrow.hit_player",
+												c.getP().getLocation());
 										SkillUtil.setHealth(le, dmg);
 									}
 								}
@@ -1552,11 +1568,11 @@ public class Warlords extends JavaPlugin {
 												if (sk != null) {
 													double dmg = UtilMethods.damage("Demonic Sphere", s.getCc(),
 															s.getCmul(), s.getDmin(), s.getDmax(), s.getP(), sk);
-					
-													
+
 													if (dmg != 0) {
 														sk.removeHealth(sk.hptohealth(dmg));
 													}
+													UtilMethods.sendSoundPacket(s.getP(), "entity.arrow.hit_player", s.getP().getLocation());
 												}
 											}
 										}
@@ -1571,6 +1587,7 @@ public class Warlords extends JavaPlugin {
 										if (hp < dmg) {
 											WeaponUtil.doWeapon(le, s.getP());
 										}
+										UtilMethods.sendSoundPacket(s.getP(), "entity.arrow.hit_player", s.getP().getLocation());
 										SkillUtil.setHealth(le, dmg);
 									}
 								}
@@ -1601,6 +1618,7 @@ public class Warlords extends JavaPlugin {
 														if (dmg != 0) {
 															sk.removeHealth(sk.hptohealth(dmg));
 														}
+														UtilMethods.sendSoundPacket(s.getP(), "entity.arrow.hit_player", s.getP().getLocation());
 														Vector kb = p2.getLocation().toVector().subtract(l.toVector());
 														p2.setVelocity(p2.getVelocity().add(kb));
 													}
@@ -1618,6 +1636,7 @@ public class Warlords extends JavaPlugin {
 											if (hp < dmg) {
 												WeaponUtil.doWeapon(le, s.getP());
 											}
+											UtilMethods.sendSoundPacket(s.getP(), "entity.arrow.hit_player", s.getP().getLocation());
 											SkillUtil.setHealth(le, dmg);
 											Vector kb = le.getLocation().toVector().subtract(l.toVector());
 											le.setVelocity(le.getVelocity().add(kb));

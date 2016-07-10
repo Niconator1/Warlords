@@ -123,6 +123,7 @@ public class Lazor {
 													kb.setY(kb.getY()+(1-Math.abs(kb.getY()))*0.5);
 													le.setVelocity(le.getVelocity().add(kb));
 												}
+												UtilMethods.sendSoundPacket(shooter, "entity.arrow.hit_player", shooter.getLocation());
 											}
 										}
 									} else {
@@ -138,6 +139,7 @@ public class Lazor {
 											Vector kb = a.getLocation().getDirection().normalize().multiply(0.2);
 											kb.setY(kb.getY()+(1-Math.abs(kb.getY()))*0.2);
 											le.setVelocity(le.getVelocity().add(kb));
+											UtilMethods.sendSoundPacket(shooter, "entity.arrow.hit_player", shooter.getLocation());
 										}
 									}
 								}	

@@ -997,6 +997,7 @@ public class SkillUtil extends UtilMethods {
 										if (dmg != 0) {
 											sk.removeHealth(sk.hptohealth(dmg));
 										}
+										sendSoundPacket(p, "entity.arrow.hit_player", p.getLocation());
 										Location mid = le.getLocation();
 										for (Player p3 : Bukkit.getOnlinePlayers()) {
 											UtilMethods.sendParticlePacket(p3, EnumParticle.REDSTONE, mid.getX(),
@@ -1059,6 +1060,7 @@ public class SkillUtil extends UtilMethods {
 								WeaponUtil.doWeapon(le, p);
 
 							}
+							sendSoundPacket(p, "entity.arrow.hit_player", p.getLocation());
 							setHealth(le, dmg);
 							Location mid = le.getLocation();
 							for (Player p2 : Bukkit.getOnlinePlayers()) {
@@ -1141,6 +1143,7 @@ public class SkillUtil extends UtilMethods {
 											if (dmg != 0) {
 												sk.removeHealth(sk.hptohealth(dmg));
 											}
+											sendSoundPacket(p, "entity.arrow.hit_player", p.getLocation());
 											Location mid = le.getLocation();
 											for (Player p3 : Bukkit.getOnlinePlayers()) {
 												UtilMethods.sendParticlePacket(p3, EnumParticle.REDSTONE, mid.getX(),
@@ -1188,6 +1191,7 @@ public class SkillUtil extends UtilMethods {
 									WeaponUtil.doWeapon(le, p);
 
 								}
+								sendSoundPacket(p, "entity.arrow.hit_player", p.getLocation());
 								setHealth(le, dmg);
 								Location mid = le.getLocation();
 								for (Player p2 : Bukkit.getOnlinePlayers()) {
@@ -1314,6 +1318,7 @@ public class SkillUtil extends UtilMethods {
 										} else {
 											dmg = damage("Crusader's Strike", f, g, d, e, p, sk);
 										}
+										sendSoundPacket(p, "entity.arrow.hit_player", p.getLocation());
 										if (dmg != 0) {
 											sk.removeHealth(sk.hptohealth(dmg));
 										}
@@ -1384,6 +1389,7 @@ public class SkillUtil extends UtilMethods {
 								WeaponUtil.doWeapon(le, p);
 
 							}
+							sendSoundPacket(p, "entity.arrow.hit_player", p.getLocation());
 							setHealth(le, dmg);
 							Location mid = le.getLocation();
 							for (Player p2 : Bukkit.getOnlinePlayers()) {
@@ -1539,6 +1545,7 @@ public class SkillUtil extends UtilMethods {
 												if (dmg != 0) {
 													sk.removeHealth(sk.hptohealth(dmg));
 												}
+												sendSoundPacket(shooter, "entity.arrow.hit_player", shooter.getLocation());
 											}
 										}
 									}
@@ -1556,6 +1563,7 @@ public class SkillUtil extends UtilMethods {
 									if (hp < dmg) {
 										WeaponUtil.doWeapon(e, f.getShooter());
 									}
+									sendSoundPacket(f.getShooter(), "entity.arrow.hit_player", f.getShooter().getLocation());
 									setHealth(e, dmg);
 								}
 							}
