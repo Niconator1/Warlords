@@ -141,7 +141,8 @@ public class SkillUtil extends UtilMethods {
 												if (dmg != 0) {
 													sk.removeHealth(sk.hptohealth(dmg));
 												}
-												a.getWorld().playSound(l, "entity.arrow.hit_player", 1, 1);
+												sendSoundPacket(shooter, "entity.arrow.hit_player",
+														shooter.getLocation());
 											}
 										}
 									}
@@ -160,7 +161,8 @@ public class SkillUtil extends UtilMethods {
 										WeaponUtil.doWeapon(e, b.getShooter());
 									}
 									setHealth(e, dmg);
-									a.getWorld().playSound(l, "entity.arrow.hit_player", 1, 1);
+									sendSoundPacket(b.getShooter(), "entity.arrow.hit_player",
+											b.getShooter().getLocation());
 								}
 							}
 						}
@@ -202,7 +204,8 @@ public class SkillUtil extends UtilMethods {
 												if (dmg != 0) {
 													sk.removeHealth(sk.hptohealth(dmg));
 												}
-												a.getWorld().playSound(l, "entity.arrow.hit_player", 1, 1);
+												sendSoundPacket(shooter, "entity.arrow.hit_player",
+														shooter.getLocation());
 											}
 										}
 									}
@@ -221,7 +224,8 @@ public class SkillUtil extends UtilMethods {
 										WeaponUtil.doWeapon(e, f.getShooter());
 									}
 									setHealth(e, dmg);
-									a.getWorld().playSound(l, "entity.arrow.hit_player", 1, 1);
+									sendSoundPacket(f.getShooter(), "entity.arrow.hit_player",
+											f.getShooter().getLocation());
 								}
 							}
 						}
@@ -293,6 +297,7 @@ public class SkillUtil extends UtilMethods {
 										if (dmg != 0) {
 											sk.removeHealth(sk.hptohealth(dmg));
 										}
+										sendSoundPacket(p, "entity.arrow.hit_player", p.getLocation());
 										return true;
 									}
 								}
@@ -320,6 +325,7 @@ public class SkillUtil extends UtilMethods {
 								WeaponUtil.doWeapon(le, p);
 							}
 							setHealth(le, dmg);
+							sendSoundPacket(p, "entity.arrow.hit_player", p.getLocation());
 							return true;
 						}
 					}
@@ -360,6 +366,7 @@ public class SkillUtil extends UtilMethods {
 											if (dmg != 0) {
 												sk.removeHealth(sk.hptohealth(dmg));
 											}
+											sendSoundPacket(p, "entity.arrow.hit_player", p.getLocation());
 											return true;
 										}
 									}
@@ -390,6 +397,7 @@ public class SkillUtil extends UtilMethods {
 									WeaponUtil.doWeapon(le, p);
 								}
 								setHealth(le, dmg);
+								sendSoundPacket(p, "entity.arrow.hit_player", p.getLocation());
 								return true;
 							}
 						}
@@ -431,6 +439,7 @@ public class SkillUtil extends UtilMethods {
 					if (sk2 != null) {
 						double own = envdamage("Deadly Poison", poisonOwn, sk2);
 						sk2.removeHealth(sk2.hptohealth(own));
+						sendSoundPacket(p, "entity.arrow.hit_player", p.getLocation());
 					}
 				} else {
 					p.sendMessage("Enemy had to much health left");
@@ -444,6 +453,7 @@ public class SkillUtil extends UtilMethods {
 				if (sk != null) {
 					double own = envdamage("Deadly Poison", poisonOwn, sk);
 					sk.removeHealth(sk.hptohealth(own));
+					sendSoundPacket(p, "entity.arrow.hit_player", p.getLocation());
 				}
 			} else {
 				p.sendMessage("Enemy had to much health left");
@@ -495,6 +505,7 @@ public class SkillUtil extends UtilMethods {
 										if (dmg != 0) {
 											sk.removeHealth(sk.hptohealth(dmg));
 										}
+										sendSoundPacket(p, "entity.arrow.hit_player", p.getLocation());
 										Location mid = le.getLocation();
 										for (Player p3 : Bukkit.getOnlinePlayers()) {
 											UtilMethods.sendParticlePacket(p3, EnumParticle.REDSTONE, mid.getX(),
@@ -552,10 +563,10 @@ public class SkillUtil extends UtilMethods {
 							} else {
 								dmg = hptohealth(damage(f, g, d, e, p, "Avenger's Strike"));
 							}
+							sendSoundPacket(p, "entity.arrow.hit_player", p.getLocation());
 							double hp = le.getHealth();
 							if (hp < dmg) {
 								WeaponUtil.doWeapon(le, p);
-
 							}
 							setHealth(le, dmg);
 							Location mid = le.getLocation();
@@ -639,6 +650,7 @@ public class SkillUtil extends UtilMethods {
 											if (dmg != 0) {
 												sk.removeHealth(sk.hptohealth(dmg));
 											}
+											sendSoundPacket(p, "entity.arrow.hit_player", p.getLocation());
 											Location mid = le.getLocation();
 											for (Player p3 : Bukkit.getOnlinePlayers()) {
 												UtilMethods.sendParticlePacket(p3, EnumParticle.REDSTONE, mid.getX(),
@@ -681,6 +693,7 @@ public class SkillUtil extends UtilMethods {
 								} else {
 									dmg = hptohealth(damage(f, g, d, e, p, "Avenger's Strike"));
 								}
+								sendSoundPacket(p, "entity.arrow.hit_player", p.getLocation());
 								double hp = le.getHealth();
 								if (hp < dmg) {
 									WeaponUtil.doWeapon(le, p);
@@ -832,6 +845,7 @@ public class SkillUtil extends UtilMethods {
 										if (!shooter.equals(list.get(j)) && list.get(j).isDead() == false) {
 											double dmg = damage("Elemental Arrow", f.critc(), f.critm(), f.dmin(),
 													f.dmax(), shooter, sk);
+											sendSoundPacket(shooter, "entity.arrow.hit_player", shooter.getLocation());
 											if (dmg != 0) {
 												sk.removeHealth(sk.hptohealth(dmg));
 												for (BloodArrow e : Warlords.bloodarrow) {
@@ -875,8 +889,8 @@ public class SkillUtil extends UtilMethods {
 										if (hp < dmg) {
 											WeaponUtil.doWeapon(e, f.getShooter());
 										}
+										sendSoundPacket(shooter, "entity.arrow.hit_player", shooter.getLocation());
 										setHealth(e, dmg);
-
 										for (BloodArrow e3 : Warlords.bloodarrow) {
 											if (e3.getPlayer().getUniqueId().compareTo(shooter.getUniqueId()) == 0) {
 												double heal = healthtohp(dmg) * 0.21;
@@ -1442,7 +1456,9 @@ public class SkillUtil extends UtilMethods {
 			Warlords.presence.add(new Presence(p, list, dur, spresence, epspresence));
 		}
 	}
-	public static void shootLightningBolt(Player p, double dmin, double dmax, double critc, double critm,double cooldown,double range) {
+
+	public static void shootLightningBolt(Player p, double dmin, double dmax, double critc, double critm,
+			double cooldown, double range) {
 		double pitch = ((p.getLocation().getPitch() + 90.0) * Math.PI) / 180.0;
 		double yaw = ((p.getLocation().getYaw() + 90.0) * Math.PI) / 180.0;
 		double x = Math.sin(pitch) * Math.cos(yaw);
@@ -1451,21 +1467,23 @@ public class SkillUtil extends UtilMethods {
 		Vector vector = new Vector(x, z, y).multiply(1.875);
 		ArmorStand f = (ArmorStand) p.getWorld().spawnEntity(p.getLocation(), EntityType.ARMOR_STAND);
 		CraftArmorStand a = (CraftArmorStand) f;
-		a.getHandle().noclip=true;
+		a.getHandle().noclip = true;
 		f.setVelocity(vector);
 		f.setVisible(false);
-//		f.setGravity(false);
+		// f.setGravity(false);
 		f.setInvulnerable(true);
-		f.setHelmet(new ItemStack(Material.SAPLING,1,(short) 3));
-		f.setHeadPose(f.getHeadPose()
-				.setX(p.getLocation().getPitch()/90.0 * 0.5 * Math.PI));
-		Warlords.lightningbolt.add(new Lightningbolt(f, vector, dmin, dmax, critc, critm, p, p.getLocation(),range,cooldown));
-//		for (Player p2 : Bukkit.getServer().getOnlinePlayers()) {
-//			PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(f.getEntityId());
-//			((CraftPlayer) p2).getHandle().playerConnection.sendPacket(packet);
-//		}
+		f.setHelmet(new ItemStack(Material.SAPLING, 1, (short) 3));
+		f.setHeadPose(f.getHeadPose().setX(p.getLocation().getPitch() / 90.0 * 0.5 * Math.PI));
+		Warlords.lightningbolt
+				.add(new Lightningbolt(f, vector, dmin, dmax, critc, critm, p, p.getLocation(), range, cooldown));
+		// for (Player p2 : Bukkit.getServer().getOnlinePlayers()) {
+		// PacketPlayOutEntityDestroy packet = new
+		// PacketPlayOutEntityDestroy(f.getEntityId());
+		// ((CraftPlayer) p2).getHandle().playerConnection.sendPacket(packet);
+		// }
 		p.getWorld().playSound(p.getLocation(), "shaman.lightningbolt.activation", 1, 1);
 	}
+
 	public static void shootCat(Player p, double dmin, double dmax, double critc, double critm) {
 		double pitch = ((p.getLocation().getPitch() + 90.0) * Math.PI) / 180.0;
 		double yaw = ((p.getLocation().getYaw() + 90.0) * Math.PI) / 180.0;
@@ -1545,7 +1563,8 @@ public class SkillUtil extends UtilMethods {
 					}
 					for (Player p : Bukkit.getServer().getOnlinePlayers()) {
 						if (Warlords.catbolt.get(i).getOcelot() != null) {
-							PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(Warlords.catbolt.get(i).getOcelot().getBukkitEntity().getEntityId());
+							PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(
+									Warlords.catbolt.get(i).getOcelot().getBukkitEntity().getEntityId());
 							((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
 						}
 					}

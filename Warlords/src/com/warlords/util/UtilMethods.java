@@ -3,6 +3,7 @@ package com.warlords.util;
 import java.util.ArrayList;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.craftbukkit.v1_10_R1.entity.CraftPlayer;
 import org.bukkit.entity.LivingEntity;
@@ -21,7 +22,9 @@ import com.warlords.util.type.Test;
 import com.warlords.util.type.Thunderlord;
 
 import net.minecraft.server.v1_10_R1.EnumParticle;
+import net.minecraft.server.v1_10_R1.PacketPlayOutCustomSoundEffect;
 import net.minecraft.server.v1_10_R1.PacketPlayOutWorldParticles;
+import net.minecraft.server.v1_10_R1.SoundCategory;
 
 public class UtilMethods {
 
@@ -447,6 +450,10 @@ public class UtilMethods {
 			float vz, float v, int count) {
 		PacketPlayOutWorldParticles packet = new PacketPlayOutWorldParticles(type, true, (float) x, (float) y,
 				(float) z, vx, vy, vz, v, count, null);
+		((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
+	}
+	public static void sendSoundPacket(Player p,String sound,Location l){
+		PacketPlayOutCustomSoundEffect packet = new PacketPlayOutCustomSoundEffect(sound, SoundCategory.MASTER, l.getX(), l.getY(), l.getZ(), 1f, 1f);
 		((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
 	}
 }
