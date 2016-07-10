@@ -1476,17 +1476,11 @@ public class SkillUtil extends UtilMethods {
 		a.getHandle().noclip = true;
 		f.setVelocity(vector);
 		f.setVisible(false);
-		// f.setGravity(false);
 		f.setInvulnerable(true);
 		f.setHelmet(new ItemStack(Material.SAPLING, 1, (short) 3));
 		f.setHeadPose(f.getHeadPose().setX(p.getLocation().getPitch() / 90.0 * 0.5 * Math.PI));
 		Warlords.lightningbolt
 				.add(new Lightningbolt(f, vector, dmin, dmax, critc, critm, p, p.getLocation(), range, cooldown));
-		// for (Player p2 : Bukkit.getServer().getOnlinePlayers()) {
-		// PacketPlayOutEntityDestroy packet = new
-		// PacketPlayOutEntityDestroy(f.getEntityId());
-		// ((CraftPlayer) p2).getHandle().playerConnection.sendPacket(packet);
-		// }
 		p.getWorld().playSound(p.getLocation(), "shaman.lightningbolt.activation", 1, 1);
 	}
 

@@ -15,6 +15,7 @@ import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_10_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_10_R1.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_10_R1.entity.CraftPlayer;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.LivingEntity;
@@ -299,8 +300,8 @@ public class Warlords extends JavaPlugin {
 									if (allies.size() < max) {
 										max = allies.size();
 									}
-									p.sendMessage("Allies (Page " + page + " of " + ((int) (allies.size() / 10.0 + 0.5)+1)
-											+ " )");
+									p.sendMessage("Allies (Page " + page + " of "
+											+ ((int) (allies.size() / 10.0 + 0.5) + 1) + " )");
 									for (int i = min; i < max; i++) {
 										OfflinePlayer p3 = Bukkit.getOfflinePlayer(allies.get(i));
 										p.sendMessage((i + 1) + ": " + p3.getName());
@@ -1392,8 +1393,9 @@ public class Warlords extends JavaPlugin {
 										WarlordsPlayerAllys a = new WarlordsPlayerAllys(lb.getShooter());
 										if (!a.hasPlayer(p2)) {
 											Location m = lb.getStand().getLocation();
-											double dy = m.getY()-le.getLocation().getY();
-											if (SkillUtil.distance2D(m, le.getLocation()) <= 1.0&&dy<0.5&&dy>-2.0) {
+											double dy = m.getY() - le.getLocation().getY();
+											if (SkillUtil.distance2D(m, le.getLocation()) <= 1.0 && dy < 0.5
+													&& dy > -2.0) {
 												SpielKlasse sk = Warlords.getKlasse(p2);
 												if (sk != null) {
 													sk.removeEnergy(3);
@@ -1402,8 +1404,8 @@ public class Warlords extends JavaPlugin {
 													if (dmg != 0) {
 														sk.removeHealth(sk.hptohealth(dmg));
 													}
-													UtilMethods.sendSoundPacket(lb.getShooter(), "entity.arrow.hit_player",
-															lb.getShooter().getLocation());
+													UtilMethods.sendSoundPacket(lb.getShooter(),
+															"entity.arrow.hit_player", lb.getShooter().getLocation());
 												}
 											}
 										}
@@ -1412,8 +1414,10 @@ public class Warlords extends JavaPlugin {
 							} else {
 								if (!(le instanceof ArmorStand)) {
 									Location m = lb.getStand().getLocation();
-									double dy = m.getY()-le.getLocation().getY();
-									if (SkillUtil.distance2D(m, le.getLocation()) <= 1.0&&dy<0.5&&dy>-2.0) {
+									double dy = m.getY() - le.getLocation().getY();
+									CraftLivingEntity cle = (CraftLivingEntity) le;
+									double height = cle.getHandle().getHeadHeight();
+									if (SkillUtil.distance2D(m, le.getLocation()) <= 1.0 && dy < 0.5*(height-1) && dy > -2.0) {
 										double dmg = UtilMethods.hptohealth(UtilMethods.damage(lb.critc(), lb.critm(),
 												lb.dmin(), lb.dmax(), lb.getShooter(), "Lightning Bolt"));
 										double hp = le.getHealth();
@@ -1618,7 +1622,8 @@ public class Warlords extends JavaPlugin {
 													if (dmg != 0) {
 														sk.removeHealth(sk.hptohealth(dmg));
 													}
-													UtilMethods.sendSoundPacket(s.getP(), "entity.arrow.hit_player", s.getP().getLocation());
+													UtilMethods.sendSoundPacket(s.getP(), "entity.arrow.hit_player",
+															s.getP().getLocation());
 												}
 											}
 										}
@@ -1633,7 +1638,8 @@ public class Warlords extends JavaPlugin {
 										if (hp < dmg) {
 											WeaponUtil.doWeapon(le, s.getP());
 										}
-										UtilMethods.sendSoundPacket(s.getP(), "entity.arrow.hit_player", s.getP().getLocation());
+										UtilMethods.sendSoundPacket(s.getP(), "entity.arrow.hit_player",
+												s.getP().getLocation());
 										SkillUtil.setHealth(le, dmg);
 									}
 								}
@@ -1664,7 +1670,8 @@ public class Warlords extends JavaPlugin {
 														if (dmg != 0) {
 															sk.removeHealth(sk.hptohealth(dmg));
 														}
-														UtilMethods.sendSoundPacket(s.getP(), "entity.arrow.hit_player", s.getP().getLocation());
+														UtilMethods.sendSoundPacket(s.getP(), "entity.arrow.hit_player",
+																s.getP().getLocation());
 														Vector kb = p2.getLocation().toVector().subtract(l.toVector());
 														p2.setVelocity(p2.getVelocity().add(kb));
 													}
@@ -1682,7 +1689,8 @@ public class Warlords extends JavaPlugin {
 											if (hp < dmg) {
 												WeaponUtil.doWeapon(le, s.getP());
 											}
-											UtilMethods.sendSoundPacket(s.getP(), "entity.arrow.hit_player", s.getP().getLocation());
+											UtilMethods.sendSoundPacket(s.getP(), "entity.arrow.hit_player",
+													s.getP().getLocation());
 											SkillUtil.setHealth(le, dmg);
 											Vector kb = le.getLocation().toVector().subtract(l.toVector());
 											le.setVelocity(le.getVelocity().add(kb));
