@@ -400,7 +400,7 @@ public class UtilMethods {
 		if (wp != null) {
 			UtilMethods.giveItems(py, true);
 			wp.setMode(true);
-			p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(10);
+			p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(20);
 			py.applySpeed();
 			wp.setKlasse(py.getName());
 			PlayerUtil.save(wp, Warlords.getPlugin(Warlords.class).getDataFolder(), "/players/" + p.getUniqueId());
@@ -436,7 +436,7 @@ public class UtilMethods {
 				py = new Thunderlord(90, p);
 			}
 			if (py != null) {
-				p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(10);
+				p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(20);
 				Warlords.player.add(py);
 				if (wp.getMode() == true) {
 					py.p.getInventory().setItem(0, WeaponUtil.generateItemStack(py.getWeapon(), py.getName()));

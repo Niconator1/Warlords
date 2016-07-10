@@ -15,7 +15,7 @@ import com.warlords.util.itemlist.ItemListThunder;
 public class Thunderlord extends SpielKlasse {
 	public static String name = "Thunderlord";
 	private static String description = "";
-	private static int eps = 150;//10
+	private static int eps = 200;// 10
 	private static int eph = 10;
 	public static int epmax = 200;
 	public static int hpmax = 6000;
@@ -26,8 +26,22 @@ public class Thunderlord extends SpielKlasse {
 	public double ccbolt = 0.2;
 	public double cmulbolt = 2.0;
 	public int ebolt = 30;
-	public double range = 60.0;
-	public double cooldown = 2.0;
+	public double rangebolt = 60.0;
+	public double cbolt = 2.0;
+	// Chain Lightning
+	public static final String chainname = "Chain Lightning";
+	public double dminchain = 243;
+	public double dmaxchain = 485;
+	public double ccchain = 0.2;
+	public double cmulchain = 1.75;
+	public int echain = 20;
+	public double rangechain = 10.0;
+	public double cchain = 10.8;
+	public int countchain = 2;
+	public double increasechain = 0.1;
+	public double reductionchain = 0.1;
+	public double reductionmaxchain = 0.3;
+	public double durchain = 4.5;
 
 	// Elytra
 	public double celytra = 40;
@@ -41,6 +55,22 @@ public class Thunderlord extends SpielKlasse {
 	@Override
 	public void addAbility(int j) {
 		switch (j) {
+		case 1:
+			if (getWeapon().getSkill() == 1 && getWeapon().getKlass() == 5) {
+				p.getInventory().setItem(1, ItemListThunder.getThunderRedRune(
+						((double) (int) (cchain * (1.0 - getWeapon().getCooldown()) * 100.0) / 100.0), echain, ccchain,
+						cmulchain, ((double) (int) (dminchain * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0,
+						((double) (int) (dmaxchain * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0, countchain,
+						rangechain, increasechain, reductionchain, reductionmaxchain, durchain));
+			} else {
+				p.getInventory().setItem(1,
+						ItemListThunder.getThunderRedRune(
+								((double) (int) (cchain * (1.0 - getWeapon().getCooldown()) * 100.0) / 100.0), echain,
+								ccchain, cmulchain, ((double) (int) (dminchain * 100.0)) / 100.0,
+								((double) (int) (dmaxchain * 100.0)) / 100.0, countchain, rangechain, increasechain,
+								reductionchain, reductionmaxchain, durchain));
+			}
+			break;
 		case 8:
 			p.getInventory().setItem(8, ItemListGenerel.getElytraRune(celytra, eelytra, espeed));
 		default:
@@ -57,16 +87,18 @@ public class Thunderlord extends SpielKlasse {
 			if (getWeapon().getSkill() == 0 && getWeapon().getKlass() == 5) {
 				im.setLore(ItemListThunder.getThunderMain(ebolt, ccbolt, cmulbolt,
 						((double) (int) (dminbolt * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0,
-						((double) (int) (dmaxbolt * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0, range, cooldown));
+						((double) (int) (dmaxbolt * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0, rangebolt,
+						cbolt));
 			} else {
 				im.setLore(
-						ItemListThunder.getThunderMain(ebolt, ccbolt, cmulbolt, dminbolt, dmaxbolt, range, cooldown));
+						ItemListThunder.getThunderMain(ebolt, ccbolt, cmulbolt, dminbolt, dmaxbolt, rangebolt, cbolt));
 			}
 			im.setDisplayName(ChatColor.GREEN + "Lightning Bolt");
 			is.setItemMeta(im);
 			p.getInventory().setItem(0, is);
 		}
 	}
+
 	@Override
 	public ItemStack getMainAbility() {
 		ItemStack is = WeaponUtil.generateItemStack(getWeapon(), getName());
@@ -75,12 +107,13 @@ public class Thunderlord extends SpielKlasse {
 			if (getWeapon().getSkill() == 0 && getWeapon().getKlass() == 5) {
 				im.setLore(ItemListThunder.getThunderMain(ebolt, ccbolt, cmulbolt,
 						((double) (int) (dminbolt * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0,
-						((double) (int) (dmaxbolt * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0, range, cooldown));
+						((double) (int) (dmaxbolt * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0, rangebolt,
+						cbolt));
 			} else {
 				im.setLore(
-						ItemListThunder.getThunderMain(ebolt, ccbolt, cmulbolt, dminbolt, dmaxbolt, range, cooldown));
+						ItemListThunder.getThunderMain(ebolt, ccbolt, cmulbolt, dminbolt, dmaxbolt, rangebolt, cbolt));
 			}
-			im.setDisplayName(ChatColor.GREEN + "Firebolt");
+			im.setDisplayName(ChatColor.GREEN + "Lightning Bolt");
 			is.setItemMeta(im);
 		}
 		return is;
@@ -100,9 +133,9 @@ public class Thunderlord extends SpielKlasse {
 			if (getEnergy() >= ebolt) {
 				if (getWeapon().getSkill() == 0 && getWeapon().getKlass() == 0) {
 					SkillUtil.shootLightningBolt(p, dminbolt * (1.0 + getWeapon().getBoost()),
-							dmaxbolt * (1.0 + getWeapon().getBoost()), ccbolt, cmulbolt, cooldown, range);
+							dmaxbolt * (1.0 + getWeapon().getBoost()), ccbolt, cmulbolt, cbolt, rangebolt);
 				} else {
-					SkillUtil.shootLightningBolt(p, dminbolt, dmaxbolt, ccbolt, cmulbolt, cooldown, range);
+					SkillUtil.shootLightningBolt(p, dminbolt, dmaxbolt, ccbolt, cmulbolt, cbolt, rangebolt);
 				}
 
 				doCooldown(j);
@@ -149,6 +182,20 @@ public class Thunderlord extends SpielKlasse {
 		switch (i) {
 		case 0:
 			return WeaponUtil.generateItemStack(getWeapon(), getName());
+		case 1:
+			if (getWeapon().getSkill() == 1 && getWeapon().getKlass() == 5) {
+				return ItemListThunder.getThunderRedRune(
+						((double) (int) (cchain * (1.0 - getWeapon().getCooldown()) * 100.0) / 100.0), echain, ccchain,
+						cmulchain, ((double) (int) (dminchain * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0,
+						((double) (int) (dmaxchain * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0, countchain,
+						rangechain, increasechain, reductionchain, reductionmaxchain, durchain);
+			} else {
+				return ItemListThunder.getThunderRedRune(
+						((double) (int) (cchain * (1.0 - getWeapon().getCooldown()) * 100.0) / 100.0), echain, ccchain,
+						cmulchain, ((double) (int) (dminchain * 100.0)) / 100.0,
+						((double) (int) (dmaxchain * 100.0)) / 100.0, countchain, rangechain, increasechain,
+						reductionchain, reductionmaxchain, durchain);
+			}
 		case 8:
 			return ItemListGenerel.getElytraRune(celytra, eelytra, espeed);
 		default:
