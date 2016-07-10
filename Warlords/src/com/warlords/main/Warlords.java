@@ -1357,9 +1357,9 @@ public class Warlords extends JavaPlugin {
 	}
 
 	private void loopsThunderlord() {
-		// Projectile Gravitation disabling
 		Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
 			public void run() {
+				// Lightning Bolt
 				for (int i = 0; i < lightningbolt.size(); i++) {
 					Lightningbolt lb = lightningbolt.get(i);
 					lb.getStand().setVelocity(lb.getVector());
@@ -1382,6 +1382,48 @@ public class Warlords extends JavaPlugin {
 						}
 						lb.getStand().remove();
 						lightningbolt.remove(i);
+					}
+					for (LivingEntity le : lb.getStand().getWorld().getLivingEntities()) {
+						if (le.isDead() == false) {
+							if (le instanceof Player) {
+								if (PlayerUtil.isAttackingPlayers(lb.getShooter())) {
+									Player p2 = (Player) le;
+									if (!p2.equals(lb.getShooter())) {
+										WarlordsPlayerAllys a = new WarlordsPlayerAllys(lb.getShooter());
+										if (!a.hasPlayer(p2)) {
+											Location m = lb.getStand().getLocation();
+											double dy = m.getY()-le.getLocation().getY();
+											if (SkillUtil.distance2D(m, le.getLocation()) <= 1.0&&dy<0.5&&dy>-2.0) {
+												SpielKlasse sk = Warlords.getKlasse(p2);
+												if (sk != null) {
+													sk.removeEnergy(3);
+													double dmg = UtilMethods.damage("Lightning Bolt", lb.critc(),
+															lb.critm(), lb.dmin(), lb.dmax(), lb.getShooter(), sk);
+													if (dmg != 0) {
+														sk.removeHealth(sk.hptohealth(dmg));
+													}
+												}
+											}
+										}
+									}
+								}
+							} else {
+								if (!(le instanceof ArmorStand)) {
+									Location m = lb.getStand().getLocation();
+									double dy = m.getY()-le.getLocation().getY();
+									if (SkillUtil.distance2D(m, le.getLocation()) <= 1.0&&dy<0.5&&dy>-2.0) {
+										double dmg = UtilMethods.hptohealth(UtilMethods.damage(lb.critc(), lb.critm(),
+												lb.dmin(), lb.dmax(), lb.getShooter(), "Lightning Bolt"));
+										double hp = le.getHealth();
+										if (hp < dmg) {
+											WeaponUtil.doWeapon(le, lb.getShooter());
+
+										}
+										UtilMethods.setHealth(le, dmg);
+									}
+								}
+							}
+						}
 					}
 				}
 			}
