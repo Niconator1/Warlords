@@ -1402,6 +1402,8 @@ public class Warlords extends JavaPlugin {
 													if (dmg != 0) {
 														sk.removeHealth(sk.hptohealth(dmg));
 													}
+													UtilMethods.sendSoundPacket(lb.getShooter(), "entity.arrow.hit_player",
+															lb.getShooter().getLocation());
 												}
 											}
 										}
@@ -1419,6 +1421,8 @@ public class Warlords extends JavaPlugin {
 											WeaponUtil.doWeapon(le, lb.getShooter());
 
 										}
+										UtilMethods.sendSoundPacket(lb.getShooter(), "entity.arrow.hit_player",
+												lb.getShooter().getLocation());
 										UtilMethods.setHealth(le, dmg);
 									}
 								}
