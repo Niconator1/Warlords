@@ -15,10 +15,10 @@ import com.warlords.util.itemlist.ItemListThunder;
 public class Thunderlord extends SpielKlasse {
 	public static String name = "Thunderlord";
 	private static String description = "";
-	private static int eps = 7;
+	private static int eps = 10;
 	private static int eph = 10;
 	public static int epmax = 200;
-	public static int hpmax = 6750;
+	public static int hpmax = 6000;
 	// Lightningbolt
 	public static final String boltname = "Lightning Bolt";
 	public double dminbolt = 215;
