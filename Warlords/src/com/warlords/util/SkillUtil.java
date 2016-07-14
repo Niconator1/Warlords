@@ -28,6 +28,7 @@ import com.warlords.util.skills.assassin.Vanish;
 import com.warlords.util.skills.demon.DConsecrate;
 import com.warlords.util.skills.demon.DWrath;
 import com.warlords.util.skills.demon.ShadowInfusion;
+import com.warlords.util.skills.demon.UnholyRadiance;
 import com.warlords.util.skills.hunter.BloodArrow;
 import com.warlords.util.skills.hunter.Companion;
 import com.warlords.util.skills.hunter.ElementalArrow;
@@ -39,6 +40,7 @@ import com.warlords.util.skills.mage.Flameburst;
 import com.warlords.util.skills.mage.Inferno;
 import com.warlords.util.skills.mage.TimeWarp;
 import com.warlords.util.skills.paladin.Consecrate;
+import com.warlords.util.skills.paladin.HolyRadiance;
 import com.warlords.util.skills.paladin.LightInfusion;
 import com.warlords.util.skills.paladin.Presence;
 import com.warlords.util.skills.paladin.Wrath;
@@ -759,6 +761,35 @@ public class SkillUtil extends UtilMethods {
 				sk.addHealth(sk.hptohealth(
 						heal("Holy Radiance", hminhradiance, hmaxhradiance, cchradiance, cmulhradiance, p, sk)));
 			}
+			ArrayList<Player> list = new ArrayList<Player>();
+			WarlordsPlayerAllys a = new WarlordsPlayerAllys(p);
+			if (a.getAllys() != null) {
+				for (UUID id : a.getAllys()) {
+					Player p2 = Bukkit.getPlayer(id);
+					if (p2 != null) {
+						if (p2.isDead() == false) {
+							if (p2.getLocation().distance(p.getLocation()) < rhradiance) {
+								SpielKlasse ska = Warlords.getKlasse(p2);
+								if (ska != null) {
+									list.add(p2);
+								}
+							}
+						}
+					}
+				}
+			}
+			for (Player p2:list) {
+				ArmorStand f = (ArmorStand) p.getWorld().spawnEntity(p.getLocation(), EntityType.ARMOR_STAND);
+				CraftArmorStand ca = (CraftArmorStand) f;
+				ca.getHandle().noclip = true;
+				f.setInvulnerable(true);
+				for (Player p3 : Bukkit.getServer().getOnlinePlayers()) {
+					PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(f.getEntityId());
+					((CraftPlayer) p3).getHandle().playerConnection.sendPacket(packet);
+				}
+				HolyRadiance hr = new HolyRadiance(f,hminhradiance,hmaxhradiance,cchradiance,cmulhradiance,p,p2,p.getLocation());
+				Warlords.hradiance.add(hr);
+			}
 		}
 		for (Player p2 : Bukkit.getServer().getOnlinePlayers()) {
 			Location l = p.getLocation();
@@ -1252,6 +1283,35 @@ public class SkillUtil extends UtilMethods {
 				sk.addHealth(sk.hptohealth(
 						heal("Unholy Radiance", hminhradiance, hmaxhradiance, cchradiance, cmulhradiance, p, sk)));
 			}
+		}
+		ArrayList<Player> list = new ArrayList<Player>();
+		WarlordsPlayerAllys a = new WarlordsPlayerAllys(p);
+		if (a.getAllys() != null) {
+			for (UUID id : a.getAllys()) {
+				Player p2 = Bukkit.getPlayer(id);
+				if (p2 != null) {
+					if (p2.isDead() == false) {
+						if (p2.getLocation().distance(p.getLocation()) < rhradiance) {
+							SpielKlasse ska = Warlords.getKlasse(p2);
+							if (ska != null) {
+								list.add(p2);
+							}
+						}
+					}
+				}
+			}
+		}
+		for (Player p2:list) {
+			ArmorStand f = (ArmorStand) p.getWorld().spawnEntity(p.getLocation(), EntityType.ARMOR_STAND);
+			CraftArmorStand ca = (CraftArmorStand) f;
+			ca.getHandle().noclip = true;
+			f.setInvulnerable(true);
+			for (Player p3 : Bukkit.getServer().getOnlinePlayers()) {
+				PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(f.getEntityId());
+				((CraftPlayer) p3).getHandle().playerConnection.sendPacket(packet);
+			}
+			UnholyRadiance hr = new UnholyRadiance(f,hminhradiance,hmaxhradiance,cchradiance,cmulhradiance,p,p2,p.getLocation());
+			Warlords.uhradiance.add(hr);
 		}
 		for (Player p2 : Bukkit.getServer().getOnlinePlayers()) {
 			Location l = p.getLocation();

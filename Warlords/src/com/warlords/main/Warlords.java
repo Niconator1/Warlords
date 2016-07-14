@@ -43,6 +43,7 @@ import com.warlords.util.skills.assassin.Vanish;
 import com.warlords.util.skills.demon.DConsecrate;
 import com.warlords.util.skills.demon.DWrath;
 import com.warlords.util.skills.demon.ShadowInfusion;
+import com.warlords.util.skills.demon.UnholyRadiance;
 import com.warlords.util.skills.hunter.BloodArrow;
 import com.warlords.util.skills.hunter.Companion;
 import com.warlords.util.skills.hunter.ElementalArrow;
@@ -54,6 +55,7 @@ import com.warlords.util.skills.mage.Flameburst;
 import com.warlords.util.skills.mage.Inferno;
 import com.warlords.util.skills.mage.TimeWarp;
 import com.warlords.util.skills.paladin.Consecrate;
+import com.warlords.util.skills.paladin.HolyRadiance;
 import com.warlords.util.skills.paladin.LightInfusion;
 import com.warlords.util.skills.paladin.Presence;
 import com.warlords.util.skills.paladin.Wrath;
@@ -93,6 +95,7 @@ public class Warlords extends JavaPlugin {
 	public static ArrayList<Lazor> lazor = new ArrayList<Lazor>();
 	public static ArrayList<Consecrate> consecrate = new ArrayList<Consecrate>();
 	public static ArrayList<LightInfusion> linfusion = new ArrayList<LightInfusion>();
+	public static ArrayList<HolyRadiance> hradiance = new ArrayList<HolyRadiance>();
 	public static ArrayList<Wrath> awrath = new ArrayList<Wrath>();
 	public static ArrayList<ElementalArrow> elementalarrow = new ArrayList<ElementalArrow>();
 	public static ArrayList<ExplosivArrow> explosivarrow = new ArrayList<ExplosivArrow>();
@@ -101,6 +104,7 @@ public class Warlords extends JavaPlugin {
 	public static ArrayList<Companion> companion = new ArrayList<Companion>();
 	public static ArrayList<DConsecrate> dconsecrate = new ArrayList<DConsecrate>();
 	public static ArrayList<ShadowInfusion> sinfusion = new ArrayList<ShadowInfusion>();
+	public static ArrayList<UnholyRadiance> uhradiance = new ArrayList<UnholyRadiance>();
 	public static ArrayList<DWrath> dwrath = new ArrayList<DWrath>();
 	public static ArrayList<Presence> presence = new ArrayList<Presence>();
 	public static ArrayList<Lightningbolt> lightningbolt = new ArrayList<Lightningbolt>();
@@ -793,7 +797,9 @@ public class Warlords extends JavaPlugin {
 						if (sk != null) {
 							UtilMethods.heal("Time Warp", sk.getHeal() * sk.getMaxHP(), sk.getHeal() * sk.getMaxHP(), 0,
 									1, sk.p, sk);
-							sk.addHealth(sk.hptohealth(sk.getHeal() * sk.getMaxHP()));
+							if (sk.healthtohp() < sk.getMaxHP()) {
+								sk.addHealth(sk.hptohealth(sk.getHeal() * sk.getMaxHP()));
+							}
 						}
 						warp.remove(tw);
 					} else {
@@ -1022,6 +1028,47 @@ public class Warlords extends JavaPlugin {
 
 					}
 				}
+				// Holy Radiance
+				for (int i = 0; i < hradiance.size(); i++) {
+					HolyRadiance in = hradiance.get(i);
+					ArmorStand a = in.getStand();
+					Location l = a.getLocation();
+					double distance = l.distance(in.start());
+					double distance2 = in.getTarget().getLocation().distance(l);
+					if (distance > 40 || distance2 > 50) {
+						a.remove();
+						hradiance.remove(i);
+					} else {
+						if (distance2 < 0.5) {
+							SpielKlasse sk = getKlasse(in.getTarget());
+							if (sk != null) {
+								if (sk.healthtohp() < sk.getMaxHP()) {
+									sk.addHealth(sk.hptohealth(UtilMethods.heal("Holy Radiance", in.hmin(), in.hmax(),
+											in.critc(), in.critm(), in.getShooter(), sk)));
+								}
+								for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+									UtilMethods.sendParticlePacket(p, EnumParticle.HEART, l.getX(), l.getY() + 2.0,
+											l.getZ(), 0f, 0f, 0f, 0f, 1);
+								}
+							}
+							a.remove();
+							hradiance.remove(i);
+						} else {
+							Vector vel = in.getTarget().getLocation().toVector().subtract(l.toVector()).normalize()
+									.multiply(0.4);
+							a.setVelocity(vel);
+							for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+								for (int j = 0; j < 10; j++) {
+									double rand = Math.random() * 2.0;
+									double randx = Math.random() * 0.6;
+									double randz = Math.random() * 0.6;
+									UtilMethods.sendParticlePacket(p, EnumParticle.SPELL_MOB, l.getX() + randx - 0.3,
+											l.getY() + rand, l.getZ() - 0.3 + randz, 1f, 1f, 1f, 1f, 0);
+								}
+							}
+						}
+					}
+				}
 				// Avenger's Wrath
 				for (int i = 0; i < awrath.size(); i++) {
 					Wrath in = awrath.get(i);
@@ -1236,6 +1283,47 @@ public class Warlords extends JavaPlugin {
 
 					}
 				}
+				// Unholy Radiance
+				for (int i = 0; i < uhradiance.size(); i++) {
+					UnholyRadiance in = uhradiance.get(i);
+					ArmorStand a = in.getStand();
+					Location l = a.getLocation();
+					double distance = l.distance(in.start());
+					double distance2 = in.getTarget().getLocation().distance(l);
+					if (distance > 40 || distance2 > 50) {
+						a.remove();
+						uhradiance.remove(i);
+					} else {
+						if (distance2 < 0.5) {
+							SpielKlasse sk = getKlasse(in.getTarget());
+							if (sk != null) {
+								if (sk.healthtohp() < sk.getMaxHP()) {
+									sk.addHealth(sk.hptohealth(UtilMethods.heal("Unholy Radiance", in.hmin(), in.hmax(),
+											in.critc(), in.critm(), in.getShooter(), sk)));
+								}
+								for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+									UtilMethods.sendParticlePacket(p, EnumParticle.VILLAGER_ANGRY, l.getX(), l.getY() + 2.0,
+											l.getZ(), 0f, 0f, 0f, 0f, 1);
+								}
+							}
+							a.remove();
+							uhradiance.remove(i);
+						} else {
+							Vector vel = in.getTarget().getLocation().toVector().subtract(l.toVector()).normalize()
+									.multiply(0.4);
+							a.setVelocity(vel);
+							for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+								for (int j = 0; j < 10; j++) {
+									double rand = Math.random() * 2.0;
+									double randx = Math.random() * 0.6;
+									double randz = Math.random() * 0.6;
+									UtilMethods.sendParticlePacket(p, EnumParticle.SPELL_MOB, l.getX() + randx - 0.3,
+											l.getY() + rand, l.getZ() - 0.3 + randz, 1f, 0f, 0f, 1f, 0);
+								}
+							}
+						}
+					}
+				}
 				// Demon's Wrath
 				for (int i = 0; i < dwrath.size(); i++) {
 					DWrath in = dwrath.get(i);
@@ -1417,7 +1505,8 @@ public class Warlords extends JavaPlugin {
 									double dy = m.getY() - le.getLocation().getY();
 									CraftLivingEntity cle = (CraftLivingEntity) le;
 									double height = cle.getHandle().getHeadHeight();
-									if (SkillUtil.distance2D(m, le.getLocation()) <= 1.0 && dy < 0.5*(height-1) && dy > -2.0) {
+									if (SkillUtil.distance2D(m, le.getLocation()) <= 1.0 && dy < 0.5 * (height - 1)
+											&& dy > -2.0) {
 										double dmg = UtilMethods.hptohealth(UtilMethods.damage(lb.critc(), lb.critm(),
 												lb.dmin(), lb.dmax(), lb.getShooter(), "Lightning Bolt"));
 										double hp = le.getHealth();
