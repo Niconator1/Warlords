@@ -161,6 +161,12 @@ public class Warlords extends JavaPlugin {
 			p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4);
 			p.setWalkSpeed(0.2f);
 		}
+		for (int i = 0; i < hradiance.size(); i++) {
+			hradiance.get(i).getStand().remove();
+		}
+		for (int i = 0; i < uhradiance.size(); i++) {
+			uhradiance.get(i).getStand().remove();
+		}
 		for (int i = 0; i < catbolt.size(); i++) {
 			for (Player p : Bukkit.getServer().getOnlinePlayers()) {
 				if (Warlords.catbolt.get(i).getOcelot() != null) {
@@ -795,9 +801,9 @@ public class Warlords extends JavaPlugin {
 								1);
 						SpielKlasse sk = getKlasse(tw.getPlayer());
 						if (sk != null) {
-							UtilMethods.heal("Time Warp", sk.getHeal() * sk.getMaxHP(), sk.getHeal() * sk.getMaxHP(), 0,
-									1, sk.p, sk);
 							if (sk.healthtohp() < sk.getMaxHP()) {
+								UtilMethods.heal("Time Warp", sk.getHeal() * sk.getMaxHP(), sk.getHeal() * sk.getMaxHP(), 0,
+										1, sk.p, sk);
 								sk.addHealth(sk.hptohealth(sk.getHeal() * sk.getMaxHP()));
 							}
 						}

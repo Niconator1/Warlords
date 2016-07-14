@@ -638,6 +638,8 @@ public class EventManager implements Listener {
 				WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
 						"/players/" + p.getUniqueId());
 				if (wp != null) {
+					if(wp.getMode()){
+					}
 					// event.setCancelled(true);
 				}
 			}

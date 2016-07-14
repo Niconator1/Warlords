@@ -805,8 +805,6 @@ public class SkillUtil extends UtilMethods {
 					1);
 		}
 		p.getLocation().getWorld().playSound(p.getLocation(), "paladin.holyradiance.activation", 1, 1);
-		// Armor Stand follow the teammates or Location with addition will
-		// follow the teammates
 	}
 
 	public static void addAvengerWrath(double dur, Player p, double r, int count,int epsboost) {
@@ -1327,8 +1325,6 @@ public class SkillUtil extends UtilMethods {
 					0f, 0f, 1);
 		}
 		p.getLocation().getWorld().playSound(p.getLocation(), "paladin.holyradiance.activation", 1, 1);
-		// Armor Stand follow the teammates or Location with addition will
-		// follow the teammates
 	}
 
 	public static void addDemonWrath(double dur, Player p, double r, int count,int epsboost) {
