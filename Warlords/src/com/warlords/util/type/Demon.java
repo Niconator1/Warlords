@@ -232,10 +232,11 @@ public class Demon extends SpielKlasse {
 			if (getEnergy() >= ehradiance) {
 				SkillUtil.doUnholyRadiance(hminhradiance, hmaxhradiance, cchradiance, cmulhradiance, rhradiance, p);
 				doCooldown(j);
+				removeEnergy(ehradiance);
 			}
 			break;
 		case 4:
-			SkillUtil.addDemonWrath(dwrath, p, rwrath, countwrath);
+			SkillUtil.addDemonWrath(dwrath, p, rwrath, countwrath,epswrath);
 			doCooldown(j);
 			break;
 		case 5:

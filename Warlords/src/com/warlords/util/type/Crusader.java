@@ -212,6 +212,7 @@ public class Crusader extends SpielKlasse {
 			if (getEnergy() >= ehradiance) {
 				SkillUtil.doHolyRadiance(hminhradiance, hmaxhradiance, cchradiance, cmulhradiance, rhradiance, p);
 				doCooldown(j);
+				removeEnergy(ehradiance);
 			}
 			break;
 		case 4:

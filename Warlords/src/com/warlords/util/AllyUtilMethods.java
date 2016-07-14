@@ -14,8 +14,8 @@ import org.bukkit.craftbukkit.libs.jline.internal.InputStreamReader;
 
 public class AllyUtilMethods {
 
-	public static void save(ArrayList<UUID> wl, File file,String path) {
-		File f = new File(file + path+".txt");
+	public static void save(ArrayList<UUID> wl, File file, String path) {
+		File f = new File(file + path + ".txt");
 		if (!f.exists()) {
 			try {
 				f.getParentFile().mkdirs();
@@ -27,7 +27,7 @@ public class AllyUtilMethods {
 		}
 		try {
 			BufferedWriter os = new BufferedWriter(
-					new OutputStreamWriter(new FileOutputStream(file.getAbsolutePath() + path+".txt")));
+					new OutputStreamWriter(new FileOutputStream(file.getAbsolutePath() + path + ".txt")));
 			for (UUID w : wl) {
 				String s = "{";
 				s += w.toString() + "";
@@ -42,7 +42,7 @@ public class AllyUtilMethods {
 	}
 
 	public static ArrayList<UUID> load(File file, String path) {
-		File f = new File(file + path+".txt");
+		File f = new File(file + path + ".txt");
 		if (!f.exists()) {
 			try {
 				f.getParentFile().mkdirs();
@@ -54,7 +54,7 @@ public class AllyUtilMethods {
 		}
 		try {
 			BufferedReader is = new BufferedReader(
-					new InputStreamReader(new FileInputStream(file.getAbsolutePath() + path+".txt")));
+					new InputStreamReader(new FileInputStream(file.getAbsolutePath() + path + ".txt")));
 			ArrayList<UUID> result = new ArrayList<UUID>();
 			while (is.ready()) {
 				String uuid = is.readLine();

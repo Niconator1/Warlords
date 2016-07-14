@@ -778,12 +778,12 @@ public class SkillUtil extends UtilMethods {
 		// follow the teammates
 	}
 
-	public static void addAvengerWrath(double dur, Player p, double r, int count) {
+	public static void addAvengerWrath(double dur, Player p, double r, int count,int epsboost) {
 		SpielKlasse sk = Warlords.getKlasse(p);
 		if (sk != null) {
-			sk.epsBoost = sk.epsBoost + count;
+			sk.epsBoost = sk.epsBoost + epsboost;
 			p.getWorld().playSound(p.getLocation(), "paladin.avengerswrath.activation", 1, 1);
-			Warlords.awrath.add(new Wrath(dur, p, r, count));
+			Warlords.awrath.add(new Wrath(dur, p, r, count,epsboost));
 		}
 	}
 
@@ -1271,12 +1271,12 @@ public class SkillUtil extends UtilMethods {
 		// follow the teammates
 	}
 
-	public static void addDemonWrath(double dur, Player p, double r, int count) {
+	public static void addDemonWrath(double dur, Player p, double r, int count,int epsboost) {
 		SpielKlasse sk = Warlords.getKlasse(p);
 		if (sk != null) {
-			sk.epsBoost = sk.epsBoost + count;
+			sk.epsBoost = sk.epsBoost + epsboost;
 			p.getWorld().playSound(p.getLocation(), "paladin.avengerswrath.activation", 1, 1);
-			Warlords.dwrath.add(new DWrath(dur, p, r, count));
+			Warlords.dwrath.add(new DWrath(dur, p, r, count,epsboost));
 		}
 	}
 

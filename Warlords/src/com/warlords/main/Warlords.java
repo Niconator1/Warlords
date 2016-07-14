@@ -1040,7 +1040,7 @@ public class Warlords extends JavaPlugin {
 					if (in.getDuration() <= 0) {
 						SpielKlasse sk = getKlasse(in.getPlayer());
 						if (sk != null) {
-							sk.epsBoost = sk.epsBoost - in.getCount();
+							sk.epsBoost = sk.epsBoost - in.getEPS();
 							awrath.remove(in);
 						}
 
@@ -1254,7 +1254,7 @@ public class Warlords extends JavaPlugin {
 					if (in.getDuration() <= 0) {
 						SpielKlasse sk = getKlasse(in.getPlayer());
 						if (sk != null) {
-							sk.epsBoost = sk.epsBoost - in.getCount();
+							sk.epsBoost = sk.epsBoost - in.getEPS();
 							dwrath.remove(in);
 						}
 

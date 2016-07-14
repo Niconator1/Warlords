@@ -7,11 +7,13 @@ public class DWrath {
 	private Player p;
 	private double r;
 	private int count;
-	public DWrath(double dur,Player p,double r,int count){
+	private int eps;
+	public DWrath(double dur,Player p,double r,int count, int epsboost){
 		this.dur=dur*20;
 		this.p=p;
 		this.r=r;
 		this.count=count;
+		this.eps=epsboost;
 	}
 	public double getDuration(){
 		return dur;
@@ -27,5 +29,8 @@ public class DWrath {
 	}
 	public int getCount() {
 		return count;
+	}
+	public int getEPS() {
+		return eps;
 	}
 }

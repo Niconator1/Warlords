@@ -206,10 +206,11 @@ public class Avenger extends SpielKlasse {
 			if (getEnergy() >= ehradiance) {
 				SkillUtil.doHolyRadiance(hminhradiance, hmaxhradiance, cchradiance, cmulhradiance, rhradiance, p);
 				doCooldown(j);
+				removeEnergy(ehradiance);
 			}
 			break;
 		case 4:
-			SkillUtil.addAvengerWrath(dwrath, p, rwrath, countwrath);
+			SkillUtil.addAvengerWrath(dwrath, p, rwrath, countwrath,epswrath);
 			doCooldown(j);
 			break;
 		case 8:
