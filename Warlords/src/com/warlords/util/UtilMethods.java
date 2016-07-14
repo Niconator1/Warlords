@@ -54,6 +54,7 @@ public class UtilMethods {
 	}
 
 	public static double envdamage(String reason, double dmg, SpielKlasse victim) {
+		dmg*=victim.damagemultiplier;
 		if (victim.getShield() > 0) {
 			if (victim.getShield() >= dmg) {
 				victim.damageShield(dmg);
@@ -147,6 +148,7 @@ public class UtilMethods {
 		double randdmg = Math.random() * (max - min) + min;
 		double rand = Math.random() * 100.0;
 		double dmg = randdmg;
+		dmg*=victim.damagemultiplier;
 		if (rand < critc * 100.0) {
 			dmg *= critm;
 			if (victim.getShield() > 0) {
@@ -264,6 +266,7 @@ public class UtilMethods {
 			double randdmg = Math.random() * (weapon.getDmax() - weapon.getDmin()) + weapon.getDmin();
 			double rand = Math.random() * 100.0;
 			double dmg = randdmg;
+			dmg*=victim.damagemultiplier;
 			if (rand < weapon.getCc() * 100.0) {
 				dmg *= weapon.getCm();
 				if (victim.getShield() > 0) {

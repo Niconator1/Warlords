@@ -30,6 +30,7 @@ public abstract class SpielKlasse {
 	public double ccBoost = 0;
 	public double cmulBoost = 0;
 	public double speedBoost = 0;
+	public double damagemultiplier = 1;
 
 	public SpielKlasse(int level, String name, String description, int eps, int eph, int epmax, int hpmax, Player p) {
 		this.level = level;

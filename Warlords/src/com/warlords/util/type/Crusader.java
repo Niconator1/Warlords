@@ -70,6 +70,7 @@ public class Crusader extends SpielKlasse {
 
 	public Crusader(int level, Player p) {
 		super(level, name, description, eps, eph, epmax, hpmax, p);
+		this.damagemultiplier=0.8;
 	}
 
 	@Override
