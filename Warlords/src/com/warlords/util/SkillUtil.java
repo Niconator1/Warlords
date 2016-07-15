@@ -1539,7 +1539,60 @@ public class SkillUtil extends UtilMethods {
 				.add(new Lightningbolt(f, vector, dmin, dmax, critc, critm, p, p.getLocation(), range, cooldown));
 		p.getWorld().playSound(p.getLocation(), "shaman.lightningbolt.activation", 1, 1);
 	}
-
+	public static boolean doChainLightning(Player p,double dmin,double dmax,double critc,double critm,double range,int count) {
+		for (int i = 0; i < range; i++) {
+			Vector v = p.getLocation().getDirection().normalize().multiply(i);
+			Location l = p.getLocation().add(v);
+			for (LivingEntity le : p.getWorld().getLivingEntities()) {
+				if (le.isDead() == false) {
+					if (le instanceof Player) {
+						if (PlayerUtil.isAttackingPlayers(p)) {
+							Player p2 = (Player) le;
+							if (!p2.equals(p)) {
+								WarlordsPlayerAllys a = new WarlordsPlayerAllys(p);
+								if (!a.hasPlayer(p2)) {
+									if (distance2D(l, le.getLocation()) <= 0.5&& le.getLocation().getY()-l.getY() < 2.0&&le.getLocation().getY()-l.getY()>0.0) {
+										SpielKlasse sk = Warlords.getKlasse(p2);
+										if (sk != null) {
+											double dmg = damage("Chain Lightning", critc, critm, dmin, dmax, p, sk);
+											sk.removeHealth(sk.hptohealth(dmg));
+											sendSoundPacket(p, "entity.arrow.hit_player", p.getLocation());
+											LivingEntity[] lea = new LivingEntity[count+1];
+											lea[0] = le;
+											for (int j = 1; j < count+1; j++) {
+												//lea[j] = doChainLightning2(lea, p, le.getLocation(), dmin, dmax, critc, critm,range);
+											}
+											return true;
+										}
+									}
+								}
+							}
+						}
+					} else {
+						if (!(le instanceof ArmorStand)) {
+							if (distance2D(l, le.getLocation()) <= 0.5&& le.getLocation().getY()-l.getY() < 2.0&&le.getLocation().getY()-l.getY()>0.0) {
+								double dmg = hptohealth(damage(critc, critm, dmin, dmax, p, "Chain Lightning"));
+								sendSoundPacket(p, "entity.arrow.hit_player", p.getLocation());
+								double hp = le.getHealth();
+								if (hp < dmg) {
+									WeaponUtil.doWeapon(le, p);
+								}
+								setHealth(le, dmg);
+								LivingEntity[] lea = new LivingEntity[count+1];
+								lea[0] = le;
+								for (int j = 1; j < count+1; j++) {
+									//lea[j] = doChainLightning2(lea, p, le.getLocation(), dmin, dmax, critc, critm,range);
+								}
+								return true;
+							}
+						}
+					}
+				}
+			}
+		}
+		p.sendMessage("Target out of range");
+		return false;
+	}
 	public static void shootCat(Player p, double dmin, double dmax, double critc, double critm) {
 		double pitch = ((p.getLocation().getPitch() + 90.0) * Math.PI) / 180.0;
 		double yaw = ((p.getLocation().getYaw() + 90.0) * Math.PI) / 180.0;
@@ -1764,5 +1817,4 @@ public class SkillUtil extends UtilMethods {
 		double dz = m2.getZ() - m1.getZ();
 		return Math.sqrt(dx * dx + dz * dz);
 	}
-
 }

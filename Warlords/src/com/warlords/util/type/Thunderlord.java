@@ -131,7 +131,7 @@ public class Thunderlord extends SpielKlasse {
 		switch (j) {
 		case 0:
 			if (getEnergy() >= ebolt) {
-				if (getWeapon().getSkill() == 0 && getWeapon().getKlass() == 0) {
+				if (getWeapon().getSkill() == 0 && getWeapon().getKlass() == 5) {
 					SkillUtil.shootLightningBolt(p, dminbolt * (1.0 + getWeapon().getBoost()),
 							dmaxbolt * (1.0 + getWeapon().getBoost()), ccbolt, cmulbolt, cbolt, rangebolt);
 				} else {
@@ -140,6 +140,22 @@ public class Thunderlord extends SpielKlasse {
 
 				doCooldown(j);
 				removeEnergy(ebolt);
+			}
+			break;
+		case 1:
+			if (getEnergy() >= echain) {
+				boolean sucess = false;
+				if (getWeapon().getSkill() == 1 && getWeapon().getKlass() == 5) {
+					sucess = SkillUtil.doChainLightning(p, dminchain * (1.0 + getWeapon().getBoost()),
+							dmaxchain * (1.0 + getWeapon().getBoost()), ccchain, cmulchain, rangechain,countchain);
+				} else {
+					sucess = SkillUtil.doChainLightning(p, dminchain, dmaxchain, ccchain, cmulchain, rangechain,countchain);
+				}
+				if (sucess) {
+					p.getWorld().playSound(p.getLocation(), "shaman.chainlightning.activation", 1, 1);
+					doCooldown(j);
+					removeEnergy(echain);
+				}
 			}
 			break;
 		case 8:
