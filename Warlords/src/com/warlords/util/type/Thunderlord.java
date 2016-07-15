@@ -18,7 +18,7 @@ public class Thunderlord extends SpielKlasse {
 	private static int eps = 200;// 10
 	private static int eph = 10;
 	public static int epmax = 200;
-	public static int hpmax = 6000;
+	public static int hpmax = 5500;
 	// Lightningbolt
 	public static final String boltname = "Lightning Bolt";
 	public double dminbolt = 215;

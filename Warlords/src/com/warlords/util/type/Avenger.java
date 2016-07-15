@@ -18,7 +18,7 @@ public class Avenger extends SpielKlasse {
 	private static int eps = 10;
 	private static int eph = 10;
 	public static int epmax = 160;
-	public static int hpmax = 7500;
+	public static int hpmax = 6875;
 	// Avenger's Strike
 	public static final String astrikename = "Avenger's Strike";
 	public double dminastrike = 423.62;

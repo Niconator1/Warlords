@@ -1056,6 +1056,8 @@ public class Warlords extends JavaPlugin {
 									UtilMethods.sendParticlePacket(p, EnumParticle.HEART, l.getX(), l.getY() + 2.0,
 											l.getZ(), 0f, 0f, 0f, 0f, 1);
 								}
+								UtilMethods.sendSoundPacket(in.getShooter(), "entity.arrow.hit_player",
+										in.getShooter().getLocation());
 							}
 							a.remove();
 							hradiance.remove(i);
@@ -1311,6 +1313,8 @@ public class Warlords extends JavaPlugin {
 									UtilMethods.sendParticlePacket(p, EnumParticle.VILLAGER_ANGRY, l.getX(), l.getY() + 2.0,
 											l.getZ(), 0f, 0f, 0f, 0f, 1);
 								}
+								UtilMethods.sendSoundPacket(in.getShooter(), "entity.arrow.hit_player",
+										in.getShooter().getLocation());
 							}
 							a.remove();
 							uhradiance.remove(i);

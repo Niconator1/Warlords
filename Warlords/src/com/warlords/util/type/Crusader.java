@@ -18,7 +18,7 @@ public class Crusader extends SpielKlasse {
 	private static int eps = 10;
 	private static int eph = 10;
 	public static int epmax = 160;
-	public static int hpmax = 8250;
+	public static int hpmax = 7563;
 	// Crusader's Strike
 	public static final String cstrikename = "Crusader's Strike";
 	public double dminastrike = 326;
