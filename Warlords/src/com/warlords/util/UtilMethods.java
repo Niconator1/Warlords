@@ -31,9 +31,9 @@ public class UtilMethods {
 
 	public static double damage(double critc, double critm, double min, double max, Player shooter, String type) {
 		double randdmg = Math.random() * (max - min) + min;
-		double rand = Math.random() * 100.0;
+		double rand = Math.random();
 		double dmg = randdmg;
-		if (rand < critc * 100.0) {
+		if (rand < critc) {
 			dmg *= critm;
 			if (shooter.isOnline()) {
 				shooter.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "≫ " + ChatColor.GRAY + "Your " + type
@@ -54,7 +54,7 @@ public class UtilMethods {
 	}
 
 	public static double envdamage(String reason, double dmg, SpielKlasse victim) {
-		dmg*=victim.damagemultiplier;
+		dmg *= victim.damagemultiplier;
 		if (victim.getShield() > 0) {
 			if (victim.getShield() >= dmg) {
 				victim.damageShield(dmg);
@@ -148,7 +148,7 @@ public class UtilMethods {
 		double randdmg = Math.random() * (max - min) + min;
 		double rand = Math.random() * 100.0;
 		double dmg = randdmg;
-		dmg*=victim.damagemultiplier;
+		dmg *= victim.damagemultiplier;
 		if (rand < critc * 100.0) {
 			dmg *= critm;
 			if (victim.getShield() > 0) {
@@ -266,7 +266,7 @@ public class UtilMethods {
 			double randdmg = Math.random() * (weapon.getDmax() - weapon.getDmin()) + weapon.getDmin();
 			double rand = Math.random() * 100.0;
 			double dmg = randdmg;
-			dmg*=victim.damagemultiplier;
+			dmg *= victim.damagemultiplier;
 			if (rand < weapon.getCc() * 100.0) {
 				dmg *= weapon.getCm();
 				if (victim.getShield() > 0) {
@@ -387,7 +387,7 @@ public class UtilMethods {
 		if (le.getHealth() < hp) {
 			le.setHealth(0);
 		} else {
-			le.setHealth(le.getHealth() - hp);	
+			le.setHealth(le.getHealth() - hp);
 		}
 	}
 
@@ -458,8 +458,10 @@ public class UtilMethods {
 				(float) z, vx, vy, vz, v, count, null);
 		((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
 	}
-	public static void sendSoundPacket(Player p,String sound,Location l){
-		PacketPlayOutCustomSoundEffect packet = new PacketPlayOutCustomSoundEffect(sound, SoundCategory.MASTER, l.getX(), l.getY(), l.getZ(), 1f, 1f);
+
+	public static void sendSoundPacket(Player p, String sound, Location l) {
+		PacketPlayOutCustomSoundEffect packet = new PacketPlayOutCustomSoundEffect(sound, SoundCategory.MASTER,
+				l.getX(), l.getY(), l.getZ(), 1f, 1f);
 		((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
 	}
 }

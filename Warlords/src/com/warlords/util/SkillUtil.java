@@ -44,9 +44,9 @@ import com.warlords.util.skills.paladin.HolyRadiance;
 import com.warlords.util.skills.paladin.LightInfusion;
 import com.warlords.util.skills.paladin.Presence;
 import com.warlords.util.skills.paladin.Wrath;
+import com.warlords.util.skills.shaman.ChainLightning;
 import com.warlords.util.skills.shaman.Lightningbolt;
 import com.warlords.util.skills.test.CatBolt;
-import com.warlords.util.skills.test.Lazor;
 import com.warlords.util.skills.unique.Sphere;
 import com.warlords.util.type.Hunter;
 import com.warlords.util.type.Pyromancer;
@@ -463,11 +463,6 @@ public class SkillUtil extends UtilMethods {
 		}
 	}
 
-	public static void addLazor(Player p, double d, double e, double cclazor, double cmullazor, double dlazor,
-			int rlazor) {
-		Warlords.lazor.add(new Lazor(p, d, e, cclazor, cmullazor, dlazor, rlazor));
-	}
-
 	public static boolean doAvengerStrike(Player p, double d, double e, double f, double g, double r) {
 		for (LivingEntity le : p.getWorld().getLivingEntities()) {
 			if (le.isDead() == false) {
@@ -483,7 +478,7 @@ public class SkillUtil extends UtilMethods {
 										&& Math.abs(m.getY() - le.getLocation().getY()) < 2.0) {
 									Consecrate is = null;
 									for (Consecrate c : Warlords.consecrate) {
-										Location l = c.getLocation();
+										Location l = c.getLocation().clone();
 										l.setY(0);
 										Location l2 = p2.getLocation();
 										l2.setY(0);
@@ -548,7 +543,7 @@ public class SkillUtil extends UtilMethods {
 								&& Math.abs(m.getY() - le.getLocation().getY()) < 2.0) {
 							Consecrate is = null;
 							for (Consecrate c : Warlords.consecrate) {
-								Location l = c.getLocation();
+								Location l = c.getLocation().clone();
 								l.setY(0);
 								Location l2 = le.getLocation();
 								l2.setY(0);
@@ -628,7 +623,7 @@ public class SkillUtil extends UtilMethods {
 											&& Math.abs(m.getY() - le.getLocation().getY()) < 2.0) {
 										Consecrate is = null;
 										for (Consecrate c : Warlords.consecrate) {
-											Location l = c.getLocation();
+											Location l = c.getLocation().clone();
 											l.setY(0);
 											Location l2 = p2.getLocation();
 											l2.setY(0);
@@ -678,7 +673,7 @@ public class SkillUtil extends UtilMethods {
 									&& Math.abs(m.getY() - le.getLocation().getY()) < 2.0) {
 								Consecrate is = null;
 								for (Consecrate c : Warlords.consecrate) {
-									Location l = c.getLocation();
+									Location l = c.getLocation().clone();
 									l.setY(0);
 									Location l2 = le.getLocation();
 									l2.setY(0);
@@ -778,7 +773,7 @@ public class SkillUtil extends UtilMethods {
 					}
 				}
 			}
-			for (Player p2:list) {
+			for (Player p2 : list) {
 				ArmorStand f = (ArmorStand) p.getWorld().spawnEntity(p.getLocation(), EntityType.ARMOR_STAND);
 				CraftArmorStand ca = (CraftArmorStand) f;
 				ca.getHandle().noclip = true;
@@ -787,7 +782,8 @@ public class SkillUtil extends UtilMethods {
 					PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(f.getEntityId());
 					((CraftPlayer) p3).getHandle().playerConnection.sendPacket(packet);
 				}
-				HolyRadiance hr = new HolyRadiance(f,hminhradiance,hmaxhradiance,cchradiance,cmulhradiance,p,p2,p.getLocation());
+				HolyRadiance hr = new HolyRadiance(f, hminhradiance, hmaxhradiance, cchradiance, cmulhradiance, p, p2,
+						p.getLocation());
 				Warlords.hradiance.add(hr);
 			}
 		}
@@ -807,12 +803,12 @@ public class SkillUtil extends UtilMethods {
 		p.getLocation().getWorld().playSound(p.getLocation(), "paladin.holyradiance.activation", 1, 1);
 	}
 
-	public static void addAvengerWrath(double dur, Player p, double r, int count,int epsboost) {
+	public static void addAvengerWrath(double dur, Player p, double r, int count, int epsboost) {
 		SpielKlasse sk = Warlords.getKlasse(p);
 		if (sk != null) {
 			sk.epsBoost = sk.epsBoost + epsboost;
 			p.getWorld().playSound(p.getLocation(), "paladin.avengerswrath.activation", 1, 1);
-			Warlords.awrath.add(new Wrath(dur, p, r, count,epsboost));
+			Warlords.awrath.add(new Wrath(dur, p, r, count, epsboost));
 		}
 	}
 
@@ -1002,7 +998,7 @@ public class SkillUtil extends UtilMethods {
 										&& Math.abs(m.getY() - le.getLocation().getY()) < 2.0) {
 									DConsecrate is = null;
 									for (DConsecrate c : Warlords.dconsecrate) {
-										Location l = c.getLocation();
+										Location l = c.getLocation().clone();
 										l.setY(0);
 										Location l2 = p2.getLocation();
 										l2.setY(0);
@@ -1067,7 +1063,7 @@ public class SkillUtil extends UtilMethods {
 								&& Math.abs(m.getY() - le.getLocation().getY()) < 2.0) {
 							DConsecrate is = null;
 							for (DConsecrate c : Warlords.dconsecrate) {
-								Location l = c.getLocation();
+								Location l = c.getLocation().clone();
 								l.setY(0);
 								Location l2 = le.getLocation();
 								l2.setY(0);
@@ -1148,7 +1144,7 @@ public class SkillUtil extends UtilMethods {
 											&& Math.abs(m.getY() - le.getLocation().getY()) < 2.0) {
 										DConsecrate is = null;
 										for (DConsecrate c : Warlords.dconsecrate) {
-											Location l = c.getLocation();
+											Location l = c.getLocation().clone();
 											l.setY(0);
 											Location l2 = p2.getLocation();
 											l2.setY(0);
@@ -1198,7 +1194,7 @@ public class SkillUtil extends UtilMethods {
 									&& Math.abs(m.getY() - le.getLocation().getY()) < 2.0) {
 								DConsecrate is = null;
 								for (DConsecrate c : Warlords.dconsecrate) {
-									Location l = c.getLocation();
+									Location l = c.getLocation().clone();
 									l.setY(0);
 									Location l2 = le.getLocation();
 									l2.setY(0);
@@ -1299,7 +1295,7 @@ public class SkillUtil extends UtilMethods {
 				}
 			}
 		}
-		for (Player p2:list) {
+		for (Player p2 : list) {
 			ArmorStand f = (ArmorStand) p.getWorld().spawnEntity(p.getLocation(), EntityType.ARMOR_STAND);
 			CraftArmorStand ca = (CraftArmorStand) f;
 			ca.getHandle().noclip = true;
@@ -1308,7 +1304,8 @@ public class SkillUtil extends UtilMethods {
 				PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(f.getEntityId());
 				((CraftPlayer) p3).getHandle().playerConnection.sendPacket(packet);
 			}
-			UnholyRadiance hr = new UnholyRadiance(f,hminhradiance,hmaxhradiance,cchradiance,cmulhradiance,p,p2,p.getLocation());
+			UnholyRadiance hr = new UnholyRadiance(f, hminhradiance, hmaxhradiance, cchradiance, cmulhradiance, p, p2,
+					p.getLocation());
 			Warlords.uhradiance.add(hr);
 		}
 		for (Player p2 : Bukkit.getServer().getOnlinePlayers()) {
@@ -1327,12 +1324,12 @@ public class SkillUtil extends UtilMethods {
 		p.getLocation().getWorld().playSound(p.getLocation(), "paladin.holyradiance.activation", 1, 1);
 	}
 
-	public static void addDemonWrath(double dur, Player p, double r, int count,int epsboost) {
+	public static void addDemonWrath(double dur, Player p, double r, int count, int epsboost) {
 		SpielKlasse sk = Warlords.getKlasse(p);
 		if (sk != null) {
 			sk.epsBoost = sk.epsBoost + epsboost;
 			p.getWorld().playSound(p.getLocation(), "paladin.avengerswrath.activation", 1, 1);
-			Warlords.dwrath.add(new DWrath(dur, p, r, count,epsboost));
+			Warlords.dwrath.add(new DWrath(dur, p, r, count, epsboost));
 		}
 	}
 
@@ -1353,7 +1350,7 @@ public class SkillUtil extends UtilMethods {
 										&& Math.abs(m.getY() - le.getLocation().getY()) < 2.0) {
 									Consecrate is = null;
 									for (Consecrate c : Warlords.consecrate) {
-										Location l = c.getLocation();
+										Location l = c.getLocation().clone();
 										l.setY(0);
 										Location l2 = p2.getLocation();
 										l2.setY(0);
@@ -1366,7 +1363,6 @@ public class SkillUtil extends UtilMethods {
 									}
 									SpielKlasse sk = Warlords.getKlasse(p2);
 									if (sk != null) {
-										sk.removeEnergy(3);
 										double dmg = 0;
 										if (is != null) {
 											dmg = damage("Crusader's Strike", f, g, d * (1 + is.getStrike()),
@@ -1423,7 +1419,7 @@ public class SkillUtil extends UtilMethods {
 								&& Math.abs(m.getY() - le.getLocation().getY()) < 2.0) {
 							Consecrate is = null;
 							for (Consecrate c : Warlords.consecrate) {
-								Location l = c.getLocation();
+								Location l = c.getLocation().clone();
 								l.setY(0);
 								Location l2 = le.getLocation();
 								l2.setY(0);
@@ -1539,10 +1535,14 @@ public class SkillUtil extends UtilMethods {
 				.add(new Lightningbolt(f, vector, dmin, dmax, critc, critm, p, p.getLocation(), range, cooldown));
 		p.getWorld().playSound(p.getLocation(), "shaman.lightningbolt.activation", 1, 1);
 	}
-	public static boolean doChainLightning(Player p,double dmin,double dmax,double critc,double critm,double range,int count) {
+
+	public static boolean doChainLightning(Player p, double dmin, double dmax, double critc, double critm, double range,
+			int count, double red, double dur) {
+		ArrayList<Location> alist = new ArrayList<Location>();
 		for (int i = 0; i < range; i++) {
 			Vector v = p.getLocation().getDirection().normalize().multiply(i);
 			Location l = p.getLocation().add(v);
+			alist.add(l);
 			for (LivingEntity le : p.getWorld().getLivingEntities()) {
 				if (le.isDead() == false) {
 					if (le instanceof Player) {
@@ -1551,16 +1551,45 @@ public class SkillUtil extends UtilMethods {
 							if (!p2.equals(p)) {
 								WarlordsPlayerAllys a = new WarlordsPlayerAllys(p);
 								if (!a.hasPlayer(p2)) {
-									if (distance2D(l, le.getLocation()) <= 0.5&& le.getLocation().getY()-l.getY() < 2.0&&le.getLocation().getY()-l.getY()>0.0) {
+									if (distance2D(l, le.getLocation()) <= 1.0
+											&& le.getLocation().getY() - l.getY() < 2.0
+											&& le.getLocation().getY() - l.getY() > 0.0) {
 										SpielKlasse sk = Warlords.getKlasse(p2);
 										if (sk != null) {
 											double dmg = damage("Chain Lightning", critc, critm, dmin, dmax, p, sk);
 											sk.removeHealth(sk.hptohealth(dmg));
+											ArrayList<ArmorStand> astand = new ArrayList<ArmorStand>();
+											for (Location ea : alist) {
+												ArmorStand stand = (ArmorStand) p.getWorld().spawnEntity(ea,
+														EntityType.ARMOR_STAND);
+												stand.setHelmet(new ItemStack(Material.STAINED_GLASS, 1, (short) 7));
+												stand.setHeadPose(
+														stand.getHeadPose().setX(l.getPitch() / 90 * 0.5 * Math.PI));
+												stand.setVisible(false);
+												stand.setInvulnerable(true);
+												stand.setGravity(false);
+												astand.add(stand);
+											}
+											SpielKlasse skm = Warlords.getKlasse(p);
+											if (skm != null) {
+												skm.damagemultiplier -= red;
+											}
+											ChainLightning cl = new ChainLightning(p, astand, red, dur);
+											Warlords.clightning.add(cl);
+											p.getWorld().playSound(p.getLocation(), "shaman.chainlightning.impact", 1,
+													1);
 											sendSoundPacket(p, "entity.arrow.hit_player", p.getLocation());
-											LivingEntity[] lea = new LivingEntity[count+1];
+											LivingEntity[] lea = new LivingEntity[count + 1];
 											lea[0] = le;
-											for (int j = 1; j < count+1; j++) {
-												//lea[j] = doChainLightning2(lea, p, le.getLocation(), dmin, dmax, critc, critm,range);
+											for (int j = 1; j < count + 1; j++) {
+												if (alist.size() > 0) {
+													lea[j] = doChainLightning2(lea, p, alist.get(alist.size() - 1),
+															dmin, dmax, critc, critm, range, red, dur);
+												} else {
+													lea[j] = doChainLightning2(lea, p,
+															le.getLocation().subtract(0, 1.5, 0), dmin, dmax, critc,
+															critm, range, red, dur);
+												}
 											}
 											return true;
 										}
@@ -1570,18 +1599,43 @@ public class SkillUtil extends UtilMethods {
 						}
 					} else {
 						if (!(le instanceof ArmorStand)) {
-							if (distance2D(l, le.getLocation()) <= 0.5&& le.getLocation().getY()-l.getY() < 2.0&&le.getLocation().getY()-l.getY()>0.0) {
+							if (distance2D(l, le.getLocation()) <= 1.0 && le.getLocation().getY() - l.getY() < 2.0
+									&& le.getLocation().getY() - l.getY() > 0.0) {
 								double dmg = hptohealth(damage(critc, critm, dmin, dmax, p, "Chain Lightning"));
-								sendSoundPacket(p, "entity.arrow.hit_player", p.getLocation());
 								double hp = le.getHealth();
 								if (hp < dmg) {
 									WeaponUtil.doWeapon(le, p);
 								}
 								setHealth(le, dmg);
-								LivingEntity[] lea = new LivingEntity[count+1];
+								ArrayList<ArmorStand> astand = new ArrayList<ArmorStand>();
+								for (Location ea : alist) {
+									ArmorStand stand = (ArmorStand) p.getWorld().spawnEntity(ea,
+											EntityType.ARMOR_STAND);
+									stand.setHelmet(new ItemStack(Material.STAINED_GLASS, 1, (short) 7));
+									stand.setHeadPose(stand.getHeadPose().setX(l.getPitch() / 90 * 0.5 * Math.PI));
+									stand.setVisible(false);
+									stand.setInvulnerable(true);
+									stand.setGravity(false);
+									astand.add(stand);
+								}
+								SpielKlasse skm = Warlords.getKlasse(p);
+								if (skm != null) {
+									skm.damagemultiplier -= red;
+								}
+								ChainLightning cl = new ChainLightning(p, astand, red, dur);
+								Warlords.clightning.add(cl);
+								sendSoundPacket(p, "entity.arrow.hit_player", p.getLocation());
+								p.getWorld().playSound(p.getLocation(), "shaman.chainlightning.impact", 1, 1);
+								LivingEntity[] lea = new LivingEntity[count + 1];
 								lea[0] = le;
-								for (int j = 1; j < count+1; j++) {
-									//lea[j] = doChainLightning2(lea, p, le.getLocation(), dmin, dmax, critc, critm,range);
+								for (int j = 1; j < count + 1; j++) {
+									if (alist.size() > 0) {
+										lea[j] = doChainLightning2(lea, p, alist.get(alist.size() - 1), dmin, dmax,
+												critc, critm, range, red, dur);
+									} else {
+										lea[j] = doChainLightning2(lea, p, le.getLocation().subtract(0, 1.5, 0), dmin,
+												dmax, critc, critm, range, red, dur);
+									}
 								}
 								return true;
 							}
@@ -1593,6 +1647,109 @@ public class SkillUtil extends UtilMethods {
 		p.sendMessage("Target out of range");
 		return false;
 	}
+
+	private static LivingEntity doChainLightning2(LivingEntity[] lea, Player p, Location m, double dmin, double dmax,
+			double critc, double critm, double range, double red, double dur) {
+		for (LivingEntity le : p.getWorld().getLivingEntities()) {
+			if (le.isDead() == false) {
+				boolean alreadyHit = false;
+				for (int i = 0; i < lea.length; i++) {
+					if (lea[i] != null) {
+						if (lea[i].getUniqueId().compareTo(le.getUniqueId()) == 0) {
+							alreadyHit = true;
+						}
+					}
+				}
+				if (alreadyHit == false) {
+					if (le instanceof Player) {
+						if (PlayerUtil.isAttackingPlayers(p)) {
+							Player p2 = (Player) le;
+							if (!p2.equals(p)) {
+								WarlordsPlayerAllys a = new WarlordsPlayerAllys(p);
+								if (!a.hasPlayer(p2)) {
+									if (m.distance(le.getLocation()) <= range) {
+										SpielKlasse sk = Warlords.getKlasse(p2);
+										if (sk != null) {
+											double dmg = damage("Chain Lightning", critc, critm, dmin, dmax, p, sk);
+											sk.removeHealth(sk.hptohealth(dmg));
+											sendSoundPacket(p, "entity.arrow.hit_player", p.getLocation());
+											ArrayList<ArmorStand> astand = new ArrayList<ArmorStand>();
+											Vector vec = le.getLocation().add(0.0,le.getEyeHeight()/2.0-1.5,0.0).toVector().subtract(m.toVector()).normalize();
+											m.setDirection(vec);
+											double distance = m.distance(le.getLocation());
+											for (int i = 0; i < distance + 1; i++) {
+												if (i > 0) {
+													m.add(vec);
+												}
+												ArmorStand stand = (ArmorStand) m.getWorld().spawnEntity(m,
+														EntityType.ARMOR_STAND);
+												stand.setHelmet(new ItemStack(Material.STAINED_GLASS, 1, (short) 7));
+												stand.setHeadPose(
+														stand.getHeadPose().setX(m.getPitch() / 90 * 0.5 * Math.PI));
+												stand.setVisible(false);
+												stand.setInvulnerable(true);
+												stand.setGravity(false);
+												astand.add(stand);
+											}
+											SpielKlasse skm = Warlords.getKlasse(p);
+											if (skm != null) {
+												skm.damagemultiplier -= red;
+											}
+											ChainLightning cl = new ChainLightning(p, astand, red, dur);
+											Warlords.clightning.add(cl);
+											p.getWorld().playSound(p.getLocation(), "shaman.chainlightning.impact", 1,
+													1);
+											return le;
+										}
+									}
+								}
+							}
+						}
+					} else {
+						if (!(le instanceof ArmorStand)) {
+							if (m.distance(le.getLocation()) <= range) {
+								double dmg = hptohealth(damage(critc, critm, dmin, dmax, p, "Chain Lightning"));
+								double hp = le.getHealth();
+								if (hp < dmg) {
+									WeaponUtil.doWeapon(le, p);
+
+								}
+								sendSoundPacket(p, "entity.arrow.hit_player", p.getLocation());
+								setHealth(le, dmg);
+								ArrayList<ArmorStand> astand = new ArrayList<ArmorStand>();
+								Vector vec = le.getLocation().add(0.0,le.getEyeHeight()/2.0-1.5,0.0).toVector().subtract(m.toVector()).normalize();
+								m.setDirection(vec);
+								double distance = m.distance(le.getLocation());
+								for (int i = 0; i < distance + 1; i++) {
+									if (i > 0) {
+										m.add(vec);
+									}
+									ArmorStand stand = (ArmorStand) m.getWorld().spawnEntity(m, EntityType.ARMOR_STAND);
+									stand.setHelmet(new ItemStack(Material.STAINED_GLASS, 1, (short) 7));
+									stand.setHeadPose(stand.getHeadPose().setX(m.getPitch() / 90 * 0.5 * Math.PI));
+									stand.setVisible(false);
+									stand.setInvulnerable(true);
+									stand.setGravity(false);
+									astand.add(stand);
+								}
+								SpielKlasse skm = Warlords.getKlasse(p);
+								if (skm != null) {
+									skm.damagemultiplier -= red;
+								}
+								ChainLightning cl = new ChainLightning(p, astand, red, dur);
+								Warlords.clightning.add(cl);
+								p.getWorld().playSound(p.getLocation(), "shaman.chainlightning.impact", 1, 1);
+								return le;
+							}
+						}
+					}
+				}
+
+			}
+		}
+		return null;
+	}
+
 	public static void shootCat(Player p, double dmin, double dmax, double critc, double critm) {
 		double pitch = ((p.getLocation().getPitch() + 90.0) * Math.PI) / 180.0;
 		double yaw = ((p.getLocation().getYaw() + 90.0) * Math.PI) / 180.0;
@@ -1648,7 +1805,8 @@ public class SkillUtil extends UtilMethods {
 												if (dmg != 0) {
 													sk.removeHealth(sk.hptohealth(dmg));
 												}
-												sendSoundPacket(shooter, "entity.arrow.hit_player", shooter.getLocation());
+												sendSoundPacket(shooter, "entity.arrow.hit_player",
+														shooter.getLocation());
 											}
 										}
 									}
@@ -1666,7 +1824,8 @@ public class SkillUtil extends UtilMethods {
 									if (hp < dmg) {
 										WeaponUtil.doWeapon(e, f.getShooter());
 									}
-									sendSoundPacket(f.getShooter(), "entity.arrow.hit_player", f.getShooter().getLocation());
+									sendSoundPacket(f.getShooter(), "entity.arrow.hit_player",
+											f.getShooter().getLocation());
 									setHealth(e, dmg);
 								}
 							}
@@ -1741,13 +1900,6 @@ public class SkillUtil extends UtilMethods {
 			if (tw.getPlayer().equals(p)) {
 				p.getInventory().setChestplate(null);
 				Warlords.elytra.remove(i);
-			}
-		}
-		for (int i = 0; i < Warlords.lazor.size(); i++) {
-			Lazor tw = Warlords.lazor.get(i);
-			if (tw.getShooter().equals(p)) {
-				tw.clearList();
-				Warlords.lazor.remove(i);
 			}
 		}
 		for (int i = 0; i < Warlords.sphere.size(); i++) {

@@ -37,6 +37,7 @@ public class ItemListThunder {
 		ItemMeta i = ret.getItemMeta();
 		i.setDisplayName(ChatColor.RESET + "" + ChatColor.GREEN + Thunderlord.chainname);
 		List<String> lore = new ArrayList<String>();
+		lore.add(ChatColor.RESET + "" + ChatColor.GRAY + "Cooldown: " + ChatColor.AQUA + cchain + " seconds");
 		lore.add(ChatColor.RESET + "" + ChatColor.GRAY + "Energy Cost: " + ChatColor.YELLOW + echain);
 		lore.add(ChatColor.RESET + "" + ChatColor.GRAY + "Crit Chance: " + ChatColor.RED + ccchain * 100.0 + "%");
 		lore.add(ChatColor.RESET + "" + ChatColor.GRAY + "Crit Multiplier: " + ChatColor.RED + cmulchain * 100.0 + "%");
