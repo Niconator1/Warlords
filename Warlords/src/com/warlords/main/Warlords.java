@@ -1475,7 +1475,16 @@ public class Warlords extends JavaPlugin {
 						lb.getStand().remove();
 						lightningbolt.remove(i);
 					}
-					else if (!l.add(lb.getVector()).getBlock().isEmpty()&&l.getBlock().getType().isSolid()) {
+					else if (!l.add(lb.getVector().clone().multiply(-0.5)).getBlock().isEmpty()&&l.getBlock().getType().isSolid()) {
+						l.getWorld().playSound(l, "shaman.lightningbolt.impact", 1, 1);
+						for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+							UtilMethods.sendParticlePacket(p, EnumParticle.EXPLOSION_LARGE, l.getX(), l.getY() + 1.5,
+									l.getZ(), 0f, 0f, 0f, 0f, 1);
+						}
+						lb.getStand().remove();
+						lightningbolt.remove(i);
+					}
+					else if (!l.add(lb.getVector().clone()).getBlock().isEmpty()&&l.getBlock().getType().isSolid()) {
 						l.getWorld().playSound(l, "shaman.lightningbolt.impact", 1, 1);
 						for (Player p : Bukkit.getServer().getOnlinePlayers()) {
 							UtilMethods.sendParticlePacket(p, EnumParticle.EXPLOSION_LARGE, l.getX(), l.getY() + 1.5,
