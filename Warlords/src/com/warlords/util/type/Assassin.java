@@ -16,31 +16,31 @@ import com.warlords.util.itemlist.ItemListGenerel;
 public class Assassin extends SpielKlasse {
 	public static String name = "Assassin";
 	private static String description = "";
-	private static int eps = 5;
-	private static int eph = 12;
+	private static int eps = 7;
+	private static int eph = 10;
 	public static int epmax = 120;
-	public static int hpmax = 7500;
+	public static int hpmax = 5250;
 	// Fireball
 	public static final String ballname = "Shadow Step";
-	public double dminball = 325;
-	public double dmaxball = 455;
-	public double ccball = 0.3;
-	public double cmulball = 2;
-	public int eball = 45;
+	public double dminball = 315;
+	public double dmaxball = 495;
+	public double ccball = 0.15;
+	public double cmulball = 1.85;
+	public int eball = 35;
 	// Burst
 	public static final String burstname = "Back Stab";
-	public double dminburst = 380;
-	public double dmaxburst = 720;
-	public double ccburst = 0.65;
-	public double cmulburst = 2.15;
-	public int eburst = 20;
-	public double cburst = 12.0;
+	public double dminburst = 640;
+	public double dmaxburst = 790;
+	public double ccburst = 0.45;
+	public double cmulburst = 2.6;
+	public int eburst = 25;
+	public double cburst = 15.0;
 	// Warp
 	public static final String warpname = "Vanish";
-	public int ewarp = 15;
-	public double cwarp = 22.5;
+	public int ewarp = 12;
+	public double cwarp = 24;
 	public double rwarp = 0.4;
-	public int dwarp = 5;
+	public int dwarp = 4;
 	// Shield
 	public static final String shieldname = "Stealth";
 	public double cshield = 50;

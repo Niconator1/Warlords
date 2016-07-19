@@ -870,6 +870,11 @@ public class Warlords extends JavaPlugin {
 				for (int i = 0; i < stealth.size(); i++) {
 					Stealth as = stealth.get(i);
 					as.decreaseDuration();
+					Location l = as.getPlayer().getLocation();
+					for (Player p3 : Bukkit.getServer().getOnlinePlayers()){
+						UtilMethods.sendParticlePacket(p3, EnumParticle.DRAGON_BREATH, l.getX(), l.getY() + 1.0, l.getZ(), 0.05f, 0.02f,
+								0.05f, 0.05f, 1);
+					}
 					if (as.getDuration() <= 0) {
 						SpielKlasse sk = getKlasse(as.getPlayer());
 						if (sk != null) {
