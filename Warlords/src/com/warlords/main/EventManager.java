@@ -275,7 +275,7 @@ public class EventManager implements Listener {
 		} else {
 			for (int i = 0; i < Warlords.confirmation.size(); i++) {
 				if (inventory.equals(Warlords.confirmation.get(i).getInventory())) {
-					if(event.getRawSlot()==11){
+					if (event.getRawSlot() == 11) {
 						Confirmation c = Warlords.confirmation.get(i);
 						WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
 								"/players/" + p.getUniqueId());
@@ -302,11 +302,10 @@ public class EventManager implements Listener {
 								p.openInventory(WeaponUtil.getWeaponInventory(p));
 							}
 						}
-					}
-					else if(event.getRawSlot()==15){
+					} else if (event.getRawSlot() == 15) {
 						Warlords.confirmation.remove(i);
 						p.openInventory(WeaponUtil.getWeaponInventory(p));
-					}	
+					}
 				}
 			}
 			SpielKlasse sk = Warlords.getKlasse(p);
@@ -580,7 +579,9 @@ public class EventManager implements Listener {
 									}
 								}
 							}
+							sp.doAbility(p.getInventory().getHeldItemSlot());
 						}
+						p.getInventory().setContents(p.getInventory().getContents());
 						e.setCancelled(true);
 					}
 				}
@@ -594,13 +595,13 @@ public class EventManager implements Listener {
 				|| event.getAction() == Action.PHYSICAL) {
 			Player p = event.getPlayer();
 			if (event.getItem() != null) {
-				int slot = event.getPlayer().getInventory().getHeldItemSlot();
 				SpielKlasse sp = Warlords.getKlasse(p);
 				if (sp != null) {
 					WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
 							"/players/" + p.getUniqueId());
 					if (wp != null) {
 						if (wp.getMode() == true) {
+							int slot = event.getPlayer().getInventory().getHeldItemSlot();
 							sp.doAbility(slot);
 							event.setCancelled(true);
 						}
@@ -638,7 +639,7 @@ public class EventManager implements Listener {
 				WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
 						"/players/" + p.getUniqueId());
 				if (wp != null) {
-					if(wp.getMode()){
+					if (wp.getMode()) {
 					}
 					// event.setCancelled(true);
 				}

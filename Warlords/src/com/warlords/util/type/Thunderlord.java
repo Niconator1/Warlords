@@ -147,9 +147,9 @@ public class Thunderlord extends SpielKlasse {
 				boolean sucess = false;
 				if (getWeapon().getSkill() == 1 && getWeapon().getKlass() == 5) {
 					sucess = SkillUtil.doChainLightning(p, dminchain * (1.0 + getWeapon().getBoost()),
-							dmaxchain * (1.0 + getWeapon().getBoost()), ccchain, cmulchain, rangechain,countchain);
+							dmaxchain * (1.0 + getWeapon().getBoost()), ccchain, cmulchain, rangechain,countchain,reductionchain,durchain);
 				} else {
-					sucess = SkillUtil.doChainLightning(p, dminchain, dmaxchain, ccchain, cmulchain, rangechain,countchain);
+					sucess = SkillUtil.doChainLightning(p, dminchain, dmaxchain, ccchain, cmulchain, rangechain,countchain,reductionchain,durchain);
 				}
 				if (sucess) {
 					p.getWorld().playSound(p.getLocation(), "shaman.chainlightning.activation", 1, 1);
@@ -175,6 +175,14 @@ public class Thunderlord extends SpielKlasse {
 		ItemStack is = new ItemStack(Material.INK_SACK, 1);
 		ItemMeta im;
 		switch (j) {
+		case 1:
+			is.setAmount((int) Math.round(cchain * (1.0 - getWeapon().getCooldown())));
+			is.setDurability((short) 8);
+			im = p.getInventory().getItem(1).getItemMeta();
+			im.setDisplayName(ChatColor.GRAY + chainname);
+			is.setItemMeta(im);
+			p.getInventory().setItem(1, is);
+			break;
 		case 8:
 			is.setAmount((int) Math.round(celytra * (1.0 - getWeapon().getCooldown())));
 			is.setDurability((short) 8);

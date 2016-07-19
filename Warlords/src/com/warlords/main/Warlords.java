@@ -59,9 +59,9 @@ import com.warlords.util.skills.paladin.HolyRadiance;
 import com.warlords.util.skills.paladin.LightInfusion;
 import com.warlords.util.skills.paladin.Presence;
 import com.warlords.util.skills.paladin.Wrath;
+import com.warlords.util.skills.shaman.ChainLightning;
 import com.warlords.util.skills.shaman.Lightningbolt;
 import com.warlords.util.skills.test.CatBolt;
-import com.warlords.util.skills.test.Lazor;
 import com.warlords.util.skills.unique.Sphere;
 import com.warlords.util.type.Assassin;
 import com.warlords.util.type.Avenger;
@@ -92,7 +92,6 @@ public class Warlords extends JavaPlugin {
 	public static ArrayList<SpielKlasse> player = new ArrayList<SpielKlasse>();
 	public static ArrayList<Stealth> stealth = new ArrayList<Stealth>();
 	public static ArrayList<Vanish> vanish = new ArrayList<Vanish>();
-	public static ArrayList<Lazor> lazor = new ArrayList<Lazor>();
 	public static ArrayList<Consecrate> consecrate = new ArrayList<Consecrate>();
 	public static ArrayList<LightInfusion> linfusion = new ArrayList<LightInfusion>();
 	public static ArrayList<HolyRadiance> hradiance = new ArrayList<HolyRadiance>();
@@ -108,6 +107,7 @@ public class Warlords extends JavaPlugin {
 	public static ArrayList<DWrath> dwrath = new ArrayList<DWrath>();
 	public static ArrayList<Presence> presence = new ArrayList<Presence>();
 	public static ArrayList<Lightningbolt> lightningbolt = new ArrayList<Lightningbolt>();
+	public static ArrayList<ChainLightning> clightning = new ArrayList<ChainLightning>();
 	// Unique
 	public static ArrayList<Sphere> sphere = new ArrayList<Sphere>();
 	public static ArrayList<CatBolt> catbolt = new ArrayList<CatBolt>();
@@ -148,9 +148,6 @@ public class Warlords extends JavaPlugin {
 		for (int i = 0; i < burst.size(); i++) {
 			burst.get(i).getArrow().remove();
 		}
-		for (int i = 0; i < lazor.size(); i++) {
-			lazor.get(i).clearList();
-		}
 		for (int i = 0; i < elementalarrow.size(); i++) {
 			elementalarrow.get(i).getArrow().remove();
 		}
@@ -179,6 +176,11 @@ public class Warlords extends JavaPlugin {
 		}
 		for (int i = 0; i < lightningbolt.size(); i++) {
 			lightningbolt.get(i).getStand().remove();
+		}
+		for (int i = 0; i < clightning.size(); i++) {
+			for (ArmorStand a : clightning.get(i).getStand()) {
+				a.remove();
+			}
 		}
 	}
 
@@ -802,8 +804,8 @@ public class Warlords extends JavaPlugin {
 						SpielKlasse sk = getKlasse(tw.getPlayer());
 						if (sk != null) {
 							if (sk.healthtohp() < sk.getMaxHP()) {
-								UtilMethods.heal("Time Warp", sk.getHeal() * sk.getMaxHP(), sk.getHeal() * sk.getMaxHP(), 0,
-										1, sk.p, sk);
+								UtilMethods.heal("Time Warp", sk.getHeal() * sk.getMaxHP(),
+										sk.getHeal() * sk.getMaxHP(), 0, 1, sk.p, sk);
 								sk.addHealth(sk.hptohealth(sk.getHeal() * sk.getMaxHP()));
 							}
 						}
@@ -1315,8 +1317,8 @@ public class Warlords extends JavaPlugin {
 											in.critc(), in.critm(), in.getShooter(), sk)));
 								}
 								for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-									UtilMethods.sendParticlePacket(p, EnumParticle.VILLAGER_ANGRY, l.getX(), l.getY() + 2.0,
-											l.getZ(), 0f, 0f, 0f, 0f, 1);
+									UtilMethods.sendParticlePacket(p, EnumParticle.VILLAGER_ANGRY, l.getX(),
+											l.getY() + 2.0, l.getZ(), 0f, 0f, 0f, 0f, 1);
 								}
 								UtilMethods.sendSoundPacket(in.getShooter(), "entity.arrow.hit_player",
 										in.getShooter().getLocation());
@@ -1469,7 +1471,7 @@ public class Warlords extends JavaPlugin {
 					lb.getStand().setVelocity(lb.getVector());
 					Location l = lb.getStand().getLocation();
 					double distance = lb.start().distance(l);
-					if (!l.add(0, 1.5, 0).getBlock().isEmpty()) {
+					if (!l.add(0, 1.5, 0).getBlock().isEmpty()) {// &&l.getBlock().getType().isSolid()
 						l.getWorld().playSound(l, "shaman.lightningbolt.impact", 1, 1);
 						for (Player p : Bukkit.getServer().getOnlinePlayers()) {
 							UtilMethods.sendParticlePacket(p, EnumParticle.EXPLOSION_LARGE, l.getX(), l.getY() + 1.5,
@@ -1536,6 +1538,24 @@ public class Warlords extends JavaPlugin {
 								}
 							}
 						}
+					}
+				}
+				// Chain Lightning
+				for (int i = 0; i < clightning.size(); i++) {
+					ChainLightning cl = clightning.get(i);
+					cl.decreaseduration();
+					if (cl.getMaxDur() - cl.getDur() == 20) {
+						for (ArmorStand a : cl.getStand()) {
+							a.remove();
+						}
+					}
+					if (cl.getDur() < 0) {
+						Player p = cl.getPlayer();
+						SpielKlasse sk = getKlasse(p);
+						if (sk != null) {
+							sk.damagemultiplier += cl.getReduction();
+						}
+						Warlords.clightning.remove(i);
 					}
 				}
 			}
@@ -1808,19 +1828,6 @@ public class Warlords extends JavaPlugin {
 				}
 			}
 		}, 0, 10);
-		// Lazor
-		Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
-			public void run() {
-				for (int i = 0; i < lazor.size(); i++) {
-					Lazor l = lazor.get(i);
-					l.moveArmorStand();
-					l.decreaseDuration();
-					if (l.getDuration() <= 0) {
-						l.clearList();
-					}
-				}
-			}
-		}, 0, 5);
 		// Projectile Gravitation disabling
 		Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
 			public void run() {
