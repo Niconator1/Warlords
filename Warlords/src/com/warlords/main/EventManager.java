@@ -573,15 +573,14 @@ public class EventManager implements Listener {
 										if (!(le instanceof ArmorStand)) {
 											if (le.isDead() == false) {
 												SkillUtil.doDeadlyPoison(as.getPoisonMax(), as.getPoisonOwn(), p, le);
-												as.doCooldown(4);
 											}
 										}
 									}
 								}
 							}
-							sp.doAbility(p.getInventory().getHeldItemSlot());
 						}
 						p.getInventory().setContents(p.getInventory().getContents());
+						sp.doAbility(p.getInventory().getHeldItemSlot());
 						e.setCancelled(true);
 					}
 				}

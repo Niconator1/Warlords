@@ -1584,11 +1584,15 @@ public class SkillUtil extends UtilMethods {
 											for (int j = 1; j < count + 1; j++) {
 												if (alist.size() > 0) {
 													lea[j] = doChainLightning2(lea, p, alist.get(alist.size() - 1),
-															dmin, dmax, critc, critm, range, red, dur);
+															dmin * (1.0 + Math.pow(0.1, j)),
+															dmax * (1.0 + Math.pow(0.1, j)), critc, critm, range, red,
+															dur);
 												} else {
 													lea[j] = doChainLightning2(lea, p,
-															le.getLocation().subtract(0, 1.5, 0), dmin, dmax, critc,
-															critm, range, red, dur);
+															le.getLocation().subtract(0, 1.5, 0),
+															dmin * (1.0 + Math.pow(0.1, j)),
+															dmax * (1.0 + Math.pow(0.1, j)), critc, critm, range, red,
+															dur);
 												}
 											}
 											return true;
@@ -1630,11 +1634,13 @@ public class SkillUtil extends UtilMethods {
 								lea[0] = le;
 								for (int j = 1; j < count + 1; j++) {
 									if (alist.size() > 0) {
-										lea[j] = doChainLightning2(lea, p, alist.get(alist.size() - 1), dmin, dmax,
-												critc, critm, range, red, dur);
+										lea[j] = doChainLightning2(lea, p, alist.get(alist.size() - 1),
+												dmin * (1.0 + Math.pow(0.1, j)), dmax * (1.0 + Math.pow(0.1, j)), critc,
+												critm, range, red, dur);
 									} else {
-										lea[j] = doChainLightning2(lea, p, le.getLocation().subtract(0, 1.5, 0), dmin,
-												dmax, critc, critm, range, red, dur);
+										lea[j] = doChainLightning2(lea, p, le.getLocation().subtract(0, 1.5, 0),
+												dmin * (1.0 + Math.pow(0.1, j)), dmax * (1.0 + Math.pow(0.1, j)), critc,
+												critm, range, red, dur);
 									}
 								}
 								return true;
@@ -1674,7 +1680,8 @@ public class SkillUtil extends UtilMethods {
 											sk.removeHealth(sk.hptohealth(dmg));
 											sendSoundPacket(p, "entity.arrow.hit_player", p.getLocation());
 											ArrayList<ArmorStand> astand = new ArrayList<ArmorStand>();
-											Vector vec = le.getLocation().add(0.0,le.getEyeHeight()/2.0-1.5,0.0).toVector().subtract(m.toVector()).normalize();
+											Vector vec = le.getLocation().add(0.0, le.getEyeHeight() / 2.0 - 1.5, 0.0)
+													.toVector().subtract(m.toVector()).normalize();
 											m.setDirection(vec);
 											double distance = m.distance(le.getLocation());
 											for (int i = 0; i < distance + 1; i++) {
@@ -1717,7 +1724,8 @@ public class SkillUtil extends UtilMethods {
 								sendSoundPacket(p, "entity.arrow.hit_player", p.getLocation());
 								setHealth(le, dmg);
 								ArrayList<ArmorStand> astand = new ArrayList<ArmorStand>();
-								Vector vec = le.getLocation().add(0.0,le.getEyeHeight()/2.0-1.5,0.0).toVector().subtract(m.toVector()).normalize();
+								Vector vec = le.getLocation().add(0.0, le.getEyeHeight() / 2.0 - 1.5, 0.0).toVector()
+										.subtract(m.toVector()).normalize();
 								m.setDirection(vec);
 								double distance = m.distance(le.getLocation());
 								for (int i = 0; i < distance + 1; i++) {

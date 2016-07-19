@@ -1,5 +1,8 @@
 package com.warlords.util.skills.shaman;
 
+import java.util.ArrayList;
+import java.util.UUID;
+
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
@@ -16,47 +19,67 @@ public class Lightningbolt {
 	private Location start;
 	private double range;
 	private double cooldown;
+	private ArrayList<UUID> hited = new ArrayList<UUID>();
+
 	public Lightningbolt(ArmorStand f, Vector v, double dmin, double dmax, double critc, double critm, Player shooter,
 			Location l, double range, double cooldown) {
-		this.a=f;
-		this.v=v;
-		this.dmin=dmin;
-		this.dmax=dmax;
-		this.shooter=shooter;
-		this.critc=critc;
-		this.critm=critm;
-		this.start=l;
-		this.range=range;
-		this.cooldown=cooldown;
+		this.a = f;
+		this.v = v;
+		this.dmin = dmin;
+		this.dmax = dmax;
+		this.shooter = shooter;
+		this.critc = critc;
+		this.critm = critm;
+		this.start = l;
+		this.range = range;
+		this.cooldown = cooldown;
 	}
-	public ArmorStand getStand(){
+
+	public ArmorStand getStand() {
 		return a;
 	}
-	public Vector getVector(){
+
+	public Vector getVector() {
 		return v;
 	}
-	public Player getShooter(){
+
+	public Player getShooter() {
 		return shooter;
 	}
-	public double dmin(){
+
+	public double dmin() {
 		return dmin;
 	}
-	public double dmax(){
+
+	public double dmax() {
 		return dmax;
 	}
-	public double critc(){
+
+	public double critc() {
 		return critc;
 	}
-	public double critm(){
+
+	public double critm() {
 		return critm;
 	}
-	public Location start(){
+
+	public Location start() {
 		return start;
 	}
-	public double cooldown(){
+
+	public double cooldown() {
 		return cooldown;
 	}
-	public double getRange(){
+
+	public double getRange() {
 		return range;
+	}
+
+	public ArrayList<UUID> getHited() {
+		return hited;
+	}
+
+	public void addHited(UUID u) {
+		hited.add(u);
 	}
 }
