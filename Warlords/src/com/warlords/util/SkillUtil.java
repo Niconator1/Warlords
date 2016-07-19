@@ -294,7 +294,12 @@ public class SkillUtil extends UtilMethods {
 										} else {
 											p.teleport(p2);
 										}
-
+										Location l = p.getLocation();
+										for (Player p3 : Bukkit.getServer().getOnlinePlayers()) {
+											UtilMethods.sendParticlePacket(p3, EnumParticle.SMOKE_NORMAL, l.getX(), l.getY() + 1.5, l.getZ(), 0.3f, 0.5f,
+													0.3f, 0f, 10);
+										
+										}
 										double dmg = damage("Shadow Step", critc, critm, dmin, dmax, p, sk);
 										if (dmg != 0) {
 											sk.removeHealth(sk.hptohealth(dmg));
@@ -430,7 +435,12 @@ public class SkillUtil extends UtilMethods {
 	public static void doDeadlyPoison(double poisonMax, double poisonOwn, Player p, LivingEntity le) {
 		if (le instanceof Player) {
 			SpielKlasse sk = Warlords.getKlasse((Player) le);
+			Location l = le.getLocation();
 			if (sk != null) {
+				for (Player p3 : Bukkit.getServer().getOnlinePlayers()) {
+					UtilMethods.sendParticlePacket(p3, EnumParticle.VILLAGER_HAPPY, l.getX(), l.getY() + 1.5, l.getZ(),
+							0.3f, 0.5f, 0.3f, 0f, 4);
+				}
 				if (sk.healthtohp() <= poisonMax) {
 					double dmg = damage(0, 1, poisonMax, poisonMax, p, "Deadly Poison");
 					((Player) le).sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "≪ " + ChatColor.GRAY + p.getName()
