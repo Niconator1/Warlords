@@ -1539,9 +1539,13 @@ public class SkillUtil extends UtilMethods {
 	public static boolean doChainLightning(Player p, double dmin, double dmax, double critc, double critm, double range,
 			int count, double red, double dur) {
 		ArrayList<Location> alist = new ArrayList<Location>();
-		for (int i = 0; i < range; i++) {
+		for (int i = 0; i < range * 2; i++) {
 			Vector v = p.getLocation().getDirection().normalize().multiply(i);
 			Location l = p.getLocation().add(v);
+			if (!l.getBlock().isEmpty() && l.getBlock().getType().isSolid()) {
+				p.sendMessage("Target out of range");
+				return false;
+			}
 			alist.add(l);
 			for (LivingEntity le : p.getWorld().getLivingEntities()) {
 				if (le.isDead() == false) {
