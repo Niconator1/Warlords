@@ -1471,7 +1471,25 @@ public class Warlords extends JavaPlugin {
 					lb.getStand().setVelocity(lb.getVector());
 					Location l = lb.getStand().getLocation();
 					double distance = lb.start().distance(l);
-					if (!l.add(0, 1.5, 0).getBlock().isEmpty()) {// &&l.getBlock().getType().isSolid()
+					if (!l.add(0, 1.5, 0).getBlock().isEmpty()&&l.getBlock().getType().isSolid()) {
+						l.getWorld().playSound(l, "shaman.lightningbolt.impact", 1, 1);
+						for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+							UtilMethods.sendParticlePacket(p, EnumParticle.EXPLOSION_LARGE, l.getX(), l.getY() + 1.5,
+									l.getZ(), 0f, 0f, 0f, 0f, 1);
+						}
+						lb.getStand().remove();
+						lightningbolt.remove(i);
+					}
+					else if (!l.add(lb.getVector().clone().multiply(-0.5)).getBlock().isEmpty()&&l.getBlock().getType().isSolid()) {
+						l.getWorld().playSound(l, "shaman.lightningbolt.impact", 1, 1);
+						for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+							UtilMethods.sendParticlePacket(p, EnumParticle.EXPLOSION_LARGE, l.getX(), l.getY() + 1.5,
+									l.getZ(), 0f, 0f, 0f, 0f, 1);
+						}
+						lb.getStand().remove();
+						lightningbolt.remove(i);
+					}
+					else if (!l.add(lb.getVector().clone()).getBlock().isEmpty()&&l.getBlock().getType().isSolid()) {
 						l.getWorld().playSound(l, "shaman.lightningbolt.impact", 1, 1);
 						for (Player p : Bukkit.getServer().getOnlinePlayers()) {
 							UtilMethods.sendParticlePacket(p, EnumParticle.EXPLOSION_LARGE, l.getX(), l.getY() + 1.5,
@@ -1490,50 +1508,112 @@ public class Warlords extends JavaPlugin {
 						lightningbolt.remove(i);
 					}
 					for (LivingEntity le : lb.getStand().getWorld().getLivingEntities()) {
-						if (le.isDead() == false) {
-							if (le instanceof Player) {
-								if (PlayerUtil.isAttackingPlayers(lb.getShooter())) {
-									Player p2 = (Player) le;
-									if (!p2.equals(lb.getShooter())) {
-										WarlordsPlayerAllys a = new WarlordsPlayerAllys(lb.getShooter());
-										if (!a.hasPlayer(p2)) {
-											Location m = lb.getStand().getLocation();
-											double dy = m.getY() - le.getLocation().getY();
-											if (SkillUtil.distance2D(m, le.getLocation()) <= 1.0 && dy < 0.5
-													&& dy > -2.0) {
-												SpielKlasse sk = Warlords.getKlasse(p2);
-												if (sk != null) {
-													sk.removeEnergy(3);
-													double dmg = UtilMethods.damage("Lightning Bolt", lb.critc(),
-															lb.critm(), lb.dmin(), lb.dmax(), lb.getShooter(), sk);
-													if (dmg != 0) {
-														sk.removeHealth(sk.hptohealth(dmg));
+						boolean already = false;
+						for (UUID u : lb.getHited()) {
+							if (u.compareTo(le.getUniqueId()) == 0) {
+								already = true;
+								break;
+							}
+						}
+						if (already == false) {
+							if (le.isDead() == false) {
+								if (le instanceof Player) {
+									if (PlayerUtil.isAttackingPlayers(lb.getShooter())) {
+										Player p2 = (Player) le;
+										if (!p2.equals(lb.getShooter())) {
+											WarlordsPlayerAllys a = new WarlordsPlayerAllys(lb.getShooter());
+											if (!a.hasPlayer(p2)) {
+												Location m = lb.getStand().getLocation();
+												double dy = m.getY() - le.getLocation().getY();
+												if (SkillUtil.distance2D(m, le.getLocation()) <= 1.0 && dy < 0.5
+														&& dy > -2.0) {
+													SpielKlasse sk = Warlords.getKlasse(p2);
+													if (sk != null) {
+														sk.removeEnergy(3);
+														double dmg = UtilMethods.damage("Lightning Bolt", lb.critc(),
+																lb.critm(), lb.dmin(), lb.dmax(), lb.getShooter(), sk);
+														if (dmg != 0) {
+															sk.removeHealth(sk.hptohealth(dmg));
+														}
+														lb.addHited(le.getUniqueId());
+														SpielKlasse skm = getKlasse(lb.getShooter());
+														if (skm != null) {
+															if (skm instanceof Thunderlord) {
+																ItemStack is = lb.getShooter().getInventory()
+																		.getItem(1);
+																if (is != null) {
+																	if (is.getType() == Material.INK_SACK) {
+																		if (is.getDurability() == 8) {
+																			if (is.getAmount() > 2) {
+																				is.setAmount(is.getAmount() - 2);
+																			} else {
+																				skm.addAbility(1);
+																			}
+																		} else if (is.getDurability() == 15) {
+																			if (is.getAmount() > 2) {
+																				is.setAmount(is.getAmount() - 2);
+																			} else {
+																				is.setDurability((short) 8);
+																				is.setAmount(59);
+																			}
+																		}
+																	}
+																}
+															}
+														}
+														UtilMethods.sendSoundPacket(lb.getShooter(),
+																"entity.arrow.hit_player",
+																lb.getShooter().getLocation());
 													}
-													UtilMethods.sendSoundPacket(lb.getShooter(),
-															"entity.arrow.hit_player", lb.getShooter().getLocation());
 												}
 											}
 										}
 									}
-								}
-							} else {
-								if (!(le instanceof ArmorStand)) {
-									Location m = lb.getStand().getLocation();
-									double dy = m.getY() - le.getLocation().getY();
-									CraftLivingEntity cle = (CraftLivingEntity) le;
-									double height = cle.getHandle().getHeadHeight();
-									if (SkillUtil.distance2D(m, le.getLocation()) <= 1.0 && dy < 0.5 * (height - 1)
-											&& dy > -2.0) {
-										double dmg = UtilMethods.hptohealth(UtilMethods.damage(lb.critc(), lb.critm(),
-												lb.dmin(), lb.dmax(), lb.getShooter(), "Lightning Bolt"));
-										double hp = le.getHealth();
-										if (hp < dmg) {
-											WeaponUtil.doWeapon(le, lb.getShooter());
+								} else {
+									if (!(le instanceof ArmorStand)) {
+										Location m = lb.getStand().getLocation();
+										double dy = m.getY() - le.getLocation().getY();
+										CraftLivingEntity cle = (CraftLivingEntity) le;
+										double height = cle.getHandle().getHeadHeight();
+										if (SkillUtil.distance2D(m, le.getLocation()) <= 1.0 && dy < 0.5 * (height - 1)
+												&& dy > -2.0) {
+											double dmg = UtilMethods
+													.hptohealth(UtilMethods.damage(lb.critc(), lb.critm(), lb.dmin(),
+															lb.dmax(), lb.getShooter(), "Lightning Bolt"));
+											double hp = le.getHealth();
+											if (hp < dmg) {
+												WeaponUtil.doWeapon(le, lb.getShooter());
 
+											}
+											lb.addHited(le.getUniqueId());
+											SpielKlasse skm = getKlasse(lb.getShooter());
+											if (skm != null) {
+												if (skm instanceof Thunderlord) {
+													ItemStack is = lb.getShooter().getInventory().getItem(1);
+													if (is != null) {
+														if (is.getType() == Material.INK_SACK) {
+															if (is.getDurability() == 8) {
+																if (is.getAmount() > 2) {
+																	is.setAmount(is.getAmount() - 2);
+																} else {
+																	skm.addAbility(1);
+																}
+															} else if (is.getDurability() == 15) {
+																if (is.getAmount() > 2) {
+																	is.setAmount(is.getAmount() - 2);
+																} else {
+																	is.setDurability((short) 8);
+																	is.setAmount(59);
+																}
+															}
+														}
+													}
+												}
+											}
+											UtilMethods.sendSoundPacket(lb.getShooter(), "entity.arrow.hit_player",
+													lb.getShooter().getLocation());
+											UtilMethods.setHealth(le, dmg);
 										}
-										UtilMethods.sendSoundPacket(lb.getShooter(), "entity.arrow.hit_player",
-												lb.getShooter().getLocation());
-										UtilMethods.setHealth(le, dmg);
 									}
 								}
 							}
@@ -1558,8 +1638,28 @@ public class Warlords extends JavaPlugin {
 						Warlords.clightning.remove(i);
 					}
 				}
+
+				// Chain Lightning
+				for (int i = 0; i < clightning.size(); i++) {
+					ChainLightning cl = clightning.get(i);
+					cl.decreaseduration();
+					if (cl.getMaxDur() - cl.getDur() == 20) {
+						for (ArmorStand a : cl.getStand()) {
+							a.remove();
+						}
+					}
+					if (cl.getDur() < 0) {
+						Player p = cl.getPlayer();
+						SpielKlasse sk = getKlasse(p);
+						if (sk != null) {
+							sk.damagemultiplier += cl.getReduction();
+						}
+						Warlords.clightning.remove(i);
+					}
+				}
 			}
 		}, 0, 1);
+
 	}
 
 	private void loopsPontiff() {
