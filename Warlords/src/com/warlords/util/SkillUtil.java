@@ -296,9 +296,9 @@ public class SkillUtil extends UtilMethods {
 										}
 										Location l = p.getLocation();
 										for (Player p3 : Bukkit.getServer().getOnlinePlayers()) {
-											UtilMethods.sendParticlePacket(p3, EnumParticle.SMOKE_NORMAL, l.getX(), l.getY() + 1.5, l.getZ(), 0.3f, 0.5f,
-													0.3f, 0f, 10);
-										
+											UtilMethods.sendParticlePacket(p3, EnumParticle.SMOKE_NORMAL, l.getX(),
+													l.getY() + 1.5, l.getZ(), 0.3f, 0.5f, 0.3f, 0f, 10);
+
 										}
 										double dmg = damage("Shadow Step", critc, critm, dmin, dmax, p, sk);
 										if (dmg != 0) {
@@ -1552,7 +1552,8 @@ public class SkillUtil extends UtilMethods {
 		for (int i = 0; i < range * 2; i++) {
 			Vector v = p.getLocation().getDirection().normalize().multiply(i);
 			Location l = p.getLocation().add(v);
-			if (!l.getBlock().isEmpty() && l.getBlock().getType().isSolid()) {
+			Location check = p.getEyeLocation().add(v);
+			if (!check.getBlock().isEmpty() && check.getBlock().getType().isSolid()) {
 				p.sendMessage("Target out of range");
 				return false;
 			}
