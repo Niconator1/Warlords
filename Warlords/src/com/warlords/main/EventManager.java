@@ -37,6 +37,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import com.warlords.boss.Pontiff;
 import com.warlords.util.Confirmation;
@@ -524,8 +525,18 @@ public class EventManager implements Listener {
 																double dmg2 = UtilMethods.damage("Windfury Weapon", 0.0,
 																		1.0, dmg * ww.mul(), dmg * ww.mul(), p, sk2);
 																sk2.removeHealth(sk2.hptohealth(dmg2));
-																victim.getWorld().playSound(victim.getLocation(),
-																		"shaman.windfuryweapon.impact", 1, 1);
+																Bukkit.getServer().getScheduler()
+																		.scheduleSyncDelayedTask(
+																				JavaPlugin.getPlugin(Warlords.class),
+																				new Runnable() {
+																					public void run() {
+																						victim.getWorld().playSound(
+																								victim.getLocation(),
+																								"shaman.windfuryweapon.impact",
+																								1, 1);
+																					}
+																				}, 7L * j);
+
 															}
 														}
 													}
@@ -561,8 +572,13 @@ public class EventManager implements Listener {
 															WeaponUtil.doWeapon(e, p);
 														}
 														UtilMethods.setHealth(e, dmg2);
-														e.getWorld().playSound(e.getLocation(),
-																"shaman.windfuryweapon.impact", 1, 1);
+														Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
+																JavaPlugin.getPlugin(Warlords.class), new Runnable() {
+																	public void run() {
+																		e.getWorld().playSound(e.getLocation(),
+																				"shaman.windfuryweapon.impact", 1, 1);
+																	}
+																}, 7L * j);
 													}
 												}
 											}
