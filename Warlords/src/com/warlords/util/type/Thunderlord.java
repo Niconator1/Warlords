@@ -35,12 +35,12 @@ public class Thunderlord extends SpielKlasse {
 	public double ccchain = 0.2;
 	public double cmulchain = 1.75;
 	public int echain = 20;
-	public double rangechain = 10.0;
+	public double rangechain = 40.0; //10.0
 	public double cchain = 10.8;
-	public int countchain = 2;
+	public int countchain = 40; //2
 	public double increasechain = 0.1;
 	public double reductionchain = 0.1;
-	public double reductionmaxchain = 0.3;
+	public double reductionmaxchain = reductionchain*(countchain+1);
 	public double durchain = 4.5;
 
 	// Elytra
@@ -153,7 +153,7 @@ public class Thunderlord extends SpielKlasse {
 				}
 				if (sucess) {
 					p.getWorld().playSound(p.getLocation(), "shaman.chainlightning.activation", 1, 1);
-					doCooldown(j);
+					//doCooldown(j);
 					removeEnergy(echain);
 				}
 			}
