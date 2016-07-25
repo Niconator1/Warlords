@@ -61,6 +61,7 @@ import com.warlords.util.skills.paladin.Presence;
 import com.warlords.util.skills.paladin.Wrath;
 import com.warlords.util.skills.shaman.ChainLightning;
 import com.warlords.util.skills.shaman.Lightningbolt;
+import com.warlords.util.skills.shaman.WindfuryWeapon;
 import com.warlords.util.skills.test.CatBolt;
 import com.warlords.util.skills.unique.Sphere;
 import com.warlords.util.type.Assassin;
@@ -108,6 +109,7 @@ public class Warlords extends JavaPlugin {
 	public static ArrayList<Presence> presence = new ArrayList<Presence>();
 	public static ArrayList<Lightningbolt> lightningbolt = new ArrayList<Lightningbolt>();
 	public static ArrayList<ChainLightning> clightning = new ArrayList<ChainLightning>();
+	public static ArrayList<WindfuryWeapon> windfury = new ArrayList<WindfuryWeapon>();
 	// Unique
 	public static ArrayList<Sphere> sphere = new ArrayList<Sphere>();
 	public static ArrayList<CatBolt> catbolt = new ArrayList<CatBolt>();
@@ -868,14 +870,18 @@ public class Warlords extends JavaPlugin {
 
 					}
 				}
+			}
+		}, 0, 10);
+		Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
+			public void run() {
 				// Stealth
 				for (int i = 0; i < stealth.size(); i++) {
 					Stealth as = stealth.get(i);
 					as.decreaseDuration();
 					Location l = as.getPlayer().getLocation();
-					for (Player p3 : Bukkit.getServer().getOnlinePlayers()){
-						UtilMethods.sendParticlePacket(p3, EnumParticle.DRAGON_BREATH, l.getX(), l.getY() + 1.0, l.getZ(), 0.05f, 0.02f,
-								0.05f, 0.05f, 1);
+					for (Player p3 : Bukkit.getServer().getOnlinePlayers()) {
+						UtilMethods.sendParticlePacket(p3, EnumParticle.DRAGON_BREATH, l.getX(), l.getY() + 1.0,
+								l.getZ(), 0.05f, 0.02f, 0.05f, 0.05f, 1);
 					}
 					if (as.getDuration() <= 0) {
 						SpielKlasse sk = getKlasse(as.getPlayer());
@@ -885,7 +891,7 @@ public class Warlords extends JavaPlugin {
 					}
 				}
 			}
-		}, 0, 10);
+		}, 0, 1);
 	}
 
 	private void loopsPaladin() {
@@ -1471,7 +1477,7 @@ public class Warlords extends JavaPlugin {
 					lb.getStand().setVelocity(lb.getVector());
 					Location l = lb.getStand().getLocation();
 					double distance = lb.start().distance(l);
-					if (!l.add(0, 1.5, 0).getBlock().isEmpty()&&l.getBlock().getType().isSolid()) {
+					if (!l.add(0, 1.5, 0).getBlock().isEmpty() && l.getBlock().getType().isSolid()) {
 						l.getWorld().playSound(l, "shaman.lightningbolt.impact", 1, 1);
 						for (Player p : Bukkit.getServer().getOnlinePlayers()) {
 							UtilMethods.sendParticlePacket(p, EnumParticle.EXPLOSION_LARGE, l.getX(), l.getY() + 1.5,
@@ -1479,8 +1485,8 @@ public class Warlords extends JavaPlugin {
 						}
 						lb.getStand().remove();
 						lightningbolt.remove(i);
-					}
-					else if (!l.add(lb.getVector().clone().multiply(-0.5)).getBlock().isEmpty()&&l.getBlock().getType().isSolid()) {
+					} else if (!l.add(lb.getVector().clone().multiply(-0.5)).getBlock().isEmpty()
+							&& l.getBlock().getType().isSolid()) {
 						l.getWorld().playSound(l, "shaman.lightningbolt.impact", 1, 1);
 						for (Player p : Bukkit.getServer().getOnlinePlayers()) {
 							UtilMethods.sendParticlePacket(p, EnumParticle.EXPLOSION_LARGE, l.getX(), l.getY() + 1.5,
@@ -1488,8 +1494,8 @@ public class Warlords extends JavaPlugin {
 						}
 						lb.getStand().remove();
 						lightningbolt.remove(i);
-					}
-					else if (!l.add(lb.getVector().clone()).getBlock().isEmpty()&&l.getBlock().getType().isSolid()) {
+					} else if (!l.add(lb.getVector().clone()).getBlock().isEmpty()
+							&& l.getBlock().getType().isSolid()) {
 						l.getWorld().playSound(l, "shaman.lightningbolt.impact", 1, 1);
 						for (Player p : Bukkit.getServer().getOnlinePlayers()) {
 							UtilMethods.sendParticlePacket(p, EnumParticle.EXPLOSION_LARGE, l.getX(), l.getY() + 1.5,
@@ -1529,7 +1535,6 @@ public class Warlords extends JavaPlugin {
 														&& dy > -2.0) {
 													SpielKlasse sk = Warlords.getKlasse(p2);
 													if (sk != null) {
-														sk.removeEnergy(3);
 														double dmg = UtilMethods.damage("Lightning Bolt", lb.critc(),
 																lb.critm(), lb.dmin(), lb.dmax(), lb.getShooter(), sk);
 														if (dmg != 0) {
@@ -1638,23 +1643,17 @@ public class Warlords extends JavaPlugin {
 						Warlords.clightning.remove(i);
 					}
 				}
-
-				// Chain Lightning
-				for (int i = 0; i < clightning.size(); i++) {
-					ChainLightning cl = clightning.get(i);
-					cl.decreaseduration();
-					if (cl.getMaxDur() - cl.getDur() == 20) {
-						for (ArmorStand a : cl.getStand()) {
-							a.remove();
-						}
+				// Windfury Weapon
+				for (int i = 0; i < windfury.size(); i++) {
+					WindfuryWeapon ww = windfury.get(i);
+					Location l = ww.getPlayer().getLocation();
+					for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+						UtilMethods.sendParticlePacket(p, EnumParticle.CRIT, l.getX(), l.getY() + 1.0, l.getZ(), 0.35f,
+								0.5f, 0.35f, 0f, 2);
 					}
-					if (cl.getDur() < 0) {
-						Player p = cl.getPlayer();
-						SpielKlasse sk = getKlasse(p);
-						if (sk != null) {
-							sk.damagemultiplier += cl.getReduction();
-						}
-						Warlords.clightning.remove(i);
+					ww.decreaseDuration();
+					if (ww.getDuration() < 0) {
+						Warlords.windfury.remove(i);
 					}
 				}
 			}

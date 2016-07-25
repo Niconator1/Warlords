@@ -29,7 +29,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
@@ -37,6 +37,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import com.warlords.boss.Pontiff;
 import com.warlords.util.Confirmation;
@@ -49,6 +50,7 @@ import com.warlords.util.WarlordsPlayerAllys;
 import com.warlords.util.Weapon;
 import com.warlords.util.WeaponUtil;
 import com.warlords.util.skills.hunter.Companion;
+import com.warlords.util.skills.shaman.WindfuryWeapon;
 import com.warlords.util.type.Assassin;
 
 public class EventManager implements Listener {
@@ -512,8 +514,32 @@ public class EventManager implements Listener {
 										if (!Warlords.isUsingVanish(sk.p)) {
 											WarlordsPlayerAllys a = new WarlordsPlayerAllys(p);
 											if (!a.hasPlayer(victim)) {
-												sk2.removeHealth(
-														sk2.hptohealth(UtilMethods.melee(sk.getWeapon(), p, sk2)));
+												double dmg = UtilMethods.melee(sk.getWeapon(), p, sk2);
+												sk2.removeHealth(sk2.hptohealth(dmg));
+												for (int i = 0; i < Warlords.windfury.size(); i++) {
+													WindfuryWeapon ww = Warlords.windfury.get(i);
+													if (ww.getPlayer().getUniqueId().compareTo(p.getUniqueId()) == 0) {
+														double rand = Math.random();
+														if (rand < ww.chance()) {
+															for (int j = 0; j < ww.count(); j++) {
+																double dmg2 = UtilMethods.damage("Windfury Weapon", 0.0,
+																		1.0, dmg * ww.mul(), dmg * ww.mul(), p, sk2);
+																sk2.removeHealth(sk2.hptohealth(dmg2));
+																Bukkit.getServer().getScheduler()
+																		.scheduleSyncDelayedTask(
+																				JavaPlugin.getPlugin(Warlords.class),
+																				new Runnable() {
+																					public void run() {
+																						victim.getWorld().playSound(
+																								victim.getLocation(),
+																								"shaman.windfuryweapon.impact",
+																								1, 1);
+																					}
+																				}, 7L * j);
+															}
+														}
+													}
+												}
 											}
 										}
 									}
@@ -531,6 +557,31 @@ public class EventManager implements Listener {
 											WeaponUtil.doWeapon(e, p);
 										}
 										UtilMethods.setHealth(e, dmg);
+										for (int i = 0; i < Warlords.windfury.size(); i++) {
+											WindfuryWeapon ww = Warlords.windfury.get(i);
+											if (ww.getPlayer().getUniqueId().compareTo(p.getUniqueId()) == 0) {
+												double rand = Math.random();
+												if (rand < ww.chance()) {
+													for (int j = 0; j < ww.count(); j++) {
+														double dmg2 = UtilMethods.hptohealth(UtilMethods.damage(0.0,
+																1.0, UtilMethods.healthtohp(dmg) * ww.mul(),
+																UtilMethods.healthtohp(dmg) * ww.mul(), p,
+																"Windfury Weapon"));
+														if (hp < dmg2) {
+															WeaponUtil.doWeapon(e, p);
+														}
+														UtilMethods.setHealth(e, dmg2);
+														Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(
+																JavaPlugin.getPlugin(Warlords.class), new Runnable() {
+																	public void run() {
+																		e.getWorld().playSound(e.getLocation(),
+																				"shaman.windfuryweapon.impact", 1, 1);
+																	}
+																}, 7L * j);
+													}
+												}
+											}
+										}
 									}
 								}
 							}
@@ -554,7 +605,7 @@ public class EventManager implements Listener {
 	}
 
 	@EventHandler
-	public void onPigClick(PlayerInteractEntityEvent e) {
+	public void onPEntitylick(PlayerInteractAtEntityEvent e) {
 		Player p = e.getPlayer();
 		if (p.getInventory().getItem(p.getInventory().getHeldItemSlot()) != null) {
 			SpielKlasse sp = Warlords.getKlasse(p);
@@ -580,7 +631,7 @@ public class EventManager implements Listener {
 							}
 						}
 						p.getInventory().setContents(p.getInventory().getContents());
-						sp.doAbility(p.getInventory().getHeldItemSlot());
+						//sp.doAbility(p.getInventory().getHeldItemSlot());
 						e.setCancelled(true);
 					}
 				}
@@ -590,8 +641,7 @@ public class EventManager implements Listener {
 
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event) {
-		if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK
-				|| event.getAction() == Action.PHYSICAL) {
+		if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			Player p = event.getPlayer();
 			if (event.getItem() != null) {
 				SpielKlasse sp = Warlords.getKlasse(p);

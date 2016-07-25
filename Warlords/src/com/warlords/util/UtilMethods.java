@@ -403,7 +403,7 @@ public class UtilMethods {
 		if (wp != null) {
 			UtilMethods.giveItems(py, true);
 			wp.setMode(true);
-			p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(20);
+			p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(10);
 			py.applySpeed();
 			wp.setKlasse(py.getName());
 			PlayerUtil.save(wp, Warlords.getPlugin(Warlords.class).getDataFolder(), "/players/" + p.getUniqueId());
