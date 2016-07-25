@@ -870,6 +870,10 @@ public class Warlords extends JavaPlugin {
 
 					}
 				}
+			}
+		}, 0, 10);
+		Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
+			public void run() {
 				// Stealth
 				for (int i = 0; i < stealth.size(); i++) {
 					Stealth as = stealth.get(i);
@@ -887,7 +891,7 @@ public class Warlords extends JavaPlugin {
 					}
 				}
 			}
-		}, 0, 10);
+		}, 0, 1);
 	}
 
 	private void loopsPaladin() {

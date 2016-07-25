@@ -298,7 +298,7 @@ public class SkillUtil extends UtilMethods {
 										Location l = p.getLocation();
 										for (Player p3 : Bukkit.getServer().getOnlinePlayers()) {
 											UtilMethods.sendParticlePacket(p3, EnumParticle.SMOKE_NORMAL, l.getX(),
-													l.getY() + 1.5, l.getZ(), 0.3f, 0.5f, 0.3f, 0f, 10);
+													l.getY() + 1.5, l.getZ(), 0.35f, 0.5f, 0.35f, 0f, 100);
 
 										}
 										double dmg = damage("Shadow Step", critc, critm, dmin, dmax, p, sk);
@@ -326,6 +326,12 @@ public class SkillUtil extends UtilMethods {
 								p.teleport(target);
 							} else {
 								p.teleport(le);
+							}
+							Location l = p.getLocation();
+							for (Player p3 : Bukkit.getServer().getOnlinePlayers()) {
+								UtilMethods.sendParticlePacket(p3, EnumParticle.SMOKE_NORMAL, l.getX(), l.getY() + 1.5,
+										l.getZ(), 0.35f, 0.5f, 0.35f, 0f, 100);
+
 							}
 							double dmg = hptohealth(damage(critc, critm, dmin, dmax, p, "Shadow Step"));
 							double hp = le.getHealth();
@@ -440,7 +446,8 @@ public class SkillUtil extends UtilMethods {
 			if (sk != null) {
 				for (Player p3 : Bukkit.getServer().getOnlinePlayers()) {
 					UtilMethods.sendParticlePacket(p3, EnumParticle.VILLAGER_HAPPY, l.getX(), l.getY() + 1.5, l.getZ(),
-							0.3f, 0.5f, 0.3f, 0f, 4);
+							0.35f, 0.5f, 0.35f, 0f, 100);
+
 				}
 				if (sk.healthtohp() <= poisonMax) {
 					double dmg = damage(0, 1, poisonMax, poisonMax, p, "Deadly Poison");
@@ -1812,8 +1819,9 @@ public class SkillUtil extends UtilMethods {
 		return null;
 	}
 
-	public static void addWindfury(Player p, double ccwindfury, double cmulwindfury, int countwindfury, double durwindfury) {
-		Warlords.windfury.add(new WindfuryWeapon(p,ccwindfury,cmulwindfury,countwindfury,durwindfury));
+	public static void addWindfury(Player p, double ccwindfury, double cmulwindfury, int countwindfury,
+			double durwindfury) {
+		Warlords.windfury.add(new WindfuryWeapon(p, ccwindfury, cmulwindfury, countwindfury, durwindfury));
 	}
 
 	public static void shootCat(Player p, double dmin, double dmax, double critc, double critm) {

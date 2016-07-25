@@ -35,9 +35,9 @@ public class Thunderlord extends SpielKlasse {
 	public double ccchain = 0.2;
 	public double cmulchain = 1.75;
 	public int echain = 20;
-	public double rangechain = 40.0; // 10.0
+	public double rangechain = 10.0;
 	public double cchain = 10.8;
-	public int countchain = 40; // 2
+	public int countchain = 2;
 	public double increasechain = 0.1;
 	public double reductionchain = 0.1;
 	public double reductionmaxchain = reductionchain * (countchain + 1);
@@ -69,14 +69,14 @@ public class Thunderlord extends SpielKlasse {
 						((double) (int) (cchain * (1.0 - getWeapon().getCooldown()) * 100.0) / 100.0), echain, ccchain,
 						cmulchain, ((double) (int) (dminchain * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0,
 						((double) (int) (dmaxchain * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0, countchain,
-						rangechain, increasechain, reductionchain, reductionmaxchain, durchain));
+						rangechain, increasechain, reductionchain, ((double) (int) (reductionchain * 100.0)) / 100.0, durchain));
 			} else {
 				p.getInventory().setItem(1,
 						ItemListThunder.getThunderRedRune(
 								((double) (int) (cchain * (1.0 - getWeapon().getCooldown()) * 100.0) / 100.0), echain,
 								ccchain, cmulchain, ((double) (int) (dminchain * 100.0)) / 100.0,
 								((double) (int) (dmaxchain * 100.0)) / 100.0, countchain, rangechain, increasechain,
-								reductionchain, reductionmaxchain, durchain));
+								reductionchain, ((double) (int) (reductionchain * 100.0)) / 100.0, durchain));
 			}
 			break;
 		case 2:
@@ -181,7 +181,7 @@ public class Thunderlord extends SpielKlasse {
 				}
 				if (sucess) {
 					p.getWorld().playSound(p.getLocation(), "shaman.chainlightning.activation", 1, 1);
-					// doCooldown(j);
+					doCooldown(j);
 					removeEnergy(echain);
 				}
 			}
@@ -195,7 +195,7 @@ public class Thunderlord extends SpielKlasse {
 					SkillUtil.addWindfury(p, ccwindfury, cmulwindfury, countwindfury, durwindfury);
 				}
 				p.getWorld().playSound(p.getLocation(), "shaman.windfuryweapon.activation", 1, 1);
-				// doCooldown(j);
+				doCooldown(j);
 				removeEnergy(ewindfury);
 			}
 			break;
@@ -230,7 +230,7 @@ public class Thunderlord extends SpielKlasse {
 			im = p.getInventory().getItem(1).getItemMeta();
 			im.setDisplayName(ChatColor.GRAY + windfuryname);
 			is.setItemMeta(im);
-			p.getInventory().setItem(1, is);
+			p.getInventory().setItem(2, is);
 			break;
 		case 8:
 			is.setAmount((int) Math.round(celytra * (1.0 - getWeapon().getCooldown())));
@@ -261,13 +261,13 @@ public class Thunderlord extends SpielKlasse {
 						((double) (int) (cchain * (1.0 - getWeapon().getCooldown()) * 100.0) / 100.0), echain, ccchain,
 						cmulchain, ((double) (int) (dminchain * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0,
 						((double) (int) (dmaxchain * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0, countchain,
-						rangechain, increasechain, reductionchain, reductionmaxchain, durchain);
+						rangechain, increasechain, reductionchain, ((double) (int) (reductionchain * 100.0)) / 100.0, durchain);
 			} else {
 				return ItemListThunder.getThunderRedRune(
 						((double) (int) (cchain * (1.0 - getWeapon().getCooldown()) * 100.0) / 100.0), echain, ccchain,
 						cmulchain, ((double) (int) (dminchain * 100.0)) / 100.0,
 						((double) (int) (dmaxchain * 100.0)) / 100.0, countchain, rangechain, increasechain,
-						reductionchain, reductionmaxchain, durchain);
+						reductionchain, ((double) (int) (reductionchain * 100.0)) / 100.0, durchain);
 			}
 		case 2:
 			if (getWeapon().getSkill() == 2 && getWeapon().getKlass() == 5) {

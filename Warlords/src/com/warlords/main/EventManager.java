@@ -29,7 +29,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
@@ -536,7 +536,6 @@ public class EventManager implements Listener {
 																								1, 1);
 																					}
 																				}, 7L * j);
-
 															}
 														}
 													}
@@ -606,7 +605,7 @@ public class EventManager implements Listener {
 	}
 
 	@EventHandler
-	public void onPigClick(PlayerInteractEntityEvent e) {
+	public void onPEntitylick(PlayerInteractAtEntityEvent e) {
 		Player p = e.getPlayer();
 		if (p.getInventory().getItem(p.getInventory().getHeldItemSlot()) != null) {
 			SpielKlasse sp = Warlords.getKlasse(p);
@@ -632,7 +631,7 @@ public class EventManager implements Listener {
 							}
 						}
 						p.getInventory().setContents(p.getInventory().getContents());
-						sp.doAbility(p.getInventory().getHeldItemSlot());
+						//sp.doAbility(p.getInventory().getHeldItemSlot());
 						e.setCancelled(true);
 					}
 				}
@@ -642,8 +641,7 @@ public class EventManager implements Listener {
 
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event) {
-		if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK
-				|| event.getAction() == Action.PHYSICAL) {
+		if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			Player p = event.getPlayer();
 			if (event.getItem() != null) {
 				SpielKlasse sp = Warlords.getKlasse(p);

@@ -6,7 +6,7 @@ public class Stealth {
 	private double dur;
 	private Player p;
 	public Stealth(double dur,Player p){
-		this.dur=dur*2;
+		this.dur=dur*20;
 		this.p=p;
 	}
 	public double getDuration(){
