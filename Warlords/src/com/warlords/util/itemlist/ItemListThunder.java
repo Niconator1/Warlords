@@ -62,4 +62,26 @@ public class ItemListThunder {
 		ret.setItemMeta(i);
 		return ret;
 	}
+
+	public static ItemStack getThunderPurpleRune(double cwindufry, int ewindfury, double ccwindfury,
+			double cmulwindfury, int countwindfury, double durwindfury) {
+		ItemStack ret = new ItemStack(Material.GLOWSTONE_DUST, 1);
+		ItemMeta i = ret.getItemMeta();
+		i.setDisplayName(ChatColor.RESET + "" + ChatColor.GREEN + Thunderlord.windfuryname);
+		List<String> lore = new ArrayList<String>();
+		lore.add(ChatColor.RESET + "" + ChatColor.GRAY + "Cooldown: " + ChatColor.AQUA + cwindufry + " seconds");
+		lore.add(ChatColor.RESET + "" + ChatColor.GRAY + "Energy Cost: " + ChatColor.YELLOW + ewindfury);
+		lore.add("");
+		lore.add(ChatColor.RESET + "" + ChatColor.GRAY + "Imbue your weapon with the power of the");
+		lore.add(ChatColor.RESET + "" + ChatColor.GRAY + "Wind, causing each of your melee attacks");
+		lore.add(ChatColor.RESET + "" + ChatColor.GRAY + "to have a " + ChatColor.YELLOW + ccwindfury*100.0 + "%"
+				+ ChatColor.GRAY + " chance to hit " + ChatColor.YELLOW + countwindfury);
+		lore.add(ChatColor.RESET + "" + ChatColor.GRAY + "additional times for " + ChatColor.RED + cmulwindfury * 100.0
+				+ "%" + ChatColor.GRAY + " weapon");
+		lore.add(ChatColor.RESET + "" + ChatColor.GRAY + "damage. Lasts " + ChatColor.GOLD + durwindfury
+				+ ChatColor.GRAY + " seconds.");
+		i.setLore(lore);
+		ret.setItemMeta(i);
+		return ret;
+	}
 }

@@ -46,6 +46,7 @@ import com.warlords.util.skills.paladin.Presence;
 import com.warlords.util.skills.paladin.Wrath;
 import com.warlords.util.skills.shaman.ChainLightning;
 import com.warlords.util.skills.shaman.Lightningbolt;
+import com.warlords.util.skills.shaman.WindfuryWeapon;
 import com.warlords.util.skills.test.CatBolt;
 import com.warlords.util.skills.unique.Sphere;
 import com.warlords.util.type.Hunter;
@@ -1811,6 +1812,10 @@ public class SkillUtil extends UtilMethods {
 		return null;
 	}
 
+	public static void addWindfury(Player p, double ccwindfury, double cmulwindfury, int countwindfury, double durwindfury) {
+		Warlords.windfury.add(new WindfuryWeapon(p,ccwindfury,cmulwindfury,countwindfury,durwindfury));
+	}
+
 	public static void shootCat(Player p, double dmin, double dmax, double critc, double critm) {
 		double pitch = ((p.getLocation().getPitch() + 90.0) * Math.PI) / 180.0;
 		double yaw = ((p.getLocation().getYaw() + 90.0) * Math.PI) / 180.0;
@@ -2021,6 +2026,12 @@ public class SkillUtil extends UtilMethods {
 			DWrath s = Warlords.dwrath.get(i);
 			if (s.getPlayer().equals(p)) {
 				Warlords.dwrath.remove(i);
+			}
+		}
+		for (int i = 0; i < Warlords.windfury.size(); i++) {
+			WindfuryWeapon s = Warlords.windfury.get(i);
+			if (s.getPlayer().equals(p)) {
+				Warlords.windfury.remove(i);
 			}
 		}
 	}

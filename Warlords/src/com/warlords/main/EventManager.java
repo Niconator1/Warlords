@@ -49,6 +49,7 @@ import com.warlords.util.WarlordsPlayerAllys;
 import com.warlords.util.Weapon;
 import com.warlords.util.WeaponUtil;
 import com.warlords.util.skills.hunter.Companion;
+import com.warlords.util.skills.shaman.WindfuryWeapon;
 import com.warlords.util.type.Assassin;
 
 public class EventManager implements Listener {
@@ -512,8 +513,23 @@ public class EventManager implements Listener {
 										if (!Warlords.isUsingVanish(sk.p)) {
 											WarlordsPlayerAllys a = new WarlordsPlayerAllys(p);
 											if (!a.hasPlayer(victim)) {
-												sk2.removeHealth(
-														sk2.hptohealth(UtilMethods.melee(sk.getWeapon(), p, sk2)));
+												double dmg = UtilMethods.melee(sk.getWeapon(), p, sk2);
+												sk2.removeHealth(sk2.hptohealth(dmg));
+												for (int i = 0; i < Warlords.windfury.size(); i++) {
+													WindfuryWeapon ww = Warlords.windfury.get(i);
+													if (ww.getPlayer().getUniqueId().compareTo(p.getUniqueId()) == 0) {
+														double rand = Math.random();
+														if (rand < ww.chance()) {
+															for (int j = 0; j < ww.count(); j++) {
+																double dmg2 = UtilMethods.damage("Windfury Weapon", 0.0,
+																		1.0, dmg * ww.mul(), dmg * ww.mul(), p, sk2);
+																sk2.removeHealth(sk2.hptohealth(dmg2));
+																victim.getWorld().playSound(victim.getLocation(),
+																		"shaman.windfuryweapon.impact", 1, 1);
+															}
+														}
+													}
+												}
 											}
 										}
 									}
@@ -531,6 +547,26 @@ public class EventManager implements Listener {
 											WeaponUtil.doWeapon(e, p);
 										}
 										UtilMethods.setHealth(e, dmg);
+										for (int i = 0; i < Warlords.windfury.size(); i++) {
+											WindfuryWeapon ww = Warlords.windfury.get(i);
+											if (ww.getPlayer().getUniqueId().compareTo(p.getUniqueId()) == 0) {
+												double rand = Math.random();
+												if (rand < ww.chance()) {
+													for (int j = 0; j < ww.count(); j++) {
+														double dmg2 = UtilMethods.hptohealth(UtilMethods.damage(0.0,
+																1.0, UtilMethods.healthtohp(dmg) * ww.mul(),
+																UtilMethods.healthtohp(dmg) * ww.mul(), p,
+																"Windfury Weapon"));
+														if (hp < dmg2) {
+															WeaponUtil.doWeapon(e, p);
+														}
+														UtilMethods.setHealth(e, dmg2);
+														e.getWorld().playSound(e.getLocation(),
+																"shaman.windfuryweapon.impact", 1, 1);
+													}
+												}
+											}
+										}
 									}
 								}
 							}
