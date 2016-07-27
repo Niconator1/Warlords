@@ -10,7 +10,6 @@ import com.warlords.util.SkillUtil;
 import com.warlords.util.SpielKlasse;
 import com.warlords.util.WeaponUtil;
 import com.warlords.util.itemlist.ItemListGenerel;
-import com.warlords.util.itemlist.ItemListTest;
 
 public class Test extends SpielKlasse {
 	public static String name = "Test";
@@ -19,13 +18,6 @@ public class Test extends SpielKlasse {
 	private static int eph = 100;
 	public static int epmax = 1000;
 	public static int hpmax = 1000000;
-	// Cat Bolt
-	public static final String ocelotname = "Cat Bolt";
-	public double dminocelot = 334.8;
-	public double dmaxocelot = 433.2;
-	public double ccocelot = 0.2;
-	public double cmulocelot = 1.75;
-	public int eocelot = 35;
 	// Elytra
 	public double celytra = 40;
 	public double espeed = 0.75;
@@ -61,38 +53,11 @@ public class Test extends SpielKlasse {
 
 	@Override
 	public void setMainAbility() {
-		ItemStack is = WeaponUtil.generateItemStack(getWeapon(), getName());
-		if (is != null) {
-			ItemMeta im = is.getItemMeta();
-			if (getWeapon().getSkill() == 0 && getWeapon().getKlass() == 2) {
-				im.setLore(ItemListTest.getTestMain(eocelot, ccocelot, cmulocelot,
-						((double) (int) (dminocelot * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0,
-						((double) (int) (dmaxocelot * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0));
-			} else {
-				im.setLore(ItemListTest.getTestMain(eocelot, ccocelot, cmulocelot, dminocelot, dmaxocelot));
-			}
-			im.setDisplayName(ChatColor.GREEN + ocelotname);
-			is.setItemMeta(im);
-			p.getInventory().setItem(0, is);
-		}
 	}
 
 	@Override
 	public ItemStack getMainAbility() {
-		ItemStack is = WeaponUtil.generateItemStack(getWeapon(), getName());
-		if (is != null) {
-			ItemMeta im = is.getItemMeta();
-			if (getWeapon().getSkill() == 0 && getWeapon().getKlass() == 2) {
-				im.setLore(ItemListTest.getTestMain(eocelot, ccocelot, cmulocelot,
-						((double) (int) (dminocelot * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0,
-						((double) (int) (dmaxocelot * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0));
-			} else {
-				im.setLore(ItemListTest.getTestMain(eocelot, ccocelot, cmulocelot, dminocelot, dmaxocelot));
-			}
-			im.setDisplayName(ChatColor.GREEN + ocelotname);
-			is.setItemMeta(im);
-		}
-		return is;
+		return null;
 	}
 
 	@Override
@@ -106,17 +71,6 @@ public class Test extends SpielKlasse {
 		}
 		switch (j) {
 		case 0:
-			if (getEnergy() >= eocelot) {
-				if (getWeapon().getSkill() == 0 && getWeapon().getKlass() == 0) {
-					SkillUtil.shootCat(p, dminocelot * (1.0 + getWeapon().getBoost()),
-							dmaxocelot * (1.0 + getWeapon().getBoost()), ccocelot + ccBoost, cmulocelot + cmulBoost);
-				} else {
-					SkillUtil.shootCat(p, dminocelot, dmaxocelot, ccocelot + ccBoost, cmulocelot + cmulBoost);
-				}
-
-				doCooldown(j);
-				removeEnergy(eocelot);
-			}
 			break;
 		case 1:
 			break;

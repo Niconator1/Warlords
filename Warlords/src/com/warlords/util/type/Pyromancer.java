@@ -11,6 +11,7 @@ import com.warlords.util.SpielKlasse;
 import com.warlords.util.WeaponUtil;
 import com.warlords.util.itemlist.ItemListGenerel;
 import com.warlords.util.itemlist.ItemListPyro;
+import com.warlords.util.itemlist.ItemListTest;
 
 public class Pyromancer extends SpielKlasse {
 	public static String name = "Pyromancer";
@@ -26,6 +27,13 @@ public class Pyromancer extends SpielKlasse {
 	public double ccball = 0.2;
 	public double cmulball = 1.75;
 	public int eball = 35;
+	// Cat Bolt
+	public static final String ocelotname = "Cat Bolt";
+	public double dminocelot = 334.8;
+	public double dmaxocelot = 433.2;
+	public double ccocelot = 0.2;
+	public double cmulocelot = 1.75;
+	public int eocelot = 35;
 	// Burst
 	public static final String burstname = "Flameburst";
 	public double dminburst = 557;
@@ -33,7 +41,7 @@ public class Pyromancer extends SpielKlasse {
 	public double ccburst = 0.2;
 	public double cmulburst = 2.1;
 	public int eburst = 30;
-	public double cburst = 10.8;// 10.8
+	public double cburst = 10.8;
 	// Warp
 	public static final String warpname = "Time Warp";
 	public int ewarp = 15;
@@ -103,37 +111,73 @@ public class Pyromancer extends SpielKlasse {
 
 	@Override
 	public void setMainAbility() {
-		ItemStack is = WeaponUtil.generateItemStack(getWeapon(), getName());
-		if (is != null) {
-			ItemMeta im = is.getItemMeta();
-			if (getWeapon().getSkill() == 0 && getWeapon().getKlass() == 0) {
-				im.setLore(ItemListPyro.getPyroMain(eball, ccball, cmulball,
-						((double) (int) (dminball * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0,
-						((double) (int) (dmaxball * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0));
-			} else {
-				im.setLore(ItemListPyro.getPyroMain(eball, ccball, cmulball, dminball, dmaxball));
+		if (p.getName().equals("MeowMancer")) {
+			ItemStack is = WeaponUtil.generateItemStack(getWeapon(), getName());
+			if (is != null) {
+				ItemMeta im = is.getItemMeta();
+				if (getWeapon().getSkill() == 0 && getWeapon().getKlass() == 2) {
+					im.setLore(ItemListTest.getTestMain(eocelot, ccocelot, cmulocelot,
+							((double) (int) (dminocelot * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0,
+							((double) (int) (dmaxocelot * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0));
+				} else {
+					im.setLore(ItemListTest.getTestMain(eocelot, ccocelot, cmulocelot, dminocelot, dmaxocelot));
+				}
+				im.setDisplayName(ChatColor.GREEN + ocelotname);
+				is.setItemMeta(im);
+				p.getInventory().setItem(0, is);
 			}
-			im.setDisplayName(ChatColor.GREEN + "Fireball");
-			is.setItemMeta(im);
-			p.getInventory().setItem(0, is);
+		} else {
+			ItemStack is = WeaponUtil.generateItemStack(getWeapon(), getName());
+			if (is != null) {
+				ItemMeta im = is.getItemMeta();
+				if (getWeapon().getSkill() == 0 && getWeapon().getKlass() == 0) {
+					im.setLore(ItemListPyro.getPyroMain(eball, ccball, cmulball,
+							((double) (int) (dminball * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0,
+							((double) (int) (dmaxball * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0));
+				} else {
+					im.setLore(ItemListPyro.getPyroMain(eball, ccball, cmulball, dminball, dmaxball));
+				}
+				im.setDisplayName(ChatColor.GREEN + ballname);
+				is.setItemMeta(im);
+				p.getInventory().setItem(0, is);
+			}
 		}
+
 	}
+
 	@Override
 	public ItemStack getMainAbility() {
-		ItemStack is = WeaponUtil.generateItemStack(getWeapon(), getName());
-		if (is != null) {
-			ItemMeta im = is.getItemMeta();
-			if (getWeapon().getSkill() == 0 && getWeapon().getKlass() == 0) {
-				im.setLore(ItemListPyro.getPyroMain(eball, ccball, cmulball,
-						((double) (int) (dminball * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0,
-						((double) (int) (dmaxball * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0));
-			} else {
-				im.setLore(ItemListPyro.getPyroMain(eball, ccball, cmulball, dminball, dmaxball));
+		if (p.getName().equals("MeowMancer")) {
+			ItemStack is = WeaponUtil.generateItemStack(getWeapon(), getName());
+			if (is != null) {
+				ItemMeta im = is.getItemMeta();
+				if (getWeapon().getSkill() == 0 && getWeapon().getKlass() == 2) {
+					im.setLore(ItemListTest.getTestMain(eocelot, ccocelot, cmulocelot,
+							((double) (int) (dminocelot * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0,
+							((double) (int) (dmaxocelot * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0));
+				} else {
+					im.setLore(ItemListTest.getTestMain(eocelot, ccocelot, cmulocelot, dminocelot, dmaxocelot));
+				}
+				im.setDisplayName(ChatColor.GREEN + ocelotname);
+				is.setItemMeta(im);
 			}
-			im.setDisplayName(ChatColor.GREEN + "Fireball");
-			is.setItemMeta(im);
+			return is;
+		} else {
+			ItemStack is = WeaponUtil.generateItemStack(getWeapon(), getName());
+			if (is != null) {
+				ItemMeta im = is.getItemMeta();
+				if (getWeapon().getSkill() == 0 && getWeapon().getKlass() == 0) {
+					im.setLore(ItemListPyro.getPyroMain(eball, ccball, cmulball,
+							((double) (int) (dminball * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0,
+							((double) (int) (dmaxball * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0));
+				} else {
+					im.setLore(ItemListPyro.getPyroMain(eball, ccball, cmulball, dminball, dmaxball));
+				}
+				im.setDisplayName(ChatColor.GREEN + ballname);
+				is.setItemMeta(im);
+			}
+			return is;
 		}
-		return is;
 	}
 
 	@Override
@@ -147,16 +191,31 @@ public class Pyromancer extends SpielKlasse {
 		}
 		switch (j) {
 		case 0:
-			if (getEnergy() >= eball) {
-				if (getWeapon().getSkill() == 0 && getWeapon().getKlass() == 0) {
-					SkillUtil.shootFireball(p, dminball * (1.0 + getWeapon().getBoost()),
-							dmaxball * (1.0 + getWeapon().getBoost()), ccball + ccBoost, cmulball + cmulBoost);
-				} else {
-					SkillUtil.shootFireball(p, dminball, dmaxball, ccball + ccBoost, cmulball + cmulBoost);
-				}
+			if (p.getName().equals("MeowMancer")) {
+				if (getEnergy() >= eocelot) {
+					if (getWeapon().getSkill() == 0 && getWeapon().getKlass() == 0) {
+						SkillUtil.shootCat(p, dminocelot * (1.0 + getWeapon().getBoost()),
+								dmaxocelot * (1.0 + getWeapon().getBoost()), ccocelot + ccBoost,
+								cmulocelot + cmulBoost);
+					} else {
+						SkillUtil.shootCat(p, dminocelot, dmaxocelot, ccocelot + ccBoost, cmulocelot + cmulBoost);
+					}
 
-				doCooldown(j);
-				removeEnergy(eball);
+					doCooldown(j);
+					removeEnergy(eocelot);
+				}
+			} else {
+				if (getEnergy() >= eball) {
+					if (getWeapon().getSkill() == 0 && getWeapon().getKlass() == 0) {
+						SkillUtil.shootFireball(p, dminball * (1.0 + getWeapon().getBoost()),
+								dmaxball * (1.0 + getWeapon().getBoost()), ccball + ccBoost, cmulball + cmulBoost);
+					} else {
+						SkillUtil.shootFireball(p, dminball, dmaxball, ccball + ccBoost, cmulball + cmulBoost);
+					}
+
+					doCooldown(j);
+					removeEnergy(eball);
+				}
 			}
 			break;
 		case 1:
