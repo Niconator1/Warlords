@@ -63,13 +63,13 @@ public class ItemListThunder {
 		return ret;
 	}
 
-	public static ItemStack getThunderPurpleRune(double cwindufry, int ewindfury, double ccwindfury,
+	public static ItemStack getThunderPurpleRune(double cwindfury, int ewindfury, double ccwindfury,
 			double cmulwindfury, int countwindfury, double durwindfury) {
 		ItemStack ret = new ItemStack(Material.GLOWSTONE_DUST, 1);
 		ItemMeta i = ret.getItemMeta();
 		i.setDisplayName(ChatColor.RESET + "" + ChatColor.GREEN + Thunderlord.windfuryname);
 		List<String> lore = new ArrayList<String>();
-		lore.add(ChatColor.RESET + "" + ChatColor.GRAY + "Cooldown: " + ChatColor.AQUA + cwindufry + " seconds");
+		lore.add(ChatColor.RESET + "" + ChatColor.GRAY + "Cooldown: " + ChatColor.AQUA + cwindfury + " seconds");
 		lore.add(ChatColor.RESET + "" + ChatColor.GRAY + "Energy Cost: " + ChatColor.YELLOW + ewindfury);
 		lore.add("");
 		lore.add(ChatColor.RESET + "" + ChatColor.GRAY + "Imbue your weapon with the power of the");
@@ -80,6 +80,24 @@ public class ItemListThunder {
 				+ "%" + ChatColor.GRAY + " weapon");
 		lore.add(ChatColor.RESET + "" + ChatColor.GRAY + "damage. Lasts " + ChatColor.GOLD + durwindfury
 				+ ChatColor.GRAY + " seconds.");
+		i.setLore(lore);
+		ret.setItemMeta(i);
+		return ret;
+	}
+
+	public static ItemStack getThunderBlueRune(double clrod, int elrod, double hlrod) {
+		ItemStack ret = new ItemStack(Material.INK_SACK, 1, (short) (10));
+		ItemMeta i = ret.getItemMeta();
+		i.setDisplayName(ChatColor.RESET + "" + ChatColor.GREEN + Thunderlord.lrodname);
+		List<String> lore = new ArrayList<String>();
+		lore.add(ChatColor.RESET + "" + ChatColor.GRAY + "Cooldown: " + ChatColor.AQUA + clrod + " seconds");
+		lore.add("");
+		lore.add(ChatColor.RESET + "" + ChatColor.GRAY + "Call down an energizing bolt of");
+		lore.add(ChatColor.RESET + "" + ChatColor.GRAY + "lightning upon yourself, restoring " + ChatColor.GREEN
+				+ hlrod * 100.0 + "%");
+		lore.add(ChatColor.RESET + "" + ChatColor.GRAY + "health and " + ChatColor.YELLOW + elrod + ChatColor.GRAY
+				+ " energy and knock all");
+		lore.add(ChatColor.RESET + "" + ChatColor.GRAY + "nearby enemies back.");
 		i.setLore(lore);
 		ret.setItemMeta(i);
 		return ret;

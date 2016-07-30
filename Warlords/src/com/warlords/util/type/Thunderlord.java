@@ -44,13 +44,17 @@ public class Thunderlord extends SpielKlasse {
 	public double durchain = 4.5;
 	// Windfury Weapon
 	public static final String windfuryname = "Windfury Weapon";
-	public double ccwindfury = 0.35;
+	public double ccwindfury = 18.0;
 	public double cmulwindfury = 2.0;
 	public int ewindfury = 15;
 	public double cwindfury = 18;
 	public int countwindfury = 2;
 	public double durwindfury = 8.0;
-
+	// Lightning rod
+	public static final String lrodname = "Lightning Rod";
+	public double clrod = 36.0;
+	public double hlrod = 0.3;
+	public int elrod = 80;
 	// Elytra
 	public double celytra = 40;
 	public double espeed = 1.25;
@@ -69,7 +73,8 @@ public class Thunderlord extends SpielKlasse {
 						((double) (int) (cchain * (1.0 - getWeapon().getCooldown()) * 100.0) / 100.0), echain, ccchain,
 						cmulchain, ((double) (int) (dminchain * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0,
 						((double) (int) (dmaxchain * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0, countchain,
-						rangechain, increasechain, reductionchain, ((double) (int) (reductionchain * 100.0)) / 100.0, durchain));
+						rangechain, increasechain, reductionchain, ((double) (int) (reductionchain * 100.0)) / 100.0,
+						durchain));
 			} else {
 				p.getInventory().setItem(1,
 						ItemListThunder.getThunderRedRune(
@@ -83,7 +88,7 @@ public class Thunderlord extends SpielKlasse {
 			if (getWeapon().getSkill() == 2 && getWeapon().getKlass() == 5) {
 				p.getInventory().setItem(2,
 						ItemListThunder.getThunderPurpleRune(
-								((double) (int) (ccwindfury * (1.0 - getWeapon().getCooldown()) * 100.0) / 100.0),
+								((double) (int) (cwindfury * (1.0 - getWeapon().getCooldown()) * 100.0) / 100.0),
 								ewindfury, ((double) (int) (ccwindfury * 100.0)) / 100.0,
 								((double) (int) (cmulwindfury * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0,
 								countwindfury, durwindfury));
@@ -91,11 +96,15 @@ public class Thunderlord extends SpielKlasse {
 				p.getInventory()
 						.setItem(2,
 								ItemListThunder.getThunderPurpleRune(
-										((double) (int) (ccwindfury * (1.0 - getWeapon().getCooldown()) * 100.0)
+										((double) (int) (cwindfury * (1.0 - getWeapon().getCooldown()) * 100.0)
 												/ 100.0),
 										ewindfury, ((double) (int) (ccwindfury * 100.0)) / 100.0,
 										((double) (int) (cmulwindfury * 100.0)) / 100.0, countwindfury, durwindfury));
 			}
+			break;
+		case 3:
+			p.getInventory().setItem(3, ItemListThunder.getThunderBlueRune(
+					((double) (int) (clrod * (1.0 - getWeapon().getCooldown()) * 100.0) / 100.0), elrod, hlrod));
 			break;
 		case 8:
 			p.getInventory().setItem(8, ItemListGenerel.getElytraRune(celytra, eelytra, espeed));
@@ -119,7 +128,7 @@ public class Thunderlord extends SpielKlasse {
 				im.setLore(
 						ItemListThunder.getThunderMain(ebolt, ccbolt, cmulbolt, dminbolt, dmaxbolt, rangebolt, cbolt));
 			}
-			im.setDisplayName(ChatColor.GREEN + "Lightning Bolt");
+			im.setDisplayName(ChatColor.GREEN + boltname);
 			is.setItemMeta(im);
 			p.getInventory().setItem(0, is);
 		}
@@ -139,7 +148,7 @@ public class Thunderlord extends SpielKlasse {
 				im.setLore(
 						ItemListThunder.getThunderMain(ebolt, ccbolt, cmulbolt, dminbolt, dmaxbolt, rangebolt, cbolt));
 			}
-			im.setDisplayName(ChatColor.GREEN + "Lightning Bolt");
+			im.setDisplayName(ChatColor.GREEN + boltname);
 			is.setItemMeta(im);
 		}
 		return is;
@@ -199,6 +208,10 @@ public class Thunderlord extends SpielKlasse {
 				removeEnergy(ewindfury);
 			}
 			break;
+		case 3:
+			SkillUtil.doLightningRod(p, elrod, hlrod);
+			doCooldown(j);
+			break;
 		case 8:
 			if (p.getInventory().getChestplate() != null) {
 				break;
@@ -227,10 +240,18 @@ public class Thunderlord extends SpielKlasse {
 		case 2:
 			is.setAmount((int) Math.round(cwindfury * (1.0 - getWeapon().getCooldown())));
 			is.setDurability((short) 8);
-			im = p.getInventory().getItem(1).getItemMeta();
+			im = p.getInventory().getItem(2).getItemMeta();
 			im.setDisplayName(ChatColor.GRAY + windfuryname);
 			is.setItemMeta(im);
 			p.getInventory().setItem(2, is);
+			break;
+		case 3:
+			is.setAmount((int) Math.round(clrod * (1.0 - getWeapon().getCooldown())));
+			is.setDurability((short) 8);
+			im = p.getInventory().getItem(3).getItemMeta();
+			im.setDisplayName(ChatColor.GRAY + lrodname);
+			is.setItemMeta(im);
+			p.getInventory().setItem(3, is);
 			break;
 		case 8:
 			is.setAmount((int) Math.round(celytra * (1.0 - getWeapon().getCooldown())));
@@ -261,7 +282,8 @@ public class Thunderlord extends SpielKlasse {
 						((double) (int) (cchain * (1.0 - getWeapon().getCooldown()) * 100.0) / 100.0), echain, ccchain,
 						cmulchain, ((double) (int) (dminchain * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0,
 						((double) (int) (dmaxchain * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0, countchain,
-						rangechain, increasechain, reductionchain, ((double) (int) (reductionchain * 100.0)) / 100.0, durchain);
+						rangechain, increasechain, reductionchain, ((double) (int) (reductionchain * 100.0)) / 100.0,
+						durchain);
 			} else {
 				return ItemListThunder.getThunderRedRune(
 						((double) (int) (cchain * (1.0 - getWeapon().getCooldown()) * 100.0) / 100.0), echain, ccchain,
@@ -272,16 +294,19 @@ public class Thunderlord extends SpielKlasse {
 		case 2:
 			if (getWeapon().getSkill() == 2 && getWeapon().getKlass() == 5) {
 				return ItemListThunder.getThunderPurpleRune(
-						((double) (int) (ccwindfury * (1.0 - getWeapon().getCooldown()) * 100.0) / 100.0), ewindfury,
+						((double) (int) (cwindfury * (1.0 - getWeapon().getCooldown()) * 100.0) / 100.0), ewindfury,
 						((double) (int) (ccwindfury * 100.0)) / 100.0,
 						((double) (int) (cmulwindfury * (1.0 + getWeapon().getBoost()) * 100.0)) / 100.0, countwindfury,
 						durwindfury);
 			} else {
 				return ItemListThunder.getThunderPurpleRune(
-						((double) (int) (ccwindfury * (1.0 - getWeapon().getCooldown()) * 100.0) / 100.0), ewindfury,
+						((double) (int) (cwindfury * (1.0 - getWeapon().getCooldown()) * 100.0) / 100.0), ewindfury,
 						((double) (int) (ccwindfury * 100.0)) / 100.0, ((double) (int) (cmulwindfury * 100.0)) / 100.0,
 						countwindfury, durwindfury);
 			}
+		case 3:
+			return ItemListThunder.getThunderBlueRune(
+					((double) (int) (clrod * (1.0 - getWeapon().getCooldown()) * 100.0) / 100.0), elrod, hlrod);
 		case 8:
 			return ItemListGenerel.getElytraRune(celytra, eelytra, espeed);
 		default:

@@ -1284,7 +1284,6 @@ public class SkillUtil extends UtilMethods {
 			sk.addEnergy(elinfusion);
 		}
 		p.getWorld().playSound(p.getLocation(), "paladin.infusionoflight.activation", 1, 1);
-
 	}
 
 	public static void doUnholyRadiance(double hminhradiance, double hmaxhradiance, double cchradiance,
@@ -1824,6 +1823,18 @@ public class SkillUtil extends UtilMethods {
 		Warlords.windfury.add(new WindfuryWeapon(p, ccwindfury, cmulwindfury, countwindfury, durwindfury));
 	}
 
+	public static void doLightningRod(Player p, int elrod, double hlrod) {
+		SpielKlasse sk = Warlords.getKlasse(p);
+		if (sk != null) {
+			if (sk.healthtohp() < sk.getMaxHP()) {
+				UtilMethods.heal("Lightning Rod", hlrod * sk.getMaxHP(), hlrod * sk.getMaxHP(), 0, 1, sk.p, sk);
+				sk.addHealth(sk.hptohealth(hlrod * sk.getMaxHP()));
+			}
+			sk.addEnergy(elrod);
+		}
+		p.getWorld().playSound(p.getLocation(), "shaman.lightningrod.activation", 1, 1);
+	}
+
 	public static void shootCat(Player p, double dmin, double dmax, double critc, double critm) {
 		double pitch = ((p.getLocation().getPitch() + 90.0) * Math.PI) / 180.0;
 		double yaw = ((p.getLocation().getYaw() + 90.0) * Math.PI) / 180.0;
@@ -2049,4 +2060,5 @@ public class SkillUtil extends UtilMethods {
 		double dz = m2.getZ() - m1.getZ();
 		return Math.sqrt(dx * dx + dz * dz);
 	}
+
 }
