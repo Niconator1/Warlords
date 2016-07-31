@@ -7,6 +7,7 @@ import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_10_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_10_R1.inventory.CraftItemStack;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -18,7 +19,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import com.warlords.main.Warlords;
 
+import net.minecraft.server.v1_10_R1.IChatBaseComponent;
 import net.minecraft.server.v1_10_R1.NBTTagCompound;
+import net.minecraft.server.v1_10_R1.PacketPlayOutChat;
+import net.minecraft.server.v1_10_R1.IChatBaseComponent.ChatSerializer;
 
 public class WeaponUtil {
 	public static final String[] KLASSEN = { "Pyromancer", "Assassin", "Avenger", "Hunter", "Crusader" };
@@ -74,7 +78,7 @@ public class WeaponUtil {
 		int um = 0;
 		int klass = r.nextInt(KLASSEN.length);
 		int skill = r.nextInt(SKILLS[klass].length);
-		String klasse = "[CHEATED] " + KLASSEN[klass];
+		String klasse = KLASSEN[klass];
 		if (i == 1) {
 			int rand = r.nextInt(LEGENDS.length);
 			dmin = r.nextInt(9) + 94;
@@ -392,15 +396,53 @@ public class WeaponUtil {
 					w = WeaponUtil.generateRandomWeapon(1);
 					for (Player p : Bukkit.getOnlinePlayers()) {
 						p.getWorld().playSound(p.getLocation(), "legendaryfind", 1, 1);
-						p.sendMessage(shooter.getDisplayName() + " got lucky and found a " + ChatColor.GOLD
-								+ LEGENDNAMES[w.getType()] + " of the " + KLASSEN[w.getKlass()]);
+						ItemStack is = WeaponUtil.generateItemStack(w, WeaponUtil.KLASSEN[w.getKlass()]);
+						String maintext = shooter.getDisplayName() + " was lucky and found a ";
+						String weaponname = WeaponUtil.LEGENDNAMES[w.getType()] + " of the "
+								+ WeaponUtil.KLASSEN[w.getKlass()];
+						String cweaponname = ChatColor.GOLD + WeaponUtil.LEGENDNAMES[w.getType()] + " of the "
+								+ WeaponUtil.KLASSEN[w.getKlass()];
+						String lore = "";
+						for (int i = 0; i < is.getItemMeta().getLore().size(); i++) {
+							String s = is.getItemMeta().getLore().get(i);
+							if (i < is.getItemMeta().getLore().size() - 1) {
+								lore += "\\\"" + s + "\\\",";
+							} else {
+								lore += "\\\"" + s + "\\\"";
+							}
+						}
+						IChatBaseComponent al = ChatSerializer
+								.a("{\"text\":\"" + maintext + "\", \"extra\":[{\"text\":\"" + weaponname
+										+ "\",\"color\":\"gold\",\"hoverEvent\":{\"action\":\"show_item\",\"value\":\"{id:stone,tag:{display:{Name:\\\""
+										+ cweaponname + "\\\",Lore:[" + lore + "]}}}\"}}]}");
+						PacketPlayOutChat packet = new PacketPlayOutChat(al, (byte) 0);
+						((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
 					}
 				} else if (x3 < 37.5) {
 					w = WeaponUtil.generateRandomWeapon(2);
 					for (Player p : Bukkit.getOnlinePlayers()) {
 						p.getWorld().playSound(p.getLocation(), "epicfind", 1, 1);
-						p.sendMessage(shooter.getDisplayName() + " got lucky and found a " + ChatColor.DARK_PURPLE
-								+ EPICNAMES[w.getType()] + " of the " + KLASSEN[w.getKlass()]);
+						ItemStack is = WeaponUtil.generateItemStack(w, WeaponUtil.KLASSEN[w.getKlass()]);
+						String maintext = shooter.getDisplayName() + " was lucky and found a ";
+						String weaponname = WeaponUtil.EPICNAMES[w.getType()] + " of the "
+								+ WeaponUtil.KLASSEN[w.getKlass()];
+						String cweaponname = ChatColor.DARK_PURPLE + WeaponUtil.EPICNAMES[w.getType()] + " of the "
+								+ WeaponUtil.KLASSEN[w.getKlass()];
+						String lore = "";
+						for (int i = 0; i < is.getItemMeta().getLore().size(); i++) {
+							String s = is.getItemMeta().getLore().get(i);
+							if (i < is.getItemMeta().getLore().size() - 1) {
+								lore += "\\\"" + s + "\\\",";
+							} else {
+								lore += "\\\"" + s + "\\\"";
+							}
+						}
+						IChatBaseComponent al = ChatSerializer
+								.a("{\"text\":\"" + maintext + "\", \"extra\":[{\"text\":\"" + weaponname
+										+ "\",\"color\":\"dark_purple\",\"hoverEvent\":{\"action\":\"show_item\",\"value\":\"{id:stone,tag:{display:{Name:\\\""
+										+ cweaponname + "\\\",Lore:[" + lore + "]}}}\"}}]}");
+						PacketPlayOutChat packet = new PacketPlayOutChat(al, (byte) 0);
+						((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
 					}
 				} else {
 					w = WeaponUtil.generateRandomWeapon(3);
@@ -466,11 +508,11 @@ public class WeaponUtil {
 		Inventory ci = Bukkit.createInventory(p, 27, "Confirmation");
 		ItemStack isy = new ItemStack(Material.STAINED_CLAY, 1, (short) 13);
 		ItemMeta imy = isy.getItemMeta();
-		imy.setDisplayName(ChatColor.RESET+"Confirm");
+		imy.setDisplayName(ChatColor.RESET + "Confirm");
 		isy.setItemMeta(imy);
 		ItemStack isn = new ItemStack(Material.STAINED_CLAY, 1, (short) 14);
 		ItemMeta imn = isn.getItemMeta();
-		imn.setDisplayName(ChatColor.RESET+"Cancel");
+		imn.setDisplayName(ChatColor.RESET + "Cancel");
 		isn.setItemMeta(imn);
 		ci.setItem(11, isy);
 		ci.setItem(15, isn);

@@ -79,10 +79,12 @@ import net.minecraft.server.v1_10_R1.EntityOcelot;
 import net.minecraft.server.v1_10_R1.EnumParticle;
 import net.minecraft.server.v1_10_R1.IChatBaseComponent;
 import net.minecraft.server.v1_10_R1.PacketPlayOutBoss;
+import net.minecraft.server.v1_10_R1.PacketPlayOutChat;
 import net.minecraft.server.v1_10_R1.PacketPlayOutEntityDestroy;
 import net.minecraft.server.v1_10_R1.PacketPlayOutEntityTeleport;
 import net.minecraft.server.v1_10_R1.PacketPlayOutSpawnEntityLiving;
 import net.minecraft.server.v1_10_R1.WorldServer;
+import net.minecraft.server.v1_10_R1.IChatBaseComponent.ChatSerializer;
 
 public class Warlords extends JavaPlugin {
 	public static ArrayList<Fireball> fireball = new ArrayList<Fireball>();
@@ -214,8 +216,59 @@ public class Warlords extends JavaPlugin {
 					Player ziel = p;
 					if (args.length > 0) {
 						w = WeaponUtil.generateRandomWeapon(Integer.valueOf(args[0]));
+						if (w.getKat() == 1) {
+							for (Player p2 : Bukkit.getOnlinePlayers()) {
+								p.getWorld().playSound(p.getLocation(), "legendaryfind", 1, 1);
+								ItemStack is = WeaponUtil.generateItemStack(w, WeaponUtil.KLASSEN[w.getKlass()]);
+								String maintext = p.getDisplayName() + " was unfair and cheated a ";
+								String weaponname = WeaponUtil.LEGENDNAMES[w.getType()] + " of the "
+										+ WeaponUtil.KLASSEN[w.getKlass()];
+								String cweaponname = ChatColor.GOLD + WeaponUtil.LEGENDNAMES[w.getType()] + " of the "
+										+ WeaponUtil.KLASSEN[w.getKlass()];
+								String lore = "";
+								for (int i = 0; i < is.getItemMeta().getLore().size(); i++) {
+									String s = is.getItemMeta().getLore().get(i);
+									if (i < is.getItemMeta().getLore().size() - 1) {
+										lore += "\\\"" + s + "\\\",";
+									} else {
+										lore += "\\\"" + s + "\\\"";
+									}
+								}
+								IChatBaseComponent al = ChatSerializer
+										.a("{\"text\":\"" + maintext + "\", \"extra\":[{\"text\":\"" + weaponname
+												+ "\",\"color\":\"gold\",\"hoverEvent\":{\"action\":\"show_item\",\"value\":\"{id:stone,tag:{display:{Name:\\\""
+												+ cweaponname + "\\\",Lore:[" + lore + "]}}}\"}}]}");
+								PacketPlayOutChat packet = new PacketPlayOutChat(al, (byte) 0);
+								((CraftPlayer) p2).getHandle().playerConnection.sendPacket(packet);
+							}
+						} else if (w.getKat() == 2) {
+							for (Player p2 : Bukkit.getOnlinePlayers()) {
+								p.getWorld().playSound(p.getLocation(), "epicfind", 1, 1);
+								ItemStack is = WeaponUtil.generateItemStack(w, WeaponUtil.KLASSEN[w.getKlass()]);
+								String maintext = p.getDisplayName() + " was unfair and cheated a ";
+								String weaponname = WeaponUtil.EPICNAMES[w.getType()] + " of the "
+										+ WeaponUtil.KLASSEN[w.getKlass()];
+								String cweaponname = ChatColor.DARK_PURPLE + WeaponUtil.EPICNAMES[w.getType()]
+										+ " of the " + WeaponUtil.KLASSEN[w.getKlass()];
+								String lore = "";
+								for (int i = 0; i < is.getItemMeta().getLore().size(); i++) {
+									String s = is.getItemMeta().getLore().get(i);
+									if (i < is.getItemMeta().getLore().size() - 1) {
+										lore += "\\\"" + s + "\\\",";
+									} else {
+										lore += "\\\"" + s + "\\\"";
+									}
+								}
+								IChatBaseComponent al = ChatSerializer
+										.a("{\"text\":\"" + maintext + "\", \"extra\":[{\"text\":\"" + weaponname
+												+ "\",\"color\":\"dark_purple\",\"hoverEvent\":{\"action\":\"show_item\",\"value\":\"{id:stone,tag:{display:{Name:\\\""
+												+ cweaponname + "\\\",Lore:[" + lore + "]}}}\"}}]}");
+								PacketPlayOutChat packet = new PacketPlayOutChat(al, (byte) 0);
+								((CraftPlayer) p2).getHandle().playerConnection.sendPacket(packet);
+							}
+						}
 					} else {
-						w = WeaponUtil.generateRandomWeapon(100);
+						w = WeaponUtil.generateRandomWeapon();
 					}
 					if (args.length > 1) {
 						for (Player sp : Bukkit.getOnlinePlayers()) {
