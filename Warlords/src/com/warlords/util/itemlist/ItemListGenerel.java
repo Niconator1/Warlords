@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class ItemListGenerel {
-	public static ItemStack getElytraRune(double celytea,double energy,double speed) {
+	public static ItemStack getElytraRune(double celytea, double energy, double speed) {
 		ItemStack ret = new ItemStack(Material.ELYTRA, 1);
 		ItemMeta i = ret.getItemMeta();
 		i.setDisplayName(ChatColor.RESET + "" + ChatColor.GREEN + "Elytra");
@@ -22,5 +22,20 @@ public class ItemListGenerel {
 		i.setLore(lore);
 		ret.setItemMeta(i);
 		return ret;
+	}
+
+	public static ItemStack getItemStack(int i) {
+		switch (i) {
+		case 1:
+			return new ItemStack(Material.INK_SACK, 1, (short) (1));
+		case 2:
+			return new ItemStack(Material.GLOWSTONE_DUST, 1);
+		case 3:
+			return new ItemStack(Material.INK_SACK, 1, (short) (10));
+		case 4:
+			return new ItemStack(Material.INK_SACK, 1, (short) (14));
+		default:
+			return new ItemStack(Material.BARRIER);
+		}
 	}
 }

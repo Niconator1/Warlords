@@ -93,14 +93,18 @@ public class UtilMethods {
 			heal *= critm;
 			if (heal > (victim.getMaxHP() - victim.healthtohp())) {
 				heal = victim.getMaxHP() - victim.healthtohp();
-				doHealMessage(true, reason, shooter, victim.p, heal);
+				if (heal > 0) {
+					doHealMessage(true, reason, shooter, victim.p, heal);
+				}
 			} else {
 				doHealMessage(true, reason, shooter, victim.p, heal);
 			}
 		} else {
 			if (heal > (victim.getMaxHP() - victim.healthtohp())) {
 				heal = victim.getMaxHP() - victim.healthtohp();
-				doHealMessage(false, reason, shooter, victim.p, heal);
+				if (heal > 0) {
+					doHealMessage(false, reason, shooter, victim.p, heal);
+				}
 			} else {
 				doHealMessage(false, reason, shooter, victim.p, heal);
 			}

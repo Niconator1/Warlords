@@ -20,7 +20,7 @@ public class Hunter extends SpielKlasse {
 	private static int eps = 7;
 	private static int eph = 7;
 	public static int epmax = 120;
-	public static int hpmax = 6750;
+	public static int hpmax = 4750;
 	// Elemental Arrow
 	public static final String ballname = "Elemental Arrow";
 	public double dminball = 225.5;
