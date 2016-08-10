@@ -22,6 +22,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import com.warlords.main.Warlords;
+import com.warlords.util.data.PlayerUtilMethods;
+import com.warlords.util.data.types.SpielKlasse;
+import com.warlords.util.data.types.WarlordsPlayerAllys;
 import com.warlords.util.skills.Elytra;
 import com.warlords.util.skills.assassin.Stealth;
 import com.warlords.util.skills.assassin.Vanish;
@@ -128,7 +131,7 @@ public class SkillUtil extends UtilMethods {
 								l.getZ(), 0f, 0f, 0f, 0f, 1);
 					}
 					double d = ((int) l.distance(b.start())) * 0.01;
-					if (PlayerUtil.isAttackingPlayers(b.getShooter())) {
+					if (PlayerUtilMethods.isAttackingPlayers(b.getShooter())) {
 						List<Player> list = a.getWorld().getPlayers();
 						for (int j = 0; j < list.size(); j++) {
 							if (list.get(j).isDead() == false) {
@@ -191,7 +194,7 @@ public class SkillUtil extends UtilMethods {
 						UtilMethods.sendParticlePacket(p, EnumParticle.EXPLOSION_LARGE, l.getX(), l.getY() + 1.0,
 								l.getZ(), 0f, 0f, 0f, 0f, 1);
 					}
-					if (PlayerUtil.isAttackingPlayers(f.getShooter())) {
+					if (PlayerUtilMethods.isAttackingPlayers(f.getShooter())) {
 						List<Player> list = a.getWorld().getPlayers();
 						for (int j = 0; j < list.size(); j++) {
 							if (list.get(j).isDead() == false) {
@@ -275,7 +278,7 @@ public class SkillUtil extends UtilMethods {
 		for (LivingEntity le : p.getWorld().getLivingEntities()) {
 			if (le.isDead() == false) {
 				if (le instanceof Player) {
-					if (PlayerUtil.isAttackingPlayers(p)) {
+					if (PlayerUtilMethods.isAttackingPlayers(p)) {
 						Player p2 = (Player) le;
 						if (!p2.equals(p)) {
 							WarlordsPlayerAllys a = new WarlordsPlayerAllys(p);
@@ -354,7 +357,7 @@ public class SkillUtil extends UtilMethods {
 		for (LivingEntity le : p.getWorld().getLivingEntities()) {
 			if (le.isDead() == false) {
 				if (le instanceof Player) {
-					if (PlayerUtil.isAttackingPlayers(p)) {
+					if (PlayerUtilMethods.isAttackingPlayers(p)) {
 						Player p2 = (Player) le;
 						if (!p2.equals(p)) {
 							WarlordsPlayerAllys a = new WarlordsPlayerAllys(p);
@@ -485,7 +488,7 @@ public class SkillUtil extends UtilMethods {
 		for (LivingEntity le : p.getWorld().getLivingEntities()) {
 			if (le.isDead() == false) {
 				if (le instanceof Player) {
-					if (PlayerUtil.isAttackingPlayers(p)) {
+					if (PlayerUtilMethods.isAttackingPlayers(p)) {
 						Player p2 = (Player) le;
 						if (!p2.equals(p)) {
 							WarlordsPlayerAllys a = new WarlordsPlayerAllys(p);
@@ -632,7 +635,7 @@ public class SkillUtil extends UtilMethods {
 				}
 				if (alreadyHit == false) {
 					if (le instanceof Player) {
-						if (PlayerUtil.isAttackingPlayers(p)) {
+						if (PlayerUtilMethods.isAttackingPlayers(p)) {
 							Player p2 = (Player) le;
 							if (!p2.equals(p)) {
 								WarlordsPlayerAllys a = new WarlordsPlayerAllys(p);
@@ -1005,7 +1008,7 @@ public class SkillUtil extends UtilMethods {
 		for (LivingEntity le : p.getWorld().getLivingEntities()) {
 			if (le.isDead() == false) {
 				if (le instanceof Player) {
-					if (PlayerUtil.isAttackingPlayers(p)) {
+					if (PlayerUtilMethods.isAttackingPlayers(p)) {
 						Player p2 = (Player) le;
 						if (!p2.equals(p)) {
 							WarlordsPlayerAllys a = new WarlordsPlayerAllys(p);
@@ -1153,7 +1156,7 @@ public class SkillUtil extends UtilMethods {
 				}
 				if (alreadyHit == false) {
 					if (le instanceof Player) {
-						if (PlayerUtil.isAttackingPlayers(p)) {
+						if (PlayerUtilMethods.isAttackingPlayers(p)) {
 							Player p2 = (Player) le;
 							if (!p2.equals(p)) {
 								WarlordsPlayerAllys a = new WarlordsPlayerAllys(p);
@@ -1356,7 +1359,7 @@ public class SkillUtil extends UtilMethods {
 		for (LivingEntity le : p.getWorld().getLivingEntities()) {
 			if (le.isDead() == false) {
 				if (le instanceof Player) {
-					if (PlayerUtil.isAttackingPlayers(p)) {
+					if (PlayerUtilMethods.isAttackingPlayers(p)) {
 						Player p2 = (Player) le;
 						if (!p2.equals(p)) {
 							WarlordsPlayerAllys a = new WarlordsPlayerAllys(p);
@@ -1568,7 +1571,7 @@ public class SkillUtil extends UtilMethods {
 			for (LivingEntity le : p.getWorld().getLivingEntities()) {
 				if (le.isDead() == false) {
 					if (le instanceof Player) {
-						if (PlayerUtil.isAttackingPlayers(p)) {
+						if (PlayerUtilMethods.isAttackingPlayers(p)) {
 							Player p2 = (Player) le;
 							if (!p2.equals(p)) {
 								WarlordsPlayerAllys a = new WarlordsPlayerAllys(p);
@@ -1702,7 +1705,7 @@ public class SkillUtil extends UtilMethods {
 				}
 				if (alreadyHit == false) {
 					if (le instanceof Player) {
-						if (PlayerUtil.isAttackingPlayers(p)) {
+						if (PlayerUtilMethods.isAttackingPlayers(p)) {
 							Player p2 = (Player) le;
 							if (!p2.equals(p)) {
 								WarlordsPlayerAllys a = new WarlordsPlayerAllys(p);
@@ -1874,7 +1877,7 @@ public class SkillUtil extends UtilMethods {
 						UtilMethods.sendParticlePacket(p, EnumParticle.EXPLOSION_LARGE, l.getX(), l.getY() + 1.0,
 								l.getZ(), 0f, 0f, 0f, 0f, 1);
 					}
-					if (PlayerUtil.isAttackingPlayers(f.getShooter())) {
+					if (PlayerUtilMethods.isAttackingPlayers(f.getShooter())) {
 						List<Player> list = a.getWorld().getPlayers();
 						for (int j = 0; j < list.size(); j++) {
 							if (list.get(j).isDead() == false) {

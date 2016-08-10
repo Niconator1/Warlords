@@ -8,8 +8,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import com.warlords.main.Warlords;
 import com.warlords.util.SkillUtil;
-import com.warlords.util.SpielKlasse;
 import com.warlords.util.WeaponUtil;
+import com.warlords.util.data.types.SpielKlasse;
 import com.warlords.util.itemlist.ItemListGenerel;
 import com.warlords.util.itemlist.ItemListHunter;
 

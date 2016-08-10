@@ -27,19 +27,19 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.util.Vector;
 
 import com.warlords.boss.Pontiff;
-import com.warlords.util.Confirmation;
-import com.warlords.util.CraftConfirmation;
-import com.warlords.util.FileUtilMethods;
-import com.warlords.util.PlayerUtil;
 import com.warlords.util.SkillUtil;
-import com.warlords.util.SkinGUI;
-import com.warlords.util.SpielKlasse;
-import com.warlords.util.UpgradeConfirmation;
 import com.warlords.util.UtilMethods;
-import com.warlords.util.WarlordsPlayer;
-import com.warlords.util.WarlordsPlayerAllys;
-import com.warlords.util.Weapon;
 import com.warlords.util.WeaponUtil;
+import com.warlords.util.data.WeaponUtilMethods;
+import com.warlords.util.data.inventory.Confirmation;
+import com.warlords.util.data.inventory.CraftConfirmation;
+import com.warlords.util.data.inventory.SkinGUI;
+import com.warlords.util.data.inventory.UpgradeConfirmation;
+import com.warlords.util.data.types.SpielKlasse;
+import com.warlords.util.data.types.WarlordsPlayer;
+import com.warlords.util.data.types.WarlordsPlayerAllys;
+import com.warlords.util.data.types.Weapon;
+import com.warlords.util.data.PlayerUtilMethods;
 import com.warlords.util.skills.Elytra;
 import com.warlords.util.skills.assassin.Stealth;
 import com.warlords.util.skills.assassin.Vanish;
@@ -294,7 +294,7 @@ public class Warlords extends JavaPlugin {
 							}
 						}
 					}
-					ArrayList<Weapon> list = FileUtilMethods.load(getDataFolder(), "/weapons/" + ziel.getUniqueId());
+					ArrayList<Weapon> list = WeaponUtilMethods.load(getDataFolder(), "/weapons/" + ziel.getUniqueId());
 					if (list != null) {
 						if (list.size() < 45) {
 							list.add(w);
@@ -306,7 +306,7 @@ public class Warlords extends JavaPlugin {
 						list = new ArrayList<Weapon>();
 						list.add(w);
 					}
-					FileUtilMethods.save(list, getDataFolder(), "/weapons/" + ziel.getUniqueId());
+					WeaponUtilMethods.save(list, getDataFolder(), "/weapons/" + ziel.getUniqueId());
 					return true;
 				}
 			} else {
@@ -529,7 +529,7 @@ public class Warlords extends JavaPlugin {
 					p.sendMessage("You are a normal person now");
 					SpielKlasse sk = getKlasse(p);
 					if (sk != null) {
-						WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
+						WarlordsPlayer wp = PlayerUtilMethods.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
 								"/players/" + p.getUniqueId());
 						if (wp != null) {
 							wp.setKlasse("");
@@ -545,7 +545,7 @@ public class Warlords extends JavaPlugin {
 							p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4);
 							p.setWalkSpeed(0.2f);
 							player.remove(sk);
-							PlayerUtil.save(wp, Warlords.getPlugin(Warlords.class).getDataFolder(),
+							PlayerUtilMethods.save(wp, Warlords.getPlugin(Warlords.class).getDataFolder(),
 									"/players/" + p.getUniqueId());
 						}
 					}
@@ -561,7 +561,7 @@ public class Warlords extends JavaPlugin {
 				if (p.hasPermission("warlords.choose")) {
 					SpielKlasse sk = getKlasse(p);
 					if (sk != null) {
-						WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
+						WarlordsPlayer wp = PlayerUtilMethods.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
 								"/players/" + p.getUniqueId());
 						if (wp != null) {
 							if (wp.getMode() == false) {
@@ -577,7 +577,7 @@ public class Warlords extends JavaPlugin {
 								p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(4);
 								p.sendMessage("Disabled Abilities");
 							}
-							PlayerUtil.save(wp, Warlords.getPlugin(Warlords.class).getDataFolder(),
+							PlayerUtilMethods.save(wp, Warlords.getPlugin(Warlords.class).getDataFolder(),
 									"/players/" + p.getUniqueId());
 						}
 					}
@@ -593,7 +593,7 @@ public class Warlords extends JavaPlugin {
 				if (p.hasPermission("warlords.choose")) {
 					SpielKlasse sk = getKlasse(p);
 					if (sk != null) {
-						WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
+						WarlordsPlayer wp = PlayerUtilMethods.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
 								"/players/" + p.getUniqueId());
 						if (wp != null) {
 							if (wp.getPlayerAttackMode() == false) {
@@ -603,7 +603,7 @@ public class Warlords extends JavaPlugin {
 								wp.setPlayerAttackMode(false);
 								p.sendMessage("Disabled attack of players");
 							}
-							PlayerUtil.save(wp, Warlords.getPlugin(Warlords.class).getDataFolder(),
+							PlayerUtilMethods.save(wp, Warlords.getPlugin(Warlords.class).getDataFolder(),
 									"/players/" + p.getUniqueId());
 						}
 					}
@@ -742,7 +742,7 @@ public class Warlords extends JavaPlugin {
 					SpielKlasse sp = player.get(i);
 					Player p = sp.p;
 					for (int j = 0; j < 9; j++) {
-						WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
+						WarlordsPlayer wp = PlayerUtilMethods.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
 								"/players/" + p.getUniqueId());
 						if (wp != null) {
 							if (wp.getMode() == true) {
@@ -1004,7 +1004,7 @@ public class Warlords extends JavaPlugin {
 					for (LivingEntity le : mid.getWorld().getLivingEntities()) {
 						if (le.isDead() == false) {
 							if (le instanceof Player) {
-								if (PlayerUtil.isAttackingPlayers(c.getP())) {
+								if (PlayerUtilMethods.isAttackingPlayers(c.getP())) {
 									Player p2 = (Player) le;
 									if (!p2.equals(c.getP())) {
 										WarlordsPlayerAllys a = new WarlordsPlayerAllys(c.getP());
@@ -1261,7 +1261,7 @@ public class Warlords extends JavaPlugin {
 					for (LivingEntity le : mid.getWorld().getLivingEntities()) {
 						if (le.isDead() == false) {
 							if (le instanceof Player) {
-								if (PlayerUtil.isAttackingPlayers(c.getP())) {
+								if (PlayerUtilMethods.isAttackingPlayers(c.getP())) {
 									Player p2 = (Player) le;
 									if (!p2.equals(c.getP())) {
 										WarlordsPlayerAllys a = new WarlordsPlayerAllys(c.getP());
@@ -1594,7 +1594,7 @@ public class Warlords extends JavaPlugin {
 						if (already == false) {
 							if (le.isDead() == false) {
 								if (le instanceof Player) {
-									if (PlayerUtil.isAttackingPlayers(lb.getShooter())) {
+									if (PlayerUtilMethods.isAttackingPlayers(lb.getShooter())) {
 										Player p2 = (Player) le;
 										if (!p2.equals(lb.getShooter())) {
 											WarlordsPlayerAllys a = new WarlordsPlayerAllys(lb.getShooter());
@@ -1901,7 +1901,7 @@ public class Warlords extends JavaPlugin {
 					for (LivingEntity le : l.getWorld().getLivingEntities()) {
 						if (le.isDead() == false) {
 							if (le instanceof Player) {
-								if (PlayerUtil.isAttackingPlayers(s.getP())) {
+								if (PlayerUtilMethods.isAttackingPlayers(s.getP())) {
 									Player p2 = (Player) le;
 									if (!p2.equals(s.getP())) {
 										WarlordsPlayerAllys a = new WarlordsPlayerAllys(s.getP());
@@ -1950,7 +1950,7 @@ public class Warlords extends JavaPlugin {
 						for (LivingEntity le : l.getWorld().getLivingEntities()) {
 							if (le.isDead() == false) {
 								if (le instanceof Player) {
-									if (PlayerUtil.isAttackingPlayers(s.getP())) {
+									if (PlayerUtilMethods.isAttackingPlayers(s.getP())) {
 										Player p2 = (Player) le;
 										if (!p2.equals(s.getP())) {
 											WarlordsPlayerAllys a = new WarlordsPlayerAllys(s.getP());

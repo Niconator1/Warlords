@@ -1,12 +1,12 @@
-package com.warlords.util;
+package com.warlords.util.data.inventory;
 
 import org.bukkit.inventory.Inventory;
 
-public class CraftConfirmation {
+public class UpgradeConfirmation {
 	private int type;
 	private Inventory i;
 
-	public CraftConfirmation(int type, Inventory i) {
+	public UpgradeConfirmation(int type, Inventory i) {
 		this.type = type;
 		this.i = i;
 	}

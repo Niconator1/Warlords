@@ -2,6 +2,6 @@ eclipse.preferences.version=1
 encoding//src/com/warlords/main/EventManager.java=UTF-8
 encoding//src/com/warlords/main/Warlords.java=UTF-8
 encoding//src/com/warlords/util/SkillUtil.java=UTF-8
-encoding//src/com/warlords/util/SpielKlasse.java=UTF-8
 encoding//src/com/warlords/util/UtilMethods.java=UTF-8
+encoding//src/com/warlords/util/data/types/SpielKlasse.java=UTF-8
 encoding/<project>=UTF-8

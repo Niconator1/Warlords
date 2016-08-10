@@ -1,4 +1,4 @@
-package com.warlords.util;
+package com.warlords.util.data.inventory;
 
 import org.bukkit.inventory.Inventory;
 

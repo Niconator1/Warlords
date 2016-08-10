@@ -1,4 +1,4 @@
-package com.warlords.util;
+package com.warlords.util.data.types;
 
 import java.util.ArrayList;
 
@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.warlords.main.Warlords;
+import com.warlords.util.data.WeaponUtilMethods;
 
 public class WarlordsPlayer {
 	private String uuid;
@@ -77,13 +78,13 @@ public class WarlordsPlayer {
 	}
 
 	public ArrayList<Weapon> getWeaponlist() {
-		ArrayList<Weapon> list = FileUtilMethods.load(Warlords.getPlugin(Warlords.class).getDataFolder(),
+		ArrayList<Weapon> list = WeaponUtilMethods.load(Warlords.getPlugin(Warlords.class).getDataFolder(),
 				"/weapons/" + getPlayer().getUniqueId());
 		return list;
 	}
 
 	public void saveWeaponlist(ArrayList<Weapon> list) {
-		FileUtilMethods.save(list, Warlords.getPlugin(Warlords.class).getDataFolder(),
+		WeaponUtilMethods.save(list, Warlords.getPlugin(Warlords.class).getDataFolder(),
 				"/weapons/" + getPlayer().getUniqueId());
 	}
 }

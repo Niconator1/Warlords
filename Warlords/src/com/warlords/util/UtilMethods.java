@@ -13,6 +13,11 @@ import org.bukkit.util.Vector;
 
 import com.warlords.boss.Pontiff;
 import com.warlords.main.Warlords;
+import com.warlords.util.data.WeaponUtilMethods;
+import com.warlords.util.data.types.SpielKlasse;
+import com.warlords.util.data.types.WarlordsPlayer;
+import com.warlords.util.data.types.Weapon;
+import com.warlords.util.data.PlayerUtilMethods;
 import com.warlords.util.type.Assassin;
 import com.warlords.util.type.Avenger;
 import com.warlords.util.type.Crusader;
@@ -345,7 +350,7 @@ public class UtilMethods {
 	}
 
 	public static void giveItems(SpielKlasse py, boolean drop) {
-		WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
+		WarlordsPlayer wp = PlayerUtilMethods.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
 				"/players/" + py.p.getUniqueId());
 		if (wp != null) {
 			if (!wp.getKlasse().equals("")) {
@@ -402,7 +407,7 @@ public class UtilMethods {
 				Warlords.player.remove(sk);
 			}
 		}
-		WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
+		WarlordsPlayer wp = PlayerUtilMethods.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
 				"/players/" + p.getUniqueId());
 		if (wp != null) {
 			UtilMethods.giveItems(py, true);
@@ -410,19 +415,19 @@ public class UtilMethods {
 			p.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(10);
 			py.applySpeed();
 			wp.setKlasse(py.getName());
-			PlayerUtil.save(wp, Warlords.getPlugin(Warlords.class).getDataFolder(), "/players/" + p.getUniqueId());
+			PlayerUtilMethods.save(wp, Warlords.getPlugin(Warlords.class).getDataFolder(), "/players/" + p.getUniqueId());
 		}
 	}
 
 	public static void doRegiveClass(Player p) {
-		WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
+		WarlordsPlayer wp = PlayerUtilMethods.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
 				"/players/" + p.getUniqueId());
 		if (wp == null) {
 			wp = new WarlordsPlayer("" + p.getUniqueId());
 			ArrayList<Weapon> w = new ArrayList<Weapon>();
 			w.add(WeaponUtil.generateRandomWeapon());
-			FileUtilMethods.save(w, Warlords.getPlugin(Warlords.class).getDataFolder(), "/weapons/" + p.getUniqueId());
-			PlayerUtil.save(wp, Warlords.getPlugin(Warlords.class).getDataFolder(), "/players/" + p.getUniqueId());
+			WeaponUtilMethods.save(w, Warlords.getPlugin(Warlords.class).getDataFolder(), "/weapons/" + p.getUniqueId());
+			PlayerUtilMethods.save(wp, Warlords.getPlugin(Warlords.class).getDataFolder(), "/players/" + p.getUniqueId());
 		} else {
 			SpielKlasse py = null;
 			if (wp.getKlasse().equals("Pyromancer")) {

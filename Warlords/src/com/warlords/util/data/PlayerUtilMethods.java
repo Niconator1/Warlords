@@ -1,4 +1,4 @@
-package com.warlords.util;
+package com.warlords.util.data;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -12,8 +12,9 @@ import org.bukkit.craftbukkit.libs.jline.internal.InputStreamReader;
 import org.bukkit.entity.Player;
 
 import com.warlords.main.Warlords;
+import com.warlords.util.data.types.WarlordsPlayer;
 
-public class PlayerUtil {
+public class PlayerUtilMethods {
 	public static void save(WarlordsPlayer wp, File file, String path) {
 		File f = new File(file + path + ".txt");
 		if (!f.exists()) {
@@ -77,7 +78,7 @@ public class PlayerUtil {
 	}
 
 	public static boolean isAttackingPlayers(Player shooter) {
-		WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
+		WarlordsPlayer wp = PlayerUtilMethods.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
 				"/players/" + shooter.getUniqueId());
 		if (wp != null) {
 			return wp.getPlayerAttackMode();

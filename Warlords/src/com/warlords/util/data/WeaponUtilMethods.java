@@ -1,4 +1,4 @@
-package com.warlords.util;
+package com.warlords.util.data;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -11,7 +11,9 @@ import java.util.ArrayList;
 
 import org.bukkit.craftbukkit.libs.jline.internal.InputStreamReader;
 
-public class FileUtilMethods {
+import com.warlords.util.data.types.Weapon;
+
+public class WeaponUtilMethods {
 	public static void save(ArrayList<Weapon> wl, File file, String path) {
 		File f = new File(file + path + ".txt");
 		if (!f.exists()) {

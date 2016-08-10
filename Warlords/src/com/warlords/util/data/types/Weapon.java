@@ -1,4 +1,4 @@
-package com.warlords.util;
+package com.warlords.util.data.types;
 
 public class Weapon {
 

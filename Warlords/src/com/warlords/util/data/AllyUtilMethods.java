@@ -1,4 +1,4 @@
-package com.warlords.util;
+package com.warlords.util.data;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

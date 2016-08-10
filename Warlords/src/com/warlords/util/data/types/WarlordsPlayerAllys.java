@@ -1,4 +1,4 @@
-package com.warlords.util;
+package com.warlords.util.data.types;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.bukkit.entity.Player;
 
 import com.warlords.main.Warlords;
+import com.warlords.util.data.AllyUtilMethods;
 
 public class WarlordsPlayerAllys{
 	private ArrayList<UUID> list;

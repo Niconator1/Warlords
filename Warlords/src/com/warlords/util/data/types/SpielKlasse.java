@@ -1,4 +1,4 @@
-package com.warlords.util;
+package com.warlords.util.data.types;
 
 import java.util.ArrayList;
 
@@ -9,6 +9,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import com.warlords.main.Warlords;
+import com.warlords.util.data.WeaponUtilMethods;
+import com.warlords.util.data.PlayerUtilMethods;
 
 import net.minecraft.server.v1_10_R1.IChatBaseComponent;
 import net.minecraft.server.v1_10_R1.IChatBaseComponent.ChatSerializer;
@@ -111,7 +113,7 @@ public abstract class SpielKlasse {
 		if (getHealth() - i >= 0) {
 			p.setHealth(getHealth() - i);
 		} else {
-			WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
+			WarlordsPlayer wp = PlayerUtilMethods.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
 					"/players/" + p.getUniqueId());
 			if (wp != null) {
 				if (wp.getMode() == true) {
@@ -150,10 +152,10 @@ public abstract class SpielKlasse {
 	}
 
 	public Weapon getWeapon() {
-		WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
+		WarlordsPlayer wp = PlayerUtilMethods.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
 				"/players/" + p.getUniqueId());
 		if (wp != null) {
-			ArrayList<Weapon> wlist = FileUtilMethods.load(Warlords.getPlugin(Warlords.class).getDataFolder(),
+			ArrayList<Weapon> wlist = WeaponUtilMethods.load(Warlords.getPlugin(Warlords.class).getDataFolder(),
 					"/weapons/" + p.getUniqueId());
 			if (wlist != null) {
 				if (wlist.size() > 0) {

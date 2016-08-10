@@ -18,6 +18,15 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import com.warlords.main.Warlords;
+import com.warlords.util.data.WeaponUtilMethods;
+import com.warlords.util.data.inventory.Confirmation;
+import com.warlords.util.data.inventory.CraftConfirmation;
+import com.warlords.util.data.inventory.SkinGUI;
+import com.warlords.util.data.inventory.UpgradeConfirmation;
+import com.warlords.util.data.types.SpielKlasse;
+import com.warlords.util.data.types.WarlordsPlayer;
+import com.warlords.util.data.types.Weapon;
+import com.warlords.util.data.PlayerUtilMethods;
 import com.warlords.util.itemlist.ItemListGenerel;
 
 import net.minecraft.server.v1_10_R1.IChatBaseComponent;
@@ -170,7 +179,7 @@ public class WeaponUtil {
 
 	public static Inventory getWeaponInventory(Player p) {
 		Inventory wi = Bukkit.createInventory(p, 54, "Weapons");
-		ArrayList<Weapon> list = FileUtilMethods.load(Warlords.getPlugin(Warlords.class).getDataFolder(),
+		ArrayList<Weapon> list = WeaponUtilMethods.load(Warlords.getPlugin(Warlords.class).getDataFolder(),
 				"/weapons/" + p.getUniqueId());
 		SpielKlasse sk = Warlords.getKlasse(p);
 		String klasse = "";
@@ -190,7 +199,7 @@ public class WeaponUtil {
 				if (list.get(i) == null) {
 					Weapon w = WeaponUtil.generateRandomWeapon(1);
 					list.set(i, w);
-					FileUtilMethods.save(list, Warlords.getPlugin(Warlords.class).getDataFolder(),
+					WeaponUtilMethods.save(list, Warlords.getPlugin(Warlords.class).getDataFolder(),
 							"/weapons/" + p.getUniqueId());
 				}
 				wi.setItem(i, generateItemStack(list.get(i), klasse));
@@ -359,7 +368,7 @@ public class WeaponUtil {
 				} else {
 					w = WeaponUtil.generateRandomWeapon(3);
 				}
-				ArrayList<Weapon> list2 = FileUtilMethods.load(Warlords.getPlugin(Warlords.class).getDataFolder(),
+				ArrayList<Weapon> list2 = WeaponUtilMethods.load(Warlords.getPlugin(Warlords.class).getDataFolder(),
 						"/weapons/" + shooter.getUniqueId());
 				if (list2 != null) {
 					shooter.sendMessage("You earned a weapon");
@@ -373,7 +382,7 @@ public class WeaponUtil {
 					shooter.sendMessage("You earned a weapon");
 					list2.add(w);
 				}
-				FileUtilMethods.save(list2, Warlords.getPlugin(Warlords.class).getDataFolder(),
+				WeaponUtilMethods.save(list2, Warlords.getPlugin(Warlords.class).getDataFolder(),
 						"/weapons/" + shooter.getUniqueId());
 			}
 		} else {
@@ -429,7 +438,7 @@ public class WeaponUtil {
 							((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
 						}
 					}
-					ArrayList<Weapon> list2 = FileUtilMethods.load(Warlords.getPlugin(Warlords.class).getDataFolder(),
+					ArrayList<Weapon> list2 = WeaponUtilMethods.load(Warlords.getPlugin(Warlords.class).getDataFolder(),
 							"/weapons/" + shooter.getUniqueId());
 					if (list2 != null) {
 						shooter.sendMessage("You earned a weapon");
@@ -443,7 +452,7 @@ public class WeaponUtil {
 						shooter.sendMessage("You earned a weapon");
 						list2.add(w);
 					}
-					FileUtilMethods.save(list2, Warlords.getPlugin(Warlords.class).getDataFolder(),
+					WeaponUtilMethods.save(list2, Warlords.getPlugin(Warlords.class).getDataFolder(),
 							"/weapons/" + shooter.getUniqueId());
 				}
 			}
@@ -511,7 +520,7 @@ public class WeaponUtil {
 		smithi.setItem(29, reroll);
 		String count = ChatColor.DARK_RED + "Error";
 		String countv = ChatColor.DARK_RED + "Error";
-		WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
+		WarlordsPlayer wp = PlayerUtilMethods.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
 				"/players/" + p.getUniqueId());
 		if (wp != null) {
 			if (wp.getWeaponlist() != null) {
@@ -757,7 +766,7 @@ public class WeaponUtil {
 		loref.add(ChatColor.GRAY + "permanently.");
 		loref.add(ChatColor.GRAY + "");
 		String cost = ChatColor.DARK_RED + "Error";
-		WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
+		WarlordsPlayer wp = PlayerUtilMethods.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
 				"/players/" + p.getUniqueId());
 		if (wp != null) {
 			ArrayList<Weapon> list = wp.getWeaponlist();
@@ -878,7 +887,7 @@ public class WeaponUtil {
 
 	public static UpgradeConfirmation getWeaponUpgradeConfirmationInventory(Player p, int type) {
 		Inventory ci = Bukkit.createInventory(p, 27, "Upgrade Weapon?");
-		WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
+		WarlordsPlayer wp = PlayerUtilMethods.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
 				"/players/" + p.getUniqueId());
 		ItemStack isy = new ItemStack(Material.STAINED_CLAY, 1, (short) 13);
 		ItemMeta imy = isy.getItemMeta();
@@ -1158,7 +1167,7 @@ public class WeaponUtil {
 
 	public static CraftConfirmation getWeaponCraftConfirmationInventory(Player p, int type) {
 		Inventory ci = Bukkit.createInventory(p, 27, "Craft Weapon?");
-		WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
+		WarlordsPlayer wp = PlayerUtilMethods.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
 				"/players/" + p.getUniqueId());
 		ItemStack isy = new ItemStack(Material.STAINED_CLAY, 1, (short) 13);
 		ItemMeta imy = isy.getItemMeta();

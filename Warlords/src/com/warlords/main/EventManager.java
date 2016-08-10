@@ -41,18 +41,18 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.warlords.boss.Pontiff;
-import com.warlords.util.Confirmation;
-import com.warlords.util.CraftConfirmation;
-import com.warlords.util.PlayerUtil;
 import com.warlords.util.SkillUtil;
-import com.warlords.util.SkinGUI;
-import com.warlords.util.SpielKlasse;
-import com.warlords.util.UpgradeConfirmation;
 import com.warlords.util.UtilMethods;
-import com.warlords.util.WarlordsPlayer;
-import com.warlords.util.WarlordsPlayerAllys;
-import com.warlords.util.Weapon;
 import com.warlords.util.WeaponUtil;
+import com.warlords.util.data.PlayerUtilMethods;
+import com.warlords.util.data.inventory.Confirmation;
+import com.warlords.util.data.inventory.CraftConfirmation;
+import com.warlords.util.data.inventory.SkinGUI;
+import com.warlords.util.data.inventory.UpgradeConfirmation;
+import com.warlords.util.data.types.SpielKlasse;
+import com.warlords.util.data.types.WarlordsPlayer;
+import com.warlords.util.data.types.WarlordsPlayerAllys;
+import com.warlords.util.data.types.Weapon;
 import com.warlords.util.skills.hunter.Companion;
 import com.warlords.util.skills.shaman.WindfuryWeapon;
 import com.warlords.util.type.Assassin;
@@ -85,7 +85,7 @@ public class EventManager implements Listener {
 					Player p = (Player) ((Arrow) en.getDamager()).getShooter();
 					SpielKlasse sk = Warlords.getKlasse(p);
 					if (sk != null) {
-						WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
+						WarlordsPlayer wp = PlayerUtilMethods.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
 								"/players/" + p.getUniqueId());
 						if (wp != null) {
 							if (wp.getMode() == true) {
@@ -125,7 +125,7 @@ public class EventManager implements Listener {
 				}
 				if (dmg > sk.healthtohp()) {
 					SkillUtil.removeAbilitys(p);
-					WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
+					WarlordsPlayer wp = PlayerUtilMethods.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
 							"/players/" + p.getUniqueId());
 					if (wp != null) {
 						if (wp.getMode() == true) {
@@ -167,7 +167,7 @@ public class EventManager implements Listener {
 	@EventHandler
 	public void respawn(PlayerRespawnEvent event) {
 		Player p = event.getPlayer();
-		WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
+		WarlordsPlayer wp = PlayerUtilMethods.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
 				"/players/" + p.getUniqueId());
 		if (wp != null) {
 			SpielKlasse py = Warlords.getKlasse(p);
@@ -188,7 +188,7 @@ public class EventManager implements Listener {
 		if (e.getWhoClicked() instanceof Player) {
 			Player p = (Player) e.getWhoClicked();
 			SpielKlasse sk = Warlords.getKlasse(p);
-			WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
+			WarlordsPlayer wp = PlayerUtilMethods.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
 					"/players/" + p.getUniqueId());
 			if (sk != null && wp != null) {
 				if (wp.getMode() == true) {
@@ -238,7 +238,7 @@ public class EventManager implements Listener {
 		if (inventory.getName().equals(WeaponUtil.getWeaponInventory(p).getName())) {
 			if (inventory.getHolder().equals(p)) {
 				if (event.getClick() == ClickType.RIGHT) {
-					WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
+					WarlordsPlayer wp = PlayerUtilMethods.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
 							"/players/" + p.getUniqueId());
 					if (wp != null) {
 						ArrayList<Weapon> wlist = wp.getWeaponlist();
@@ -309,21 +309,21 @@ public class EventManager implements Listener {
 								}
 								wlist.remove(event.getSlot());
 								wp.saveWeaponlist(wlist);
-								PlayerUtil.save(wp, Warlords.getPlugin(Warlords.class).getDataFolder(),
+								PlayerUtilMethods.save(wp, Warlords.getPlugin(Warlords.class).getDataFolder(),
 										"/players/" + p.getUniqueId());
 								inventory.setContents(WeaponUtil.getWeaponInventory(p).getContents());
 							}
 						}
 					}
 				} else {
-					WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
+					WarlordsPlayer wp = PlayerUtilMethods.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
 							"/players/" + p.getUniqueId());
 					if (wp != null) {
 						ArrayList<Weapon> wlist = wp.getWeaponlist();
 						if (wlist != null) {
 							if (clicked != null && event.getRawSlot() < wlist.size()) {
 								wp.setWeaponSlot(event.getSlot());
-								PlayerUtil.save(wp, Warlords.getPlugin(Warlords.class).getDataFolder(),
+								PlayerUtilMethods.save(wp, Warlords.getPlugin(Warlords.class).getDataFolder(),
 										"/players/" + p.getUniqueId());
 								SpielKlasse sk = wp.getSk();
 								if (sk != null) {
@@ -342,7 +342,7 @@ public class EventManager implements Listener {
 			if (event.getRawSlot() == 15) {
 				p.openInventory(WeaponUtil.getWeaponInventory(p));
 			} else if (event.getRawSlot() == 29) {
-				WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
+				WarlordsPlayer wp = PlayerUtilMethods.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
 						"/players/" + p.getUniqueId());
 				if (wp != null) {
 					ArrayList<Weapon> wlist = wp.getWeaponlist();
@@ -365,7 +365,7 @@ public class EventManager implements Listener {
 				p.openInventory(WeaponUtil.getCraftingInventory(p));
 			} else if (event.getRawSlot() == 33) {
 				int kat = 5;
-				WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
+				WarlordsPlayer wp = PlayerUtilMethods.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
 						"/players/" + p.getUniqueId());
 				if (wp != null) {
 					ArrayList<Weapon> wlist = wp.getWeaponlist();
@@ -419,7 +419,7 @@ public class EventManager implements Listener {
 							return;
 						} else {
 							if (event.getInventory().getItem(event.getRawSlot()) != null) {
-								WarlordsPlayer wp = PlayerUtil.getWlPlayer(
+								WarlordsPlayer wp = PlayerUtilMethods.getWlPlayer(
 										Warlords.getPlugin(Warlords.class).getDataFolder(),
 										"/players/" + p.getUniqueId());
 								if (wp != null) {
@@ -431,7 +431,7 @@ public class EventManager implements Listener {
 										int s = (event.getRawSlot() - slota) / 2;
 										w.setSkill(s);
 										wp.saveWeaponlist(wlist);
-										PlayerUtil.save(wp, Warlords.getPlugin(Warlords.class).getDataFolder(),
+										PlayerUtilMethods.save(wp, Warlords.getPlugin(Warlords.class).getDataFolder(),
 												"/players/" + p.getUniqueId());
 										Warlords.uconfirmation.remove(i);
 										SpielKlasse sk = wp.getSk();
@@ -447,7 +447,7 @@ public class EventManager implements Listener {
 						}
 					} else {
 						if (event.getRawSlot() == 11) {
-							WarlordsPlayer wp = PlayerUtil.getWlPlayer(
+							WarlordsPlayer wp = PlayerUtilMethods.getWlPlayer(
 									Warlords.getPlugin(Warlords.class).getDataFolder(), "/players/" + p.getUniqueId());
 							if (wp != null) {
 								ArrayList<Weapon> wlist = wp.getWeaponlist();
@@ -563,7 +563,7 @@ public class EventManager implements Listener {
 										}
 									}
 									wp.saveWeaponlist(wlist);
-									PlayerUtil.save(wp, Warlords.getPlugin(Warlords.class).getDataFolder(),
+									PlayerUtilMethods.save(wp, Warlords.getPlugin(Warlords.class).getDataFolder(),
 											"/players/" + p.getUniqueId());
 									Warlords.uconfirmation.remove(i);
 									SpielKlasse sk = wp.getSk();
@@ -587,7 +587,7 @@ public class EventManager implements Listener {
 				if (inventory.equals(Warlords.cconfirmation.get(i).getInventory())) {
 					if (event.getRawSlot() == 11) {
 						CraftConfirmation uc = Warlords.cconfirmation.get(i);
-						WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
+						WarlordsPlayer wp = PlayerUtilMethods.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
 								"/players/" + p.getUniqueId());
 						if (wp != null) {
 							ArrayList<Weapon> wlist = wp.getWeaponlist();
@@ -699,7 +699,7 @@ public class EventManager implements Listener {
 									}
 								}
 								wp.saveWeaponlist(wlist);
-								PlayerUtil.save(wp, Warlords.getPlugin(Warlords.class).getDataFolder(),
+								PlayerUtilMethods.save(wp, Warlords.getPlugin(Warlords.class).getDataFolder(),
 										"/players/" + p.getUniqueId());
 								Warlords.cconfirmation.remove(i);
 								SpielKlasse sk = wp.getSk();
@@ -725,7 +725,7 @@ public class EventManager implements Listener {
 					} else if (event.getRawSlot() == 50 && sk.getInventory().getItem(50) != null) {
 						Warlords.skingui.remove(i);
 						int kat = 5;
-						WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
+						WarlordsPlayer wp = PlayerUtilMethods.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
 								"/players/" + p.getUniqueId());
 						if (wp != null) {
 							ArrayList<Weapon> wlist = wp.getWeaponlist();
@@ -740,7 +740,7 @@ public class EventManager implements Listener {
 					} else if (event.getRawSlot() == 48 && sk.getInventory().getItem(48) != null) {
 						Warlords.skingui.remove(i);
 						int kat = 5;
-						WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
+						WarlordsPlayer wp = PlayerUtilMethods.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
 								"/players/" + p.getUniqueId());
 						if (wp != null) {
 							ArrayList<Weapon> wlist = wp.getWeaponlist();
@@ -754,7 +754,7 @@ public class EventManager implements Listener {
 						p.openInventory(sk2.getInventory());
 					} else if (event.getInventory().getItem(event.getRawSlot()) != null) {
 						int kat = 5;
-						WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
+						WarlordsPlayer wp = PlayerUtilMethods.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
 								"/players/" + p.getUniqueId());
 						if (wp != null) {
 							ArrayList<Weapon> wlist = wp.getWeaponlist();
@@ -796,7 +796,7 @@ public class EventManager implements Listener {
 											w.setType(slot);
 											wp.setVoidShards(wp.getVoidShards() - 5);
 											wp.saveWeaponlist(wlist);
-											PlayerUtil.save(wp, Warlords.getPlugin(Warlords.class).getDataFolder(),
+											PlayerUtilMethods.save(wp, Warlords.getPlugin(Warlords.class).getDataFolder(),
 													"/players/" + p.getUniqueId());
 											ItemStack is = WeaponUtil.generateItemStack(w,
 													WeaponUtil.KLASSEN[w.getKlass()]);
@@ -851,7 +851,7 @@ public class EventManager implements Listener {
 				if (inventory.equals(Warlords.confirmation.get(i).getInventory())) {
 					if (event.getRawSlot() == 11) {
 						Confirmation c = Warlords.confirmation.get(i);
-						WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
+						WarlordsPlayer wp = PlayerUtilMethods.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
 								"/players/" + p.getUniqueId());
 						if (wp != null) {
 							ArrayList<Weapon> wlist = wp.getWeaponlist();
@@ -915,7 +915,7 @@ public class EventManager implements Listener {
 								}
 								wlist.remove(c.getSlot());
 								wp.saveWeaponlist(wlist);
-								PlayerUtil.save(wp, Warlords.getPlugin(Warlords.class).getDataFolder(),
+								PlayerUtilMethods.save(wp, Warlords.getPlugin(Warlords.class).getDataFolder(),
 										"/players/" + p.getUniqueId());
 								Warlords.confirmation.remove(i);
 								p.openInventory(WeaponUtil.getWeaponInventory(p));
@@ -931,7 +931,7 @@ public class EventManager implements Listener {
 					}
 				}
 			}
-			WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
+			WarlordsPlayer wp = PlayerUtilMethods.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
 					"/players/" + p.getUniqueId());
 			if (wp != null) {
 				ArrayList<Weapon> wlist = wp.getWeaponlist();
@@ -1018,7 +1018,7 @@ public class EventManager implements Listener {
 								wp.setVoidShards(wp.getVoidShards() - 5);
 							}
 							wp.saveWeaponlist(wlist);
-							PlayerUtil.save(wp, Warlords.getPlugin(Warlords.class).getDataFolder(),
+							PlayerUtilMethods.save(wp, Warlords.getPlugin(Warlords.class).getDataFolder(),
 									"/players/" + p.getUniqueId());
 							SpielKlasse sk = wp.getSk();
 							if (sk != null) {
@@ -1106,7 +1106,7 @@ public class EventManager implements Listener {
 	public void dropItem(PlayerDropItemEvent e) {
 		Player p = e.getPlayer();
 		SpielKlasse sk = Warlords.getKlasse(p);
-		WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
+		WarlordsPlayer wp = PlayerUtilMethods.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
 				"/players/" + p.getUniqueId());
 		if (sk != null && wp != null) {
 			if (wp.getMode() == true) {
@@ -1136,7 +1136,7 @@ public class EventManager implements Listener {
 	public void PickupItem(PlayerPickupItemEvent e) {
 		Player p = e.getPlayer();
 		SpielKlasse sk = Warlords.getKlasse(p);
-		WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
+		WarlordsPlayer wp = PlayerUtilMethods.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
 				"/players/" + p.getUniqueId());
 		if (sk != null && wp != null) {
 			if (wp.getMode() == true) {
@@ -1182,7 +1182,7 @@ public class EventManager implements Listener {
 		if (event.getDamager() instanceof Player) {
 			Player p = (Player) event.getDamager();
 			SpielKlasse sk = Warlords.getKlasse(p);
-			WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
+			WarlordsPlayer wp = PlayerUtilMethods.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
 					"/players/" + p.getUniqueId());
 			if (wp != null) {
 				if (wp.getMode() == true) {
@@ -1331,7 +1331,7 @@ public class EventManager implements Listener {
 		if (p.getInventory().getItem(p.getInventory().getHeldItemSlot()) != null) {
 			SpielKlasse sp = Warlords.getKlasse(p);
 			if (sp != null) {
-				WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
+				WarlordsPlayer wp = PlayerUtilMethods.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
 						"/players/" + p.getUniqueId());
 				if (wp != null) {
 					if (wp.getMode() == true) {
@@ -1368,7 +1368,7 @@ public class EventManager implements Listener {
 			if (event.getItem() != null) {
 				SpielKlasse sp = Warlords.getKlasse(p);
 				if (sp != null) {
-					WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
+					WarlordsPlayer wp = PlayerUtilMethods.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
 							"/players/" + p.getUniqueId());
 					if (wp != null) {
 						if (wp.getMode() == true) {
@@ -1386,7 +1386,7 @@ public class EventManager implements Listener {
 				int slot = event.getPlayer().getInventory().getHeldItemSlot();
 				SpielKlasse sp = Warlords.getKlasse(p);
 				if (sp != null) {
-					WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
+					WarlordsPlayer wp = PlayerUtilMethods.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
 							"/players/" + p.getUniqueId());
 					if (wp != null) {
 						if (wp.getMode() == true) {
@@ -1407,7 +1407,7 @@ public class EventManager implements Listener {
 			Player p = (Player) event.getEntity();
 			SpielKlasse sp = Warlords.getKlasse(p);
 			if (sp != null) {
-				WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
+				WarlordsPlayer wp = PlayerUtilMethods.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
 						"/players/" + p.getUniqueId());
 				if (wp != null) {
 					if (wp.getMode()) {
