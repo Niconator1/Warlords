@@ -33,7 +33,8 @@ public class PlayerUtil {
 			s += wp.getWeaponSlot() + ",";
 			s += wp.getKlasse() + ",";
 			s += wp.getMode() + ",";
-			s += wp.getPlayerAttackMode();
+			s += wp.getPlayerAttackMode() + ",";
+			s += wp.getVoidShards();
 			s += "}";
 			os.write(s + "\n");
 			os.flush();
@@ -52,7 +53,14 @@ public class PlayerUtil {
 				String param = is.readLine();
 				param = param.substring(1, param.length() - 1);
 				String[] parts = param.split(",");
-				if (parts.length > 4) {
+				if (parts.length > 5) {
+					wp = new WarlordsPlayer(parts[0]);
+					wp.setWeaponSlot(Integer.parseInt(parts[1]));
+					wp.setKlasse(parts[2]);
+					wp.setMode(Boolean.parseBoolean(parts[3]));
+					wp.setPlayerAttackMode(Boolean.parseBoolean(parts[4]));
+					wp.setVoidShards(Integer.parseInt(parts[5]));
+				} else if (parts.length > 4) {
 					wp = new WarlordsPlayer(parts[0]);
 					wp.setWeaponSlot(Integer.parseInt(parts[1]));
 					wp.setKlasse(parts[2]);

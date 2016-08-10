@@ -28,10 +28,13 @@ import org.bukkit.util.Vector;
 
 import com.warlords.boss.Pontiff;
 import com.warlords.util.Confirmation;
+import com.warlords.util.CraftConfirmation;
 import com.warlords.util.FileUtilMethods;
 import com.warlords.util.PlayerUtil;
 import com.warlords.util.SkillUtil;
+import com.warlords.util.SkinGUI;
 import com.warlords.util.SpielKlasse;
+import com.warlords.util.UpgradeConfirmation;
 import com.warlords.util.UtilMethods;
 import com.warlords.util.WarlordsPlayer;
 import com.warlords.util.WarlordsPlayerAllys;
@@ -78,13 +81,13 @@ import net.minecraft.server.v1_10_R1.BossBattleServer;
 import net.minecraft.server.v1_10_R1.EntityOcelot;
 import net.minecraft.server.v1_10_R1.EnumParticle;
 import net.minecraft.server.v1_10_R1.IChatBaseComponent;
+import net.minecraft.server.v1_10_R1.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_10_R1.PacketPlayOutBoss;
 import net.minecraft.server.v1_10_R1.PacketPlayOutChat;
 import net.minecraft.server.v1_10_R1.PacketPlayOutEntityDestroy;
 import net.minecraft.server.v1_10_R1.PacketPlayOutEntityTeleport;
 import net.minecraft.server.v1_10_R1.PacketPlayOutSpawnEntityLiving;
 import net.minecraft.server.v1_10_R1.WorldServer;
-import net.minecraft.server.v1_10_R1.IChatBaseComponent.ChatSerializer;
 
 public class Warlords extends JavaPlugin {
 	public static ArrayList<Fireball> fireball = new ArrayList<Fireball>();
@@ -118,6 +121,9 @@ public class Warlords extends JavaPlugin {
 	public static Objective obj;
 	public static ArrayList<Elytra> elytra = new ArrayList<Elytra>();
 	public static ArrayList<Confirmation> confirmation = new ArrayList<Confirmation>();
+	public static ArrayList<UpgradeConfirmation> uconfirmation = new ArrayList<UpgradeConfirmation>();
+	public static ArrayList<CraftConfirmation> cconfirmation = new ArrayList<CraftConfirmation>();
+	public static ArrayList<SkinGUI> skingui = new ArrayList<SkinGUI>();
 	public static ArrayList<Pontiff> pontiff = new ArrayList<Pontiff>();
 
 	public void onEnable() {
@@ -189,6 +195,17 @@ public class Warlords extends JavaPlugin {
 	}
 
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+		if (cmd.getName().equalsIgnoreCase("smith")) {
+			if (sender instanceof Player) {
+				Player p = (Player) sender;
+				if (p.hasPermission("warlords.weapons")) {
+					p.openInventory(WeaponUtil.getSmithInventory(p));
+					return true;
+				}
+			} else {
+				sender.sendMessage("You have to be a player");
+			}
+		}
 		if (cmd.getName().equalsIgnoreCase("weapons")) {
 			if (sender instanceof Player) {
 				Player p = (Player) sender;
@@ -217,53 +234,53 @@ public class Warlords extends JavaPlugin {
 					if (args.length > 0) {
 						w = WeaponUtil.generateRandomWeapon(Integer.valueOf(args[0]));
 						if (w.getKat() == 1) {
-							for (Player p2 : Bukkit.getOnlinePlayers()) {
-								p.getWorld().playSound(p.getLocation(), "legendaryfind", 1, 1);
-								ItemStack is = WeaponUtil.generateItemStack(w, WeaponUtil.KLASSEN[w.getKlass()]);
-								String maintext = p.getDisplayName() + " was unfair and cheated a ";
-								String weaponname = WeaponUtil.LEGENDNAMES[w.getType()] + " of the "
-										+ WeaponUtil.KLASSEN[w.getKlass()];
-								String cweaponname = ChatColor.GOLD + WeaponUtil.LEGENDNAMES[w.getType()] + " of the "
-										+ WeaponUtil.KLASSEN[w.getKlass()];
-								String lore = "";
-								for (int i = 0; i < is.getItemMeta().getLore().size(); i++) {
-									String s = is.getItemMeta().getLore().get(i);
-									if (i < is.getItemMeta().getLore().size() - 1) {
-										lore += "\\\"" + s + "\\\",";
-									} else {
-										lore += "\\\"" + s + "\\\"";
-									}
+							ItemStack is = WeaponUtil.generateItemStack(w, WeaponUtil.KLASSEN[w.getKlass()]);
+							String maintext = p.getDisplayName() + ChatColor.WHITE + " was unfair and cheated a ";
+							String weaponname = WeaponUtil.LEGENDNAMES[w.getType()] + " of the "
+									+ WeaponUtil.KLASSEN[w.getKlass()];
+							String cweaponname = ChatColor.GOLD + WeaponUtil.LEGENDNAMES[w.getType()] + " of the "
+									+ WeaponUtil.KLASSEN[w.getKlass()];
+							String lore = "";
+							for (int i = 0; i < is.getItemMeta().getLore().size(); i++) {
+								String s = is.getItemMeta().getLore().get(i);
+								if (i < is.getItemMeta().getLore().size() - 1) {
+									lore += "\\\"" + s + "\\\",";
+								} else {
+									lore += "\\\"" + s + "\\\"";
 								}
-								IChatBaseComponent al = ChatSerializer
-										.a("{\"text\":\"" + maintext + "\", \"extra\":[{\"text\":\"" + weaponname
-												+ "\",\"color\":\"gold\",\"hoverEvent\":{\"action\":\"show_item\",\"value\":\"{id:stone,tag:{display:{Name:\\\""
-												+ cweaponname + "\\\",Lore:[" + lore + "]}}}\"}}]}");
-								PacketPlayOutChat packet = new PacketPlayOutChat(al, (byte) 0);
+							}
+							IChatBaseComponent al = ChatSerializer
+									.a("{\"text\":\"" + maintext + "\", \"extra\":[{\"text\":\"" + weaponname
+											+ "\",\"color\":\"gold\",\"hoverEvent\":{\"action\":\"show_item\",\"value\":\"{id:stone,tag:{display:{Name:\\\""
+											+ cweaponname + "\\\",Lore:[" + lore + "]}}}\"}}]}");
+							PacketPlayOutChat packet = new PacketPlayOutChat(al, (byte) 0);
+							for (Player p2 : Bukkit.getOnlinePlayers()) {
+								UtilMethods.sendSoundPacket(p2, "legendaryfind", p2.getLocation());
 								((CraftPlayer) p2).getHandle().playerConnection.sendPacket(packet);
 							}
 						} else if (w.getKat() == 2) {
-							for (Player p2 : Bukkit.getOnlinePlayers()) {
-								p.getWorld().playSound(p.getLocation(), "epicfind", 1, 1);
-								ItemStack is = WeaponUtil.generateItemStack(w, WeaponUtil.KLASSEN[w.getKlass()]);
-								String maintext = p.getDisplayName() + " was unfair and cheated a ";
-								String weaponname = WeaponUtil.EPICNAMES[w.getType()] + " of the "
-										+ WeaponUtil.KLASSEN[w.getKlass()];
-								String cweaponname = ChatColor.DARK_PURPLE + WeaponUtil.EPICNAMES[w.getType()]
-										+ " of the " + WeaponUtil.KLASSEN[w.getKlass()];
-								String lore = "";
-								for (int i = 0; i < is.getItemMeta().getLore().size(); i++) {
-									String s = is.getItemMeta().getLore().get(i);
-									if (i < is.getItemMeta().getLore().size() - 1) {
-										lore += "\\\"" + s + "\\\",";
-									} else {
-										lore += "\\\"" + s + "\\\"";
-									}
+							ItemStack is = WeaponUtil.generateItemStack(w, WeaponUtil.KLASSEN[w.getKlass()]);
+							String maintext = p.getDisplayName() + ChatColor.WHITE + " was unfair and cheated a ";
+							String weaponname = WeaponUtil.EPICNAMES[w.getType()] + " of the "
+									+ WeaponUtil.KLASSEN[w.getKlass()];
+							String cweaponname = ChatColor.DARK_PURPLE + WeaponUtil.EPICNAMES[w.getType()] + " of the "
+									+ WeaponUtil.KLASSEN[w.getKlass()];
+							String lore = "";
+							for (int i = 0; i < is.getItemMeta().getLore().size(); i++) {
+								String s = is.getItemMeta().getLore().get(i);
+								if (i < is.getItemMeta().getLore().size() - 1) {
+									lore += "\\\"" + s + "\\\",";
+								} else {
+									lore += "\\\"" + s + "\\\"";
 								}
-								IChatBaseComponent al = ChatSerializer
-										.a("{\"text\":\"" + maintext + "\", \"extra\":[{\"text\":\"" + weaponname
-												+ "\",\"color\":\"dark_purple\",\"hoverEvent\":{\"action\":\"show_item\",\"value\":\"{id:stone,tag:{display:{Name:\\\""
-												+ cweaponname + "\\\",Lore:[" + lore + "]}}}\"}}]}");
-								PacketPlayOutChat packet = new PacketPlayOutChat(al, (byte) 0);
+							}
+							IChatBaseComponent al = ChatSerializer
+									.a("{\"text\":\"" + maintext + "\", \"extra\":[{\"text\":\"" + weaponname
+											+ "\",\"color\":\"dark_purple\",\"hoverEvent\":{\"action\":\"show_item\",\"value\":\"{id:stone,tag:{display:{Name:\\\""
+											+ cweaponname + "\\\",Lore:[" + lore + "]}}}\"}}]}");
+							PacketPlayOutChat packet = new PacketPlayOutChat(al, (byte) 0);
+							for (Player p2 : Bukkit.getOnlinePlayers()) {
+								UtilMethods.sendSoundPacket(p2, "epicfind", p2.getLocation());
 								((CraftPlayer) p2).getHandle().playerConnection.sendPacket(packet);
 							}
 						}
@@ -279,7 +296,7 @@ public class Warlords extends JavaPlugin {
 					}
 					ArrayList<Weapon> list = FileUtilMethods.load(getDataFolder(), "/weapons/" + ziel.getUniqueId());
 					if (list != null) {
-						if (list.size() < 54) {
+						if (list.size() < 45) {
 							list.add(w);
 						} else {
 							p.sendMessage("Weapon inventory already full");

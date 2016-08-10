@@ -1,15 +1,15 @@
 name: Warlords
-version: 1.4
+version: 1.5
 description: >
   Recreation of warlords for the guild UnravelSoul
 
 author: Niconator1
-authors: [Hypixel]
-website: www.hypixel.net
 main: com.warlords.main.Warlords
 load: STARTUP
 
 commands:
+    smith:
+        description: Opens the weapon smith gui
     weapons:
         description: Opens the weapon inventory
     pyro:

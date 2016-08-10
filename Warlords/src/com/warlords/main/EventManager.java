@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_10_R1.entity.CraftPlayer;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
@@ -41,9 +42,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.warlords.boss.Pontiff;
 import com.warlords.util.Confirmation;
+import com.warlords.util.CraftConfirmation;
 import com.warlords.util.PlayerUtil;
 import com.warlords.util.SkillUtil;
+import com.warlords.util.SkinGUI;
 import com.warlords.util.SpielKlasse;
+import com.warlords.util.UpgradeConfirmation;
 import com.warlords.util.UtilMethods;
 import com.warlords.util.WarlordsPlayer;
 import com.warlords.util.WarlordsPlayerAllys;
@@ -52,6 +56,10 @@ import com.warlords.util.WeaponUtil;
 import com.warlords.util.skills.hunter.Companion;
 import com.warlords.util.skills.shaman.WindfuryWeapon;
 import com.warlords.util.type.Assassin;
+
+import net.minecraft.server.v1_10_R1.IChatBaseComponent;
+import net.minecraft.server.v1_10_R1.IChatBaseComponent.ChatSerializer;
+import net.minecraft.server.v1_10_R1.PacketPlayOutChat;
 
 public class EventManager implements Listener {
 	@EventHandler
@@ -128,7 +136,6 @@ public class EventManager implements Listener {
 					}
 				}
 			}
-
 			if (dmg > 0) {
 				UtilMethods.setHealth(p, sk.hptohealth(dmg));
 				e.setDamage(0);
@@ -206,7 +213,21 @@ public class EventManager implements Listener {
 				Warlords.confirmation.remove(i);
 			}
 		}
-
+		for (int i = 0; i < Warlords.uconfirmation.size(); i++) {
+			if (in.equals(Warlords.uconfirmation.get(i).getInventory())) {
+				Warlords.uconfirmation.remove(i);
+			}
+		}
+		for (int i = 0; i < Warlords.cconfirmation.size(); i++) {
+			if (in.equals(Warlords.cconfirmation.get(i).getInventory())) {
+				Warlords.cconfirmation.remove(i);
+			}
+		}
+		for (int i = 0; i < Warlords.skingui.size(); i++) {
+			if (in.equals(Warlords.skingui.get(i).getInventory())) {
+				Warlords.skingui.remove(i);
+			}
+		}
 	}
 
 	@EventHandler
@@ -236,13 +257,53 @@ public class EventManager implements Listener {
 									p.openInventory(c.getInventory());
 									return;
 								} else if (w.getKat() == 3) {
-									p.sendMessage("You salvaged " + ChatColor.BLUE + WeaponUtil.RARENAMES[w.getType()]
-											+ " of the " + WeaponUtil.KLASSEN[w.getKlass()]);
+									ItemStack is = WeaponUtil.generateItemStack(w, WeaponUtil.KLASSEN[w.getKlass()]);
+									double rand = Math.random();
+									String maintext = ChatColor.GRAY + "You salvaged ";
+									if (rand < 0.05) {
+										maintext = ChatColor.GRAY + "You received " + ChatColor.LIGHT_PURPLE
+												+ "1 Void Shard " + ChatColor.GRAY + "for salvaging your ";
+										wp.setVoidShards(wp.getVoidShards() + 1);
+									}
+									String weaponname = is.getItemMeta().getDisplayName();
+									String cweaponname = is.getItemMeta().getDisplayName();
+									String lore = "";
+									for (int i = 0; i < is.getItemMeta().getLore().size(); i++) {
+										String s = is.getItemMeta().getLore().get(i);
+										if (i < is.getItemMeta().getLore().size() - 1) {
+											lore += "\\\"" + s + "\\\",";
+										} else {
+											lore += "\\\"" + s + "\\\"";
+										}
+									}
+									IChatBaseComponent al = ChatSerializer
+											.a("{\"text\":\"" + maintext + "\", \"extra\":[{\"text\":\"" + weaponname
+													+ "\",\"color\":\"blue\",\"hoverEvent\":{\"action\":\"show_item\",\"value\":\"{id:stone,tag:{display:{Name:\\\""
+													+ cweaponname + "\\\",Lore:[" + lore + "]}}}\"}}]}");
+									PacketPlayOutChat packet = new PacketPlayOutChat(al, (byte) 0);
+									((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
 								} else {
-									p.sendMessage(
-											"You salvaged " + ChatColor.GREEN + WeaponUtil.COMMONNAMES[w.getType()]
-													+ " of the " + WeaponUtil.KLASSEN[w.getKlass()]);
+									ItemStack is = WeaponUtil.generateItemStack(w, WeaponUtil.KLASSEN[w.getKlass()]);
+									String maintext = ChatColor.GRAY + "You salvaged ";
+									String weaponname = is.getItemMeta().getDisplayName();
+									String cweaponname = is.getItemMeta().getDisplayName();
+									String lore = "";
+									for (int i = 0; i < is.getItemMeta().getLore().size(); i++) {
+										String s = is.getItemMeta().getLore().get(i);
+										if (i < is.getItemMeta().getLore().size() - 1) {
+											lore += "\\\"" + s + "\\\",";
+										} else {
+											lore += "\\\"" + s + "\\\"";
+										}
+									}
+									IChatBaseComponent al = ChatSerializer
+											.a("{\"text\":\"" + maintext + "\", \"extra\":[{\"text\":\"" + weaponname
+													+ "\",\"color\":\"green\",\"hoverEvent\":{\"action\":\"show_item\",\"value\":\"{id:stone,tag:{display:{Name:\\\""
+													+ cweaponname + "\\\",Lore:[" + lore + "]}}}\"}}]}");
+									PacketPlayOutChat packet = new PacketPlayOutChat(al, (byte) 0);
+									((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
 								}
+								UtilMethods.sendSoundPacket(p, "block.anvil.use", p.getLocation());
 								if (event.getSlot() < wp.getWeaponSlot()) {
 									wp.setWeaponSlot(wp.getWeaponSlot() - 1);
 								}
@@ -272,9 +333,520 @@ public class EventManager implements Listener {
 						}
 					}
 				}
+				if (event.getRawSlot() == 49) {
+					p.openInventory(WeaponUtil.getSmithInventory(p));
+				}
+			}
+			event.setCancelled(true);
+		} else if (inventory.getName().equals(WeaponUtil.getSmithInventory(p).getName())) {
+			if (event.getRawSlot() == 15) {
+				p.openInventory(WeaponUtil.getWeaponInventory(p));
+			} else if (event.getRawSlot() == 29) {
+				WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
+						"/players/" + p.getUniqueId());
+				if (wp != null) {
+					ArrayList<Weapon> wlist = wp.getWeaponlist();
+					if (wlist != null) {
+						Weapon w = wlist.get(wp.getWeaponSlot());
+						if (w.getKat() < 3 && w.getKat() > 0) {
+							if (wp.getVoidShards() >= 1.0 / w.getKat() * 10) {
+								p.openInventory(WeaponUtil.getWeaponRerollConfirmationInventory(p, w.getKat()));
+							} else {
+								p.sendMessage(ChatColor.RED + "You don't have enough " + ChatColor.LIGHT_PURPLE
+										+ "Void Shards");
+							}
+						} else {
+							p.sendMessage(ChatColor.RED
+									+ "Your equipped weapon has to be at least a epic in order to perform this action.");
+						}
+					}
+				}
+			} else if (event.getRawSlot() == 11) {
+				p.openInventory(WeaponUtil.getCraftingInventory(p));
+			} else if (event.getRawSlot() == 33) {
+				int kat = 5;
+				WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
+						"/players/" + p.getUniqueId());
+				if (wp != null) {
+					ArrayList<Weapon> wlist = wp.getWeaponlist();
+					if (wlist != null) {
+						Weapon w = wlist.get(wp.getWeaponSlot());
+						kat = w.getKat();
+					}
+				}
+				SkinGUI c = WeaponUtil.getSkinInventory(p, 4, kat);
+				Warlords.skingui.add(c);
+				p.openInventory(c.getInventory());
+			}
+			event.setCancelled(true);
+		} else if (inventory.getName().equals(WeaponUtil.getCraftingInventory(p).getName())) {
+			if (event.getRawSlot() == 33) {
+				UpgradeConfirmation c = WeaponUtil.getWeaponUpgradeConfirmationInventory(p, 2);
+				Warlords.uconfirmation.add(c);
+				p.openInventory(c.getInventory());
+			} else if (event.getRawSlot() == 31) {
+				UpgradeConfirmation c = WeaponUtil.getWeaponUpgradeConfirmationInventory(p, 1);
+				Warlords.uconfirmation.add(c);
+				p.openInventory(c.getInventory());
+			} else if (event.getRawSlot() == 29) {
+				UpgradeConfirmation c = WeaponUtil.getWeaponUpgradeConfirmationInventory(p, 0);
+				Warlords.uconfirmation.add(c);
+				p.openInventory(c.getInventory());
+			} else if (event.getRawSlot() == 15) {
+				CraftConfirmation c = WeaponUtil.getWeaponCraftConfirmationInventory(p, 2);
+				Warlords.cconfirmation.add(c);
+				p.openInventory(c.getInventory());
+			} else if (event.getRawSlot() == 13) {
+				CraftConfirmation c = WeaponUtil.getWeaponCraftConfirmationInventory(p, 1);
+				Warlords.cconfirmation.add(c);
+				p.openInventory(c.getInventory());
+			} else if (event.getRawSlot() == 11) {
+				CraftConfirmation c = WeaponUtil.getWeaponCraftConfirmationInventory(p, 0);
+				Warlords.cconfirmation.add(c);
+				p.openInventory(c.getInventory());
+			} else if (event.getRawSlot() == 49) {
+				p.openInventory(WeaponUtil.getSmithInventory(p));
 			}
 			event.setCancelled(true);
 		} else {
+			for (int i = 0; i < Warlords.uconfirmation.size(); i++) {
+				if (inventory.equals(Warlords.uconfirmation.get(i).getInventory())) {
+					UpgradeConfirmation uc = Warlords.uconfirmation.get(i);
+					if (uc.getType() == 3) {
+						if (event.getRawSlot() == 49) {
+							Warlords.uconfirmation.remove(i);
+							p.openInventory(WeaponUtil.getCraftingInventory(p));
+							return;
+						} else {
+							if (event.getInventory().getItem(event.getRawSlot()) != null) {
+								WarlordsPlayer wp = PlayerUtil.getWlPlayer(
+										Warlords.getPlugin(Warlords.class).getDataFolder(),
+										"/players/" + p.getUniqueId());
+								if (wp != null) {
+									ArrayList<Weapon> wlist = wp.getWeaponlist();
+									if (wlist != null) {
+										Weapon w = wlist.get(wp.getWeaponSlot());
+										int anz = WeaponUtil.SKILLS[w.getKlass()].length;
+										int slota = 18 + 5 - anz;
+										int s = (event.getRawSlot() - slota) / 2;
+										w.setSkill(s);
+										wp.saveWeaponlist(wlist);
+										PlayerUtil.save(wp, Warlords.getPlugin(Warlords.class).getDataFolder(),
+												"/players/" + p.getUniqueId());
+										Warlords.uconfirmation.remove(i);
+										SpielKlasse sk = wp.getSk();
+										if (sk != null) {
+											UtilMethods.giveItems(sk, false);
+										}
+										p.closeInventory();
+									}
+								}
+							} else {
+								event.setCancelled(true);
+							}
+						}
+					} else {
+						if (event.getRawSlot() == 11) {
+							WarlordsPlayer wp = PlayerUtil.getWlPlayer(
+									Warlords.getPlugin(Warlords.class).getDataFolder(), "/players/" + p.getUniqueId());
+							if (wp != null) {
+								ArrayList<Weapon> wlist = wp.getWeaponlist();
+								if (wlist != null) {
+									Weapon w = wlist.get(wp.getWeaponSlot());
+									if (uc.getType() == 0) {
+										if (w.getKat() == 1) {
+											if (wp.getVoidShards() >= 100) {
+												wp.setVoidShards(wp.getVoidShards() - 100);
+												w.setSkillboost(true);
+											} else {
+												p.sendMessage(ChatColor.RED + "You don't have enough "
+														+ ChatColor.LIGHT_PURPLE + "Void Shards");
+											}
+										} else {
+											p.sendMessage(ChatColor.GRAY + "You don't have a " + ChatColor.GOLD
+													+ "LEGENDARY " + ChatColor.GRAY + "weapon equipped");
+										}
+									} else if (uc.getType() == 1) {
+										if (w.getKat() == 2) {
+											if (w.getUa() < w.getUm()) {
+												int count = (int) (25 + (w.getUa() * 0.5 + 0.5) * w.getUa() * 12.5);
+												if (wp.getVoidShards() >= count) {
+													wp.setVoidShards(wp.getVoidShards() - count);
+													Weapon neu = WeaponUtil.upgradeWeapon(w);
+													ItemStack is = WeaponUtil.generateUpgradeItemStack(w, neu);
+													String maintext = ChatColor.GRAY + "Result: ";
+													String weaponname = is.getItemMeta().getDisplayName();
+													String cweaponname = is.getItemMeta().getDisplayName();
+													String lore = "";
+													for (int j = 0; j < is.getItemMeta().getLore().size(); j++) {
+														String s = is.getItemMeta().getLore().get(j);
+														if (j < is.getItemMeta().getLore().size() - 1) {
+															lore += "\\\"" + s + "\\\",";
+														} else {
+															lore += "\\\"" + s + "\\\"";
+														}
+													}
+													IChatBaseComponent al = ChatSerializer.a("{\"text\":\"" + maintext
+															+ "\", \"extra\":[{\"text\":\"" + weaponname
+															+ "\",\"color\":\"dark_purple\",\"hoverEvent\":{\"action\":\"show_item\",\"value\":\"{id:stone,tag:{display:{Name:\\\""
+															+ cweaponname + "\\\",Lore:[" + lore + "]}}}\"}}]}");
+													PacketPlayOutChat packet = new PacketPlayOutChat(al, (byte) 0);
+													((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
+													w.setDmin(neu.getDmin());
+													w.setDmax(neu.getDmax());
+													w.setCc(neu.getCc());
+													w.setCm(neu.getCm());
+													w.setBoost(neu.getBoost());
+													w.setHp(neu.getHp());
+													w.setEnergy(neu.getEnergy());
+													w.setCooldown(neu.getCooldown());
+													w.setUa(neu.getUa());
+												} else {
+													p.sendMessage(ChatColor.RED + "You don't have enough "
+															+ ChatColor.LIGHT_PURPLE + "Void Shards");
+												}
+											} else {
+												p.sendMessage(
+														ChatColor.RED + "You can't upgrade this weapon any more!");
+											}
+										} else {
+											p.sendMessage(ChatColor.GRAY + "You don't have an " + ChatColor.DARK_PURPLE
+													+ "EPIC " + ChatColor.GRAY + "weapon equipped");
+										}
+									} else if (uc.getType() == 2) {
+										if (w.getKat() == 1) {
+											if (w.getUa() < w.getUm()) {
+												int count = (int) (100 + (w.getUa() * 0.5 + 0.5) * w.getUa() * 50);
+												if (wp.getVoidShards() >= count) {
+													wp.setVoidShards(wp.getVoidShards() - count);
+													Weapon neu = WeaponUtil.upgradeWeapon(w);
+													ItemStack is = WeaponUtil.generateUpgradeItemStack(w, neu);
+													String maintext = ChatColor.GRAY + "Result: ";
+													String weaponname = is.getItemMeta().getDisplayName();
+													String cweaponname = is.getItemMeta().getDisplayName();
+													String lore = "";
+													for (int j = 0; j < is.getItemMeta().getLore().size(); j++) {
+														String s = is.getItemMeta().getLore().get(j);
+														if (j < is.getItemMeta().getLore().size() - 1) {
+															lore += "\\\"" + s + "\\\",";
+														} else {
+															lore += "\\\"" + s + "\\\"";
+														}
+													}
+													IChatBaseComponent al = ChatSerializer.a("{\"text\":\"" + maintext
+															+ "\", \"extra\":[{\"text\":\"" + weaponname
+															+ "\",\"color\":\"gold\",\"hoverEvent\":{\"action\":\"show_item\",\"value\":\"{id:stone,tag:{display:{Name:\\\""
+															+ cweaponname + "\\\",Lore:[" + lore + "]}}}\"}}]}");
+													PacketPlayOutChat packet = new PacketPlayOutChat(al, (byte) 0);
+													((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
+													w.setDmin(neu.getDmin());
+													w.setDmax(neu.getDmax());
+													w.setCc(neu.getCc());
+													w.setCm(neu.getCm());
+													w.setBoost(neu.getBoost());
+													w.setHp(neu.getHp());
+													w.setEnergy(neu.getEnergy());
+													w.setCooldown(neu.getCooldown());
+													w.setSpeed(neu.getSpeed());
+													w.setUa(neu.getUa());
+												} else {
+													p.sendMessage(ChatColor.RED + "You don't have enough "
+															+ ChatColor.LIGHT_PURPLE + "Void Shards");
+												}
+											} else {
+												p.sendMessage(
+														ChatColor.RED + "You can't upgrade this weapon any more!");
+											}
+										} else {
+											p.sendMessage(ChatColor.GRAY + "You don't have a " + ChatColor.GOLD
+													+ "LEGENDARY " + ChatColor.GRAY + "weapon equipped");
+										}
+									}
+									wp.saveWeaponlist(wlist);
+									PlayerUtil.save(wp, Warlords.getPlugin(Warlords.class).getDataFolder(),
+											"/players/" + p.getUniqueId());
+									Warlords.uconfirmation.remove(i);
+									SpielKlasse sk = wp.getSk();
+									if (sk != null) {
+										UtilMethods.giveItems(sk, false);
+									}
+									p.closeInventory();
+								}
+							}
+						} else if (event.getRawSlot() == 15) {
+							Warlords.uconfirmation.remove(i);
+							p.openInventory(WeaponUtil.getCraftingInventory(p));
+							return;
+						} else {
+							event.setCancelled(true);
+						}
+					}
+				}
+			}
+			for (int i = 0; i < Warlords.cconfirmation.size(); i++) {
+				if (inventory.equals(Warlords.cconfirmation.get(i).getInventory())) {
+					if (event.getRawSlot() == 11) {
+						CraftConfirmation uc = Warlords.cconfirmation.get(i);
+						WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
+								"/players/" + p.getUniqueId());
+						if (wp != null) {
+							ArrayList<Weapon> wlist = wp.getWeaponlist();
+							if (wlist != null) {
+								if (uc.getType() == 0) {
+									if (wp.getVoidShards() >= 5) {
+										int k = WeaponUtil.getKlass(wp.getKlasse());
+										if (k >= 0) {
+											wp.setVoidShards(wp.getVoidShards() - 5);
+											Weapon w = WeaponUtil.craftWeapon(3, k);
+											ItemStack is = WeaponUtil.generateItemStack(w, w.getTitle());
+											String maintext = ChatColor.GRAY + "You crafted: ";
+											String weaponname = is.getItemMeta().getDisplayName();
+											String cweaponname = is.getItemMeta().getDisplayName();
+											String lore = "";
+											for (int j = 0; j < is.getItemMeta().getLore().size(); j++) {
+												String s = is.getItemMeta().getLore().get(j);
+												if (j < is.getItemMeta().getLore().size() - 1) {
+													lore += "\\\"" + s + "\\\",";
+												} else {
+													lore += "\\\"" + s + "\\\"";
+												}
+											}
+											IChatBaseComponent al = ChatSerializer.a("{\"text\":\"" + maintext
+													+ "\", \"extra\":[{\"text\":\"" + weaponname
+													+ "\",\"color\":\"blue\",\"hoverEvent\":{\"action\":\"show_item\",\"value\":\"{id:stone,tag:{display:{Name:\\\""
+													+ cweaponname + "\\\",Lore:[" + lore + "]}}}\"}}]}");
+											PacketPlayOutChat packet = new PacketPlayOutChat(al, (byte) 0);
+											((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
+											wlist.add(w);
+										} else {
+											p.sendMessage(ChatColor.RED + "You don't have a class selected");
+										}
+									} else {
+										p.sendMessage(ChatColor.RED + "You don't have enough " + ChatColor.LIGHT_PURPLE
+												+ "Void Shards");
+									}
+								} else if (uc.getType() == 1) {
+									if (wp.getVoidShards() >= 25) {
+										int k = WeaponUtil.getKlass(wp.getKlasse());
+										if (k >= 0) {
+											wp.setVoidShards(wp.getVoidShards() - 25);
+											Weapon w = WeaponUtil.craftWeapon(2, k);
+											ItemStack is = WeaponUtil.generateItemStack(w, w.getTitle());
+											String maintext = p.getDisplayName() + " crafted a ";
+											String weaponname = is.getItemMeta().getDisplayName();
+											String cweaponname = is.getItemMeta().getDisplayName();
+											String lore = "";
+											for (int j = 0; j < is.getItemMeta().getLore().size(); j++) {
+												String s = is.getItemMeta().getLore().get(j);
+												if (j < is.getItemMeta().getLore().size() - 1) {
+													lore += "\\\"" + s + "\\\",";
+												} else {
+													lore += "\\\"" + s + "\\\"";
+												}
+											}
+											IChatBaseComponent al = ChatSerializer.a("{\"text\":\"" + maintext
+													+ "\", \"extra\":[{\"text\":\"" + weaponname
+													+ "\",\"color\":\"dark_purple\",\"hoverEvent\":{\"action\":\"show_item\",\"value\":\"{id:stone,tag:{display:{Name:\\\""
+													+ cweaponname + "\\\",Lore:[" + lore + "]}}}\"}}]}");
+											PacketPlayOutChat packet = new PacketPlayOutChat(al, (byte) 0);
+											for (Player p2 : Bukkit.getOnlinePlayers()) {
+												UtilMethods.sendSoundPacket(p2, "epicfind", p2.getLocation());
+												((CraftPlayer) p2).getHandle().playerConnection.sendPacket(packet);
+											}
+											wlist.add(w);
+										} else {
+											p.sendMessage(ChatColor.RED + "You don't have a class selected");
+										}
+									} else {
+										p.sendMessage(ChatColor.RED + "You don't have enough " + ChatColor.LIGHT_PURPLE
+												+ "Void Shards");
+									}
+								} else if (uc.getType() == 2) {
+									if (wp.getVoidShards() >= 100) {
+										int k = WeaponUtil.getKlass(wp.getKlasse());
+										if (k >= 0) {
+											wp.setVoidShards(wp.getVoidShards() - 100);
+											Weapon w = WeaponUtil.craftWeapon(1, k);
+											ItemStack is = WeaponUtil.generateItemStack(w, w.getTitle());
+											String maintext = p.getDisplayName() + " crafted a ";
+											String weaponname = is.getItemMeta().getDisplayName();
+											String cweaponname = is.getItemMeta().getDisplayName();
+											String lore = "";
+											for (int j = 0; j < is.getItemMeta().getLore().size(); j++) {
+												String s = is.getItemMeta().getLore().get(j);
+												if (j < is.getItemMeta().getLore().size() - 1) {
+													lore += "\\\"" + s + "\\\",";
+												} else {
+													lore += "\\\"" + s + "\\\"";
+												}
+											}
+											IChatBaseComponent al = ChatSerializer.a("{\"text\":\"" + maintext
+													+ "\", \"extra\":[{\"text\":\"" + weaponname
+													+ "\",\"color\":\"gold\",\"hoverEvent\":{\"action\":\"show_item\",\"value\":\"{id:stone,tag:{display:{Name:\\\""
+													+ cweaponname + "\\\",Lore:[" + lore + "]}}}\"}}]}");
+											PacketPlayOutChat packet = new PacketPlayOutChat(al, (byte) 0);
+											for (Player p2 : Bukkit.getOnlinePlayers()) {
+												UtilMethods.sendSoundPacket(p2, "legendaryfind", p2.getLocation());
+												((CraftPlayer) p2).getHandle().playerConnection.sendPacket(packet);
+											}
+											wlist.add(w);
+										} else {
+											p.sendMessage(ChatColor.RED + "You don't have a class selected");
+										}
+									} else {
+										p.sendMessage(ChatColor.RED + "You don't have enough " + ChatColor.LIGHT_PURPLE
+												+ "Void Shards");
+									}
+								}
+								wp.saveWeaponlist(wlist);
+								PlayerUtil.save(wp, Warlords.getPlugin(Warlords.class).getDataFolder(),
+										"/players/" + p.getUniqueId());
+								Warlords.cconfirmation.remove(i);
+								SpielKlasse sk = wp.getSk();
+								if (sk != null) {
+									UtilMethods.giveItems(sk, false);
+								}
+								p.closeInventory();
+							}
+						}
+					} else if (event.getRawSlot() == 15) {
+						Warlords.cconfirmation.remove(i);
+						p.openInventory(WeaponUtil.getCraftingInventory(p));
+					} else {
+						event.setCancelled(true);
+					}
+				}
+			}
+			for (int i = 0; i < Warlords.skingui.size(); i++) {
+				if (inventory.equals(Warlords.skingui.get(i).getInventory())) {
+					SkinGUI sk = Warlords.skingui.get(i);
+					if (event.getRawSlot() == 49) {
+						p.openInventory(WeaponUtil.getSmithInventory(p));
+					} else if (event.getRawSlot() == 50 && sk.getInventory().getItem(50) != null) {
+						Warlords.skingui.remove(i);
+						int kat = 5;
+						WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
+								"/players/" + p.getUniqueId());
+						if (wp != null) {
+							ArrayList<Weapon> wlist = wp.getWeaponlist();
+							if (wlist != null) {
+								Weapon w = wlist.get(wp.getWeaponSlot());
+								kat = w.getKat();
+							}
+						}
+						SkinGUI sk2 = WeaponUtil.getSkinInventory(p, sk.getType() - 1, kat);
+						Warlords.skingui.add(sk2);
+						p.openInventory(sk2.getInventory());
+					} else if (event.getRawSlot() == 48 && sk.getInventory().getItem(48) != null) {
+						Warlords.skingui.remove(i);
+						int kat = 5;
+						WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
+								"/players/" + p.getUniqueId());
+						if (wp != null) {
+							ArrayList<Weapon> wlist = wp.getWeaponlist();
+							if (wlist != null) {
+								Weapon w = wlist.get(wp.getWeaponSlot());
+								kat = w.getKat();
+							}
+						}
+						SkinGUI sk2 = WeaponUtil.getSkinInventory(p, sk.getType() + 1, kat);
+						Warlords.skingui.add(sk2);
+						p.openInventory(sk2.getInventory());
+					} else if (event.getInventory().getItem(event.getRawSlot()) != null) {
+						int kat = 5;
+						WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
+								"/players/" + p.getUniqueId());
+						if (wp != null) {
+							ArrayList<Weapon> wlist = wp.getWeaponlist();
+							if (wlist != null) {
+								Weapon w = wlist.get(wp.getWeaponSlot());
+								kat = w.getKat();
+							}
+						}
+						if (kat <= sk.getType()) {
+							if (wp != null) {
+								ArrayList<Weapon> wlist = wp.getWeaponlist();
+								if (wlist != null) {
+									Weapon w = wlist.get(wp.getWeaponSlot());
+									int slot = (event.getRawSlot() - 10) - ((int) ((event.getRawSlot() - 9) / 9)) * 2;
+									if (sk.getType() == w.getSkin() && slot == w.getType()) {
+										ItemStack is = WeaponUtil.generateItemStack(w,
+												WeaponUtil.KLASSEN[w.getKlass()]);
+										String maintext = ChatColor.GRAY + "You received: ";
+										String weaponname = is.getItemMeta().getDisplayName();
+										String cweaponname = is.getItemMeta().getDisplayName();
+										String lore = "";
+										for (int j = 0; j < is.getItemMeta().getLore().size(); j++) {
+											String s = is.getItemMeta().getLore().get(j);
+											if (j < is.getItemMeta().getLore().size() - 1) {
+												lore += "\\\"" + s + "\\\",";
+											} else {
+												lore += "\\\"" + s + "\\\"";
+											}
+										}
+										IChatBaseComponent al = ChatSerializer.a(
+												"{\"text\":\"" + maintext + "\", \"extra\":[{\"text\":\"" + weaponname
+														+ "\",\"color\":\"gold\",\"hoverEvent\":{\"action\":\"show_item\",\"value\":\"{id:stone,tag:{display:{Name:\\\""
+														+ cweaponname + "\\\",Lore:[" + lore + "]}}}\"}}]}");
+										PacketPlayOutChat packet = new PacketPlayOutChat(al, (byte) 0);
+										((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
+									} else {
+										if (wp.getVoidShards() >= 5) {
+											w.setSkin(sk.getType());
+											w.setType(slot);
+											wp.setVoidShards(wp.getVoidShards() - 5);
+											wp.saveWeaponlist(wlist);
+											PlayerUtil.save(wp, Warlords.getPlugin(Warlords.class).getDataFolder(),
+													"/players/" + p.getUniqueId());
+											ItemStack is = WeaponUtil.generateItemStack(w,
+													WeaponUtil.KLASSEN[w.getKlass()]);
+											String maintext = ChatColor.GRAY + "You received: ";
+											String weaponname = is.getItemMeta().getDisplayName();
+											String cweaponname = is.getItemMeta().getDisplayName();
+											String lore = "";
+											for (int j = 0; j < is.getItemMeta().getLore().size(); j++) {
+												String s = is.getItemMeta().getLore().get(j);
+												if (j < is.getItemMeta().getLore().size() - 1) {
+													lore += "\\\"" + s + "\\\",";
+												} else {
+													lore += "\\\"" + s + "\\\"";
+												}
+											}
+											IChatBaseComponent al = ChatSerializer.a("{\"text\":\"" + maintext
+													+ "\", \"extra\":[{\"text\":\"" + weaponname
+													+ "\",\"color\":\"gold\",\"hoverEvent\":{\"action\":\"show_item\",\"value\":\"{id:stone,tag:{display:{Name:\\\""
+													+ cweaponname + "\\\",Lore:[" + lore + "]}}}\"}}]}");
+											PacketPlayOutChat packet = new PacketPlayOutChat(al, (byte) 0);
+											((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
+										} else {
+											p.sendMessage(ChatColor.RED + "You don't have enough "
+													+ ChatColor.LIGHT_PURPLE + "Void Shards");
+										}
+									}
+								}
+							}
+
+							Warlords.skingui.remove(i);
+							SpielKlasse sp = wp.getSk();
+							if (sp != null) {
+								UtilMethods.giveItems(sp, false);
+							}
+							p.closeInventory();
+						} else {
+							if (sk.getType() == 4) {
+								p.sendMessage("");
+							} else if (sk.getType() == 3) {
+								p.sendMessage("");
+							} else if (sk.getType() == 2) {
+								p.sendMessage("");
+							} else if (sk.getType() == 1) {
+								p.sendMessage("");
+							}
+						}
+					}
+					event.setCancelled(true);
+				}
+			}
 			for (int i = 0; i < Warlords.confirmation.size(); i++) {
 				if (inventory.equals(Warlords.confirmation.get(i).getInventory())) {
 					if (event.getRawSlot() == 11) {
@@ -286,13 +858,58 @@ public class EventManager implements Listener {
 							if (wlist != null) {
 								Weapon w = wlist.get(c.getSlot());
 								if (w.getKat() == 1) {
-									p.sendMessage("You salvaged " + ChatColor.GOLD + WeaponUtil.LEGENDNAMES[w.getType()]
-											+ " of the " + WeaponUtil.KLASSEN[w.getKlass()]);
+									ItemStack is = WeaponUtil.generateItemStack(w, WeaponUtil.KLASSEN[w.getKlass()]);
+									double rand = Math.random();
+									int count = (int) (30 + Math.round(10.0 * rand));
+									wp.setVoidShards(wp.getVoidShards() + count);
+									String maintext = ChatColor.GRAY + "You received " + ChatColor.LIGHT_PURPLE + count
+											+ " Void Shards " + ChatColor.GRAY + "for salvaging your ";
+									String weaponname = is.getItemMeta().getDisplayName();
+									String cweaponname = is.getItemMeta().getDisplayName();
+									String lore = "";
+									for (int j = 0; j < is.getItemMeta().getLore().size(); j++) {
+										String s = is.getItemMeta().getLore().get(j);
+										if (j < is.getItemMeta().getLore().size() - 1) {
+											lore += "\\\"" + s + "\\\",";
+										} else {
+											lore += "\\\"" + s + "\\\"";
+										}
+									}
+									IChatBaseComponent al = ChatSerializer
+											.a("{\"text\":\"" + maintext + "\", \"extra\":[{\"text\":\"" + weaponname
+													+ "\",\"color\":\"gold\",\"hoverEvent\":{\"action\":\"show_item\",\"value\":\"{id:stone,tag:{display:{Name:\\\""
+													+ cweaponname + "\\\",Lore:[" + lore + "]}}}\"}}]}");
+									PacketPlayOutChat packet = new PacketPlayOutChat(al, (byte) 0);
+									((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
 								} else if (w.getKat() == 2) {
-									p.sendMessage(
-											"You salvaged " + ChatColor.DARK_PURPLE + WeaponUtil.EPICNAMES[w.getType()]
-													+ " of the " + WeaponUtil.KLASSEN[w.getKlass()]);
+									ItemStack is = WeaponUtil.generateItemStack(w, WeaponUtil.KLASSEN[w.getKlass()]);
+									double rand = Math.random();
+									int count = 3;
+									if (rand < 0.5) {
+										count += 1;
+									}
+									wp.setVoidShards(wp.getVoidShards() + count);
+									String maintext = ChatColor.GRAY + "You received " + ChatColor.LIGHT_PURPLE + count
+											+ " Void Shards " + ChatColor.GRAY + "for salvaging your ";
+									String weaponname = is.getItemMeta().getDisplayName();
+									String cweaponname = is.getItemMeta().getDisplayName();
+									String lore = "";
+									for (int j = 0; j < is.getItemMeta().getLore().size(); j++) {
+										String s = is.getItemMeta().getLore().get(j);
+										if (j < is.getItemMeta().getLore().size() - 1) {
+											lore += "\\\"" + s + "\\\",";
+										} else {
+											lore += "\\\"" + s + "\\\"";
+										}
+									}
+									IChatBaseComponent al = ChatSerializer
+											.a("{\"text\":\"" + maintext + "\", \"extra\":[{\"text\":\"" + weaponname
+													+ "\",\"color\":\"dark_purple\",\"hoverEvent\":{\"action\":\"show_item\",\"value\":\"{id:stone,tag:{display:{Name:\\\""
+													+ cweaponname + "\\\",Lore:[" + lore + "]}}}\"}}]}");
+									PacketPlayOutChat packet = new PacketPlayOutChat(al, (byte) 0);
+									((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
 								}
+								UtilMethods.sendSoundPacket(p, "block.anvil.use", p.getLocation());
 								if (c.getSlot() < wp.getWeaponSlot()) {
 									wp.setWeaponSlot(wp.getWeaponSlot() - 1);
 								}
@@ -302,17 +919,121 @@ public class EventManager implements Listener {
 										"/players/" + p.getUniqueId());
 								Warlords.confirmation.remove(i);
 								p.openInventory(WeaponUtil.getWeaponInventory(p));
+								return;
 							}
 						}
 					} else if (event.getRawSlot() == 15) {
 						Warlords.confirmation.remove(i);
 						p.openInventory(WeaponUtil.getWeaponInventory(p));
+						return;
+					} else {
+						event.setCancelled(true);
+					}
+				}
+			}
+			WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
+					"/players/" + p.getUniqueId());
+			if (wp != null) {
+				ArrayList<Weapon> wlist = wp.getWeaponlist();
+				if (wlist != null) {
+					Weapon w = wlist.get(wp.getWeaponSlot());
+					if (inventory.getName()
+							.equals(WeaponUtil.getWeaponRerollConfirmationInventory(p, w.getKat()).getName())) {
+						if (event.getRawSlot() == 11) {
+							Weapon neu = WeaponUtil.generateRandomWeapon(w.getKat());
+							for (int j = 0; j < w.getUa(); j++) {
+								Weapon up = WeaponUtil.upgradeWeapon(neu);
+								neu.setDmin(up.getDmin());
+								neu.setDmax(up.getDmax());
+								neu.setCc(up.getCc());
+								neu.setCm(up.getCm());
+								neu.setBoost(up.getBoost());
+								neu.setHp(up.getHp());
+								neu.setEnergy(up.getEnergy());
+								neu.setCooldown(up.getCooldown());
+								neu.setSpeed(up.getSpeed());
+								neu.setUa(up.getUa());
+							}
+							Weapon alt = w;
+							if (w.getKat() == 1) {
+								ItemStack is = WeaponUtil.generateChangeItemStack(alt, neu);
+								String maintext = ChatColor.GRAY + "Result: ";
+								String weaponname = is.getItemMeta().getDisplayName();
+								String cweaponname = is.getItemMeta().getDisplayName();
+								String lore = "";
+								for (int j = 0; j < is.getItemMeta().getLore().size(); j++) {
+									String s = is.getItemMeta().getLore().get(j);
+									if (j < is.getItemMeta().getLore().size() - 1) {
+										lore += "\\\"" + s + "\\\",";
+									} else {
+										lore += "\\\"" + s + "\\\"";
+									}
+								}
+								IChatBaseComponent al = ChatSerializer
+										.a("{\"text\":\"" + maintext + "\", \"extra\":[{\"text\":\"" + weaponname
+												+ "\",\"color\":\"gold\",\"hoverEvent\":{\"action\":\"show_item\",\"value\":\"{id:stone,tag:{display:{Name:\\\""
+												+ cweaponname + "\\\",Lore:[" + lore + "]}}}\"}}]}");
+								PacketPlayOutChat packet = new PacketPlayOutChat(al, (byte) 0);
+								((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
+								w.setDmin(neu.getDmin());
+								w.setDmax(neu.getDmax());
+								w.setCc(neu.getCc());
+								w.setCm(neu.getCm());
+								w.setBoost(neu.getBoost());
+								w.setHp(neu.getHp());
+								w.setEnergy(neu.getEnergy());
+								w.setCooldown(neu.getCooldown());
+								w.setSpeed(neu.getSpeed());
+								wp.setVoidShards(wp.getVoidShards() - 10);
+							} else if (w.getKat() == 2) {
+								ItemStack is = WeaponUtil.generateChangeItemStack(alt, neu);
+								String maintext = ChatColor.GRAY + "Result: ";
+								String weaponname = WeaponUtil.EPICNAMES[w.getType()] + " of the "
+										+ WeaponUtil.KLASSEN[w.getKlass()];
+								String cweaponname = ChatColor.DARK_PURPLE + WeaponUtil.EPICNAMES[w.getType()]
+										+ " of the " + WeaponUtil.KLASSEN[w.getKlass()];
+								String lore = "";
+								for (int j = 0; j < is.getItemMeta().getLore().size(); j++) {
+									String s = is.getItemMeta().getLore().get(j);
+									if (j < is.getItemMeta().getLore().size() - 1) {
+										lore += "\\\"" + s + "\\\",";
+									} else {
+										lore += "\\\"" + s + "\\\"";
+									}
+								}
+								IChatBaseComponent al = ChatSerializer
+										.a("{\"text\":\"" + maintext + "\", \"extra\":[{\"text\":\"" + weaponname
+												+ "\",\"color\":\"dark_purple\",\"hoverEvent\":{\"action\":\"show_item\",\"value\":\"{id:stone,tag:{display:{Name:\\\""
+												+ cweaponname + "\\\",Lore:[" + lore + "]}}}\"}}]}");
+								PacketPlayOutChat packet = new PacketPlayOutChat(al, (byte) 0);
+								((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
+								w.setDmin(neu.getDmin());
+								w.setDmax(neu.getDmax());
+								w.setCc(neu.getCc());
+								w.setCm(neu.getCm());
+								w.setBoost(neu.getBoost());
+								w.setHp(neu.getHp());
+								w.setEnergy(neu.getEnergy());
+								w.setCooldown(neu.getCooldown());
+								wp.setVoidShards(wp.getVoidShards() - 5);
+							}
+							wp.saveWeaponlist(wlist);
+							PlayerUtil.save(wp, Warlords.getPlugin(Warlords.class).getDataFolder(),
+									"/players/" + p.getUniqueId());
+							SpielKlasse sk = wp.getSk();
+							if (sk != null) {
+								UtilMethods.giveItems(sk, false);
+							}
+							p.closeInventory();
+						} else if (event.getRawSlot() == 15) {
+							p.openInventory(WeaponUtil.getSmithInventory(p));
+						} else {
+							event.setCancelled(true);
+						}
 					}
 				}
 			}
 			SpielKlasse sk = Warlords.getKlasse(p);
-			WarlordsPlayer wp = PlayerUtil.getWlPlayer(Warlords.getPlugin(Warlords.class).getDataFolder(),
-					"/players/" + p.getUniqueId());
 			if (sk != null && wp != null) {
 				if (wp.getMode() == true) {
 					Integer slotClicked = event.getRawSlot();
@@ -624,6 +1345,7 @@ public class EventManager implements Listener {
 										if (!(le instanceof ArmorStand)) {
 											if (le.isDead() == false) {
 												SkillUtil.doDeadlyPoison(as.getPoisonMax(), as.getPoisonOwn(), p, le);
+												sp.doCooldown(4);
 											}
 										}
 									}
@@ -631,7 +1353,7 @@ public class EventManager implements Listener {
 							}
 						}
 						p.getInventory().setContents(p.getInventory().getContents());
-						//sp.doAbility(p.getInventory().getHeldItemSlot());
+						// sp.doAbility(p.getInventory().getHeldItemSlot());
 						e.setCancelled(true);
 					}
 				}
